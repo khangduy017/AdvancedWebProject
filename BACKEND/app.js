@@ -5,7 +5,6 @@ import xss from 'xss-clean';
 import hpp from 'hpp';
 import cors from 'cors';
 import globalErrorhandler from "./controllers/ErrorController.js"
-import testRouter from './routes/testRouter.js'
 
 const limiter = rateLimit({
   // limiter is now become a middleware function
@@ -27,8 +26,6 @@ app.use(
 );
 
 app.use(express.json({ limit: '10mb' }));
-
-app.use('/api/test', testRouter)
 
 app.use(globalErrorhandler);
 
