@@ -5,23 +5,34 @@ import jwt from 'jsonwebtoken'
 
 const signToken = function (id) {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
-      expiresIn: '90d',
+    expiresIn: '29d',
   });
 };
 
-const register = catchAsync(async (req, res) => {
-  console.log(req.body)
-  const newUser = await User.create(req.body)
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
 
-  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-    expiresIn: '90d'
+  res.cookie('jwt', token, {
+    expires: new Date(Date.now() + 30 * 24 * 3600 * 1000),
+    // secure: true,
+    httpOnly: true,
   })
 
-  return res.status(200).json({
+  user.password = undefined;
+
+  return res.status(statusCode).json({
     status: 'success',
     token,
-    message: 'Register successful',
+    data: { user },
   });
+
+}
+
+const register = catchAsync(async (req, res) => {
+  // console.log(req.body)
+  const newUser = await User.create(req.body)
+
+  createSendToken(newUser, 201, res)
 })
 
 const login = catchAsync(async (req, res, next) => {
@@ -36,16 +47,9 @@ const login = catchAsync(async (req, res, next) => {
     return next(new AppError('Tài khoản hoặc mật khẩu không chính xác', 401));
   }
 
-  console.log(user)
-  const token = signToken(user._id);
+  // console.log(user)
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      user,
-      access_token: token
-    }
-  });
+  createSendToken(user, 200, res);
 })
 
 export default { register, login }
