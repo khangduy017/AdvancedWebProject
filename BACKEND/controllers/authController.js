@@ -2,6 +2,8 @@ import User from "../models/userModel.js";
 import catchAsync from '../utils/catchAsync.js'
 import AppError from "../utils/appError.js";
 import jwt from 'jsonwebtoken'
+import Validator from "../utils/validator.js"
+import REGEX from '../constants/regex.js';
 import { promisify } from 'util';
 
 const signToken = function (id) {
@@ -13,11 +15,11 @@ const signToken = function (id) {
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
 
-  res.cookie('jwt', token, {
-    expires: new Date(Date.now() + 30 * 24 * 3600 * 1000),
-    // secure: true,
-    httpOnly: true,
-  })
+  // res.cookie('jwt', token, {
+  //   expires: new Date(Date.now() + 30 * 24 * 3600 * 1000),
+  //   // secure: true,
+  //   httpOnly: true,
+  // })
 
   user.password = undefined;
 
@@ -29,9 +31,44 @@ const createSendToken = (user, statusCode, res) => {
 
 }
 
-const register = catchAsync(async (req, res) => {
-  // console.log(req.body)
-  const newUser = await User.create(req.body)
+const register = catchAsync(async (req, res,next) => {
+  console.log(req.body)
+  // // Validate request body
+  // if (!Validator.isValidRequestBody(req.body, ['email', 'password', 'passwordConfirm']))
+  //     return next(new AppError("Bad request", 400));
+
+  // Validate phonenumber, password and password confirm
+  const { email, password, passwordConfirm } = req.body;
+
+  if (Validator.isEmptyString(email) || Validator.isEmptyString(password) || Validator.isEmptyString(passwordConfirm))
+      return next(new AppError("Vui lòng nhập đầy đủ thông tin", 400));
+
+  else if (!Validator.isMatching(email, REGEX.EMAIL))
+      return next(new AppError("Email không hợp lệ", 400));
+
+  else if (password.length < 8)
+      return next(new AppError('Mật khẩu của bạn quá yếu (tối thiểu 8 kí tự)', 400));
+
+  else if (password !== passwordConfirm)
+      return next(new AppError("Mật khẩu của bạn không khớp", 400));
+
+  const founded_user = await User.findOne({ email: email });
+
+  if (founded_user)
+      return next(new AppError("Tài khoản đã tồn tại", 400));
+
+  const newUser = await User.create({
+    email: email,
+    password: password,  
+    role: 'user',
+    username: req.body.username?req.body.username:'',
+    fullname: '',
+    phone: '',
+    dob: '',
+    address: '',
+    gender: '',
+    avatar: '',
+  })
 
   createSendToken(newUser, 201, res)
 })
