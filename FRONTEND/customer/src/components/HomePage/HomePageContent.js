@@ -1,10 +1,12 @@
-import classes from './HomePageContent.module.css';
+import "./HomePageContent.css";
+import { RingLoader } from "react-spinners";
 
 const HomePageContent = () => {
   return (
-    <section>
-      <h1>Welcome</h1>
-    </section>
+    <div className="spinner">
+      <h3>Homepage</h3>
+      <RingLoader color="#5D5FEF" size={400} />
+    </div>
   );
 };
 

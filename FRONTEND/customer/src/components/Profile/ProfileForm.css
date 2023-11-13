@@ -1,0 +1,68 @@
+.edit-profile-container{
+    width: 68%;
+    height: 100%;
+    background: #EEEEFF;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #c8c8fa;
+}
+
+.edit-profile-heading{
+    color: #2C2C66;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.form-container{
+    font-size: 0.75rem;
+    color: #4e4e7c  ;
+    font-weight: 500;
+}
+
+.form-control-container{
+    font-size: 0.8rem;
+    color: #2C2C66;
+    font-weight: 500;
+}
+
+.edit-profile-update{
+    width: 100%;
+    font-size: 0.7rem;
+    background: #5D5FEF;
+    color: white;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    padding: 0.4rem;
+    border: none;
+}
+
+.edit-profile-update:hover{
+    background: #494bdb;
+    color: white;
+    border: none;
+}
+
+/* .edit-profile-cancel{
+    width: 100%;
+    font-size: 0.7rem;
+    background: white;
+    color: #2C2C66;
+    border: 1px solid #5D5FEF;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    padding: 0.4rem;
+}
+
+.edit-profile-cancel:hover{
+    background: #d7d7f3;
+    border: 1px solid #5D5FEF;
+    color: #2C2C66;
+} */
+
+.multi-button-container{
+    display: flex;
+    gap: 0.5rem;
+    width: 20%;
+    float: right;
+}
