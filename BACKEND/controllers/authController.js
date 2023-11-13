@@ -6,7 +6,7 @@ import Validator from "../utils/validator.js"
 import REGEX from '../constants/regex.js';
 import { promisify } from 'util';
 
-const expiresTime = 30*24*3600*1000;
+const expiresTime = 3*24*3600*1000;
 
 const signToken = function (id) {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
