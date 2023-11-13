@@ -28,7 +28,7 @@ app.use(
 
 app.use(express.json({ limit: '10mb' }));
 
-app.use(globalErrorhandler);
 app.use('/webAdvanced/api/v1/auth', authRouter)
+app.use(globalErrorhandler);
 
 export default app;

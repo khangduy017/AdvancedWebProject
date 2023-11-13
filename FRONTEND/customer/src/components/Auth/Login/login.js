@@ -4,12 +4,14 @@ import Spinner from 'react-bootstrap/Spinner'
 import Form from 'react-bootstrap/Form';
 import { useState, useRef, useContext } from 'react';
 import axios from 'axios'
+import { Link,useNavigate } from "react-router-dom";
+import AuthContext from '../../../store/auth-context'
 
 function Login() {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  // const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,56 +19,71 @@ function Login() {
   const [message, setMessage] = useState({
     type: "success",
     content: ""
-});
+  });
+
+  const navigate = useNavigate();
 
   const submitHandler = (event) => {
     event.preventDefault()
 
-    setIsLoading(true)
+    if (!isLoading) {
+      setIsLoading(true)
 
-    const data = {
-      email: emailInputRef.current.value,
-      password: passwordInputRef.current.value
-    };
+      const data = {
+        email: emailInputRef.current.value,
+        password: passwordInputRef.current.value
+      };
 
-    // console.log(data)
+      // console.log(data)
 
-    axios.post(process.env.REACT_APP_API_HOST + "auth/login", data)
-      .then(res => {
-        setIsLoading(false)
-        console.log(res)
-      })
-      .catch(err => {
-        setIsLoading(false)
-        console.log(err.response.data.toJson)
-        setMessage({
-          type: "error",
-          // content: err.response.data.message
-      });
-      })
+      axios.post(process.env.REACT_APP_API_HOST + "auth/login", data)
+        .then(res => {
+          setIsLoading(false)
+          console.log(res.data)
+          const expirationTime = new Date(
+            new Date().getTime() + +res.data.expiresTime
+          );
+          authCtx.login(res.data.token, expirationTime.toISOString());
+          navigate('/',{replace:true})
+        })
+        .catch(err => {
+          setIsLoading(false)
+          setMessage({
+            type: "error",
+            content: err.response.data.message
+          })
+        })
+    }
+  }
 
+  const handleFocus = () => {
+    setMessage({
+      type: "success",
+      content: ""
+    });
   }
 
   return (
     <div className={`${styles.login} d-flex justify-content-center align-items-center`}>
       <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white`}>
-        <h2 className={`${styles['form-title']} display-7`}>Login</h2>
+        <h2 className={`${styles['form-title']} display-7 `}>Login</h2>
         <p className={`${styles['form-text']}`}>Enter your credentials to access your account</p>
-        <Form.Group className={`mb-3 mt-5`} controlId="formBasicEmail">
+
+        <Form.Group className={`mb-3 mt-5`} controlId="formBasicEmail" onFocus={handleFocus}>
           <Form.Label>Email address</Form.Label>
-          <Form.Control ref={emailInputRef} required className={`form-control`} type="email" placeholder="Enter email" />
+          <Form.Control ref={emailInputRef} required className={`form-control ${message.type === 'error' && 'is-invalid'}`} type="email" placeholder="Enter email" />
         </Form.Group>
 
-        <Form.Group className={`mb-3 mt-4`} controlId="formBasicPassword">
+        <Form.Group className={`mb-3 mt-4`} controlId="formBasicPassword" onFocus={handleFocus}>
           <Form.Label>Password</Form.Label>
-          <Form.Control ref={passwordInputRef} required className={`form-control`} type="password" placeholder="Password" />
+          <Form.Control ref={passwordInputRef} required className={`form-control ${message.type === 'error' && 'is-invalid'}`} type="password" placeholder="Password" />
         </Form.Group>
-      {message.type === 'error' && <p className={`${styles['error-message']}`}>Email or password is incorrect</p> }
+        {message.type === 'error' && <p className={`${styles['error-message']}`}>{message.content}</p>}
 
 
         <Button className={`${styles['submit-button']} d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
           Login
-          {isLoading&& <Spinner size="sm" animation="border" />}
+          {isLoading && <Spinner size="sm" animation="border" />}
         </Button>
 
         <button type="button" className={`btn mt-3 d-flex gap-1 justify-content-center align-items-center shadow-sm btn-light w-100`}>
@@ -78,7 +95,7 @@ function Login() {
 
         <div className={`d-flex gap-1 align-item-center mt-5`}>
           <p className={`display-10`}>Don't have an account?</p>
-          <a href='login'>Sign up</a>
+          <Link to='/register'>Sign up</Link>
         </div>
 
       </Form>

@@ -49,7 +49,7 @@ export const AuthContextProvider = (props) => {
   const userIsLoggedIn = !!token;
 
   const logoutHandler = useCallback(() => {
-///
+    ///
   }, []);
 
   const loginHandler = (token, expirationTime) => {
