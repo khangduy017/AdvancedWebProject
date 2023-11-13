@@ -13,7 +13,6 @@ function Login() {
 
   const authCtx = useContext(AuthContext);
 
-  const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const [message, setMessage] = useState({
@@ -39,7 +38,7 @@ function Login() {
       axios.post(process.env.REACT_APP_API_HOST + "auth/login", data)
         .then(res => {
           setIsLoading(false)
-          console.log(res.data)
+          // console.log(res.data)
           const expirationTime = new Date(
             new Date().getTime() + +res.data.expiresTime
           );
@@ -74,11 +73,11 @@ function Login() {
           <Form.Control ref={emailInputRef} required className={`form-control ${message.type === 'error' && 'is-invalid'}`} type="email" placeholder="Enter email" />
         </Form.Group>
 
-        <Form.Group className={`mb-3 mt-4`} controlId="formBasicPassword" onFocus={handleFocus}>
+        <Form.Group className={`mb-2 mt-4`} controlId="formBasicPassword" onFocus={handleFocus}>
           <Form.Label>Password</Form.Label>
           <Form.Control ref={passwordInputRef} required className={`form-control ${message.type === 'error' && 'is-invalid'}`} type="password" placeholder="Password" />
         </Form.Group>
-        {message.type === 'error' && <p className={`${styles['error-message']}`}>{message.content}</p>}
+        {message.type === 'error' ? <p className={`${styles['error-message']}`}>{message.content}</p>:<p className={`${styles['error-message']}`}>&nbsp;</p>}
 
 
         <Button className={`${styles['submit-button']} d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">

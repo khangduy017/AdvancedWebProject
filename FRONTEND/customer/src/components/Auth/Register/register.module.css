@@ -26,4 +26,5 @@
 .register .error-message{
   color: rgb(196, 0, 0);
   font-style: italic;
+  font-size: 14px;
 }
