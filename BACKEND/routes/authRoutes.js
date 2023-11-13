@@ -7,5 +7,6 @@ router.post('/register',authController.register);
 router.post('/login',authController.login);
 router.post('/change-password', authController.protect, authController.changePassword);
 router.post('/edit-profile', authController.protect, authController.editProfile);
+router.get('/get-user', authController.protect, authController.getUser);
 
 export default router;

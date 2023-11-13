@@ -92,7 +92,7 @@ const login = catchAsync(async (req, res, next) => {
 })
 
 const protect = catchAsync(async (req, res, next) => {
-  // 1) Getting token and check of it's there
+
   let token;
   if (
     req.headers.authorization &&
@@ -107,10 +107,8 @@ const protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     return next(
@@ -121,52 +119,45 @@ const protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 4) Check if user changed password after the token was issued
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError('User recently changed password! Please log in again.', 401)
     );
   }
 
-  // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
   next();
 });
 
 const changePassword = catchAsync(async (req, res, next) => {
-  // 1) Get user from collection
+
   const user = await User.findById(req.user.id).select('+password');
 
-  // 2) Check if POSTed current password is correct
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     return next(new AppError('Your current password is wrong.', 401));
   }
 
-  // 3) If so, update password
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
-  // User.findByIdAndUpdate will NOT work as intended!
 
-  // 4) Log user in, send JWT
   createSendToken(user, 200, res);
 });
 
 const editProfile = catchAsync(async (req, res, next) => {
-  // 1) Create error if user POSTs password data
-  if (req.body.password || req.body.passwordConfirm) {
-    return next(
-      new AppError(
-        'This route is not for password updates. Please use /updateMyPassword.',
-        400
-      )
-    );
-  }
 
-  // 3) Update user document
   const updatedUser = await User.updateOne(
     { _id: req.user.id },
-    { fullname: req.body.fullname, email: req.body.email}
+    { 
+      fullname: req.body.fullname,
+      username: req.body.username,
+      dob: req.body.dob,
+      phone: req.body.phone,
+      gender: req.body.gender,
+      role: req.body.role,
+      email: req.body.email,
+      address: req.body.address
+    }
   );
 
   res.status(200).json({
@@ -177,4 +168,16 @@ const editProfile = catchAsync(async (req, res, next) => {
   });
 });
 
-export default { register, login, protect, changePassword, editProfile }
+const getUser = catchAsync(async (req, res, next) => {
+
+  const userData = await User.findOne(
+    { _id: req.user.id },
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: userData
+  });
+});
+
+export default { register, login, protect, changePassword, editProfile, getUser }
