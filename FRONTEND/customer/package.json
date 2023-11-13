@@ -8,10 +8,6 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.1",
     "bootstrap": "^5.3.2",
-<<<<<<< HEAD
-=======
-    "jwt-decode": "^4.0.0",
->>>>>>> 04de0c549dfcb39fda79c8e7336577a17f21e94d
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
