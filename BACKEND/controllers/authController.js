@@ -6,9 +6,11 @@ import Validator from "../utils/validator.js"
 import REGEX from '../constants/regex.js';
 import { promisify } from 'util';
 
+const expiresTime = 30*24*3600*1000;
+
 const signToken = function (id) {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
-    expiresIn: '29d',
+    expiresIn: expiresTime,
   });
 };
 
@@ -21,11 +23,12 @@ const createSendToken = (user, statusCode, res) => {
   //   httpOnly: true,
   // })
 
-  user.password = undefined;
+  user.password = ''
 
   return res.status(statusCode).json({
     status: 'success',
     token,
+    expiresTime,
     data: { user },
   });
 
@@ -41,21 +44,21 @@ const register = catchAsync(async (req, res,next) => {
   const { email, password, passwordConfirm } = req.body;
 
   if (Validator.isEmptyString(email) || Validator.isEmptyString(password) || Validator.isEmptyString(passwordConfirm))
-      return next(new AppError("Vui lòng nhập đầy đủ thông tin", 400));
+      return next(new AppError("Please provide complete information", 400));
 
   else if (!Validator.isMatching(email, REGEX.EMAIL))
-      return next(new AppError("Email không hợp lệ", 400));
+      return next(new AppError("Invalid email address", 400));
 
   else if (password.length < 8)
-      return next(new AppError('Mật khẩu của bạn quá yếu (tối thiểu 8 kí tự)', 400));
+      return next(new AppError('Your password is too weak (minimum 8 characters)', 400));
 
   else if (password !== passwordConfirm)
-      return next(new AppError("Mật khẩu của bạn không khớp", 400));
+      return next(new AppError("Your passwords do not match", 400));
 
   const founded_user = await User.findOne({ email: email });
 
   if (founded_user)
-      return next(new AppError("Tài khoản đã tồn tại", 400));
+      return next(new AppError("The email already exist", 400));
 
   const newUser = await User.create({
     email: email,
@@ -76,13 +79,13 @@ const register = catchAsync(async (req, res,next) => {
 const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return next(new AppError("Nhập tài khoản và mật khẩu", 401));
+    return next(new AppError("Enter your email and password", 401));
   }
 
   const user = await User.findOne({ email: email }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Tài khoản hoặc mật khẩu không chính xác', 401));
+    return next(new AppError('Email or password is incorrect', 401));
   }
 
   createSendToken(user, 200, res);

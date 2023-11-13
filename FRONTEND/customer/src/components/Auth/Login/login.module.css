@@ -1,0 +1,30 @@
+.login {
+  background-color: #eeeeff;
+  height: 100vh;
+}
+
+.login .form-size {
+  width: 500px;
+}
+
+.login .form-title {
+  color: #2c2c66;
+}
+
+.login .form-text {
+  color: #94a3bb;
+}
+
+.login .submit-button {
+  background-color: #5d5fef !important;
+}
+
+.login .submit-button:hover {
+  background-color: #4c4eb6 !important;
+}
+
+.login .error-message {
+  color: rgb(196, 0, 0);
+  font-style: italic;
+  font-size: 14px;
+}
