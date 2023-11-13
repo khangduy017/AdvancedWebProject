@@ -27,21 +27,23 @@ const ProfileForm = (props) => {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
 
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGY5NWRiOWMyODYzMzZhNTk1YmZhYSIsImlhdCI6MTY5OTc3MzIwMCwiZXhwIjoxNzAyMjc4ODAwfQ.bG394RTgBvAbwijkwXGTQl-uKtxiqKr4xAaJIGuyggw'
+  const token = authCtx.token;
   const headers = { 'Authorization': `Bearer ${token}` };
   useEffect(() => {
-    axios.get('http://127.0.0.1:3000/webAdvanced/api/v1/auth/get-user', { headers })
-        .then(res => {
-          setUserData(res.data.data);
-          setFullname(res.data.data.fullname===undefined ? '' : res.data.data.fullname);
-          setUsername(res.data.data.username);
-          setDob(res.data.data.dob===undefined ? '' : res.data.data.dob);
-          setPhone(res.data.data.phone===undefined ? '' : res.data.data.phone);
-          setGender(res.data.data.gender===undefined ? '' : res.data.data.gender);
-          setRole(res.data.data.role===undefined ? '' : res.data.data.role);
-          setEmail(res.data.data.email);
-          setAddress(res.data.data.address===undefined ? '' : res.data.data.address);
-        });
+    if(authCtx.isLoggedIn){
+      axios.get('http://127.0.0.1:3000/webAdvanced/api/v1/auth/get-user', { headers })
+          .then(res => {
+            setUserData(res.data.data);
+            setFullname(res.data.data.fullname===undefined ? '' : res.data.data.fullname);
+            setUsername(res.data.data.username);
+            setDob(res.data.data.dob===undefined ? '' : res.data.data.dob);
+            setPhone(res.data.data.phone===undefined ? '' : res.data.data.phone);
+            setGender(res.data.data.gender===undefined ? '' : res.data.data.gender);
+            setRole(res.data.data.role===undefined ? '' : res.data.data.role);
+            setEmail(res.data.data.email);
+            setAddress(res.data.data.address===undefined ? '' : res.data.data.address);
+          });
+    }
   }, []);
 
   
