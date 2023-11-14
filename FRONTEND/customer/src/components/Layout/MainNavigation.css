@@ -4,6 +4,10 @@
   background: #5D5FEF;
 }
 
+.nav-container:hover{
+  cursor: pointer;
+}
+
 .d-flex{
   gap: 0.5rem;
 }

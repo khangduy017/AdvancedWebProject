@@ -18,23 +18,20 @@ const MainNavigation = () => {
   const navigate = useNavigate();
   const isLoggedIn = authCtx.isLoggedIn;
 
-  const [userData, setUserData] = useState({});
+  const userData = authCtx.userData;
+
   const token = authCtx.token;
-  // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGY5NWRiOWMyODYzMzZhNTk1YmZhYSIsImlhdCI6MTY5OTc3MzIwMCwiZXhwIjoxNzAyMjc4ODAwfQ.bG394RTgBvAbwijkwXGTQl-uKtxiqKr4xAaJIGuyggw'
   const headers = { 'Authorization': `Bearer ${token}` };
   useEffect(() => {
-    if(authCtx,isLoggedIn){
+    if(authCtx.isLoggedIn){
       const headers = { 'Authorization': `Bearer ${token}` };
       axios.get('http://127.0.0.1:3000/webAdvanced/api/v1/auth/get-user', { headers })
-          .then(res => setUserData(res.data.data));
+          .then(res => authCtx.setUserDataContext(res.data.data));
     }
   }, []);
 
   const logoutHandler = () => {
     authCtx.logout();
-  };
-
-  const onClickLogo = () => {
     navigate("/");
   };
 
