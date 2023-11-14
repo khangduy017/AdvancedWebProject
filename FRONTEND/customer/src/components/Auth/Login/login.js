@@ -64,7 +64,7 @@ function Login() {
 
   return (
     <div className={`${styles.login} d-flex justify-content-center align-items-center`}>
-      <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white`}>
+      <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
         <h2 className={`${styles['form-title']} display-7 `}>Login</h2>
         <p className={`${styles['form-text']}`}>Enter your credentials to access your account</p>
 
