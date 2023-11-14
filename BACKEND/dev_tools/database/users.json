@@ -1,0 +1,32 @@
+[
+  {
+    "_id": {
+      "$oid": "654f786de9147edd4b0f9d3b"
+    },
+    "username": "khangdinh",
+    "password": "$2a$12$KzwKgPB3F0VCH9m8PMnBmeDWFM67n4IdIWzZMpfck1Oq89FvvswQi",
+    "role": "user",
+    "email": "khangduy017@gmail.com",
+    "__v": 0,
+    "address": "",
+    "dob": "21/04/2002",
+    "fullname": "Nguyễn Khang",
+    "gender": "Nam",
+    "phone": "0976975548"
+  },
+  {
+    "_id": {
+      "$oid": "654f95db9c286336a595bfaa"
+    },
+    "username": "giahuy200202",
+    "password": "$2a$12$CN9T7TwtaiRXfB8cz6QqTe0yySsKtlWukQF2x.zglenmg0iu0hQX.",
+    "role": "user",
+    "email": "giahuy200202@gmail.com",
+    "__v": 0,
+    "fullname": "Huy",
+    "address": "Ho Chi Minh City",
+    "dob": "",
+    "gender": "Male",
+    "phone": "0703350128"
+  }
+]
