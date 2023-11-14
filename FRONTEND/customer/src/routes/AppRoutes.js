@@ -14,7 +14,10 @@ const AppRoutes = () => {
       {!authCtx.isLoggedIn && (
         <Route path="/login" element={<LoginPage />} />
       )}
-      <Route path="/register" element={<Register />} />
+      {!authCtx.isLoggedIn && (
+        <Route path="/register" element={<Register />} />
+      )}
+
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />

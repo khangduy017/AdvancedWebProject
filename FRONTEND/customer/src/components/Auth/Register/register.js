@@ -57,6 +57,7 @@ function Register() {
             new Date().getTime() + +res.data.expiresTime
           );
           authCtx.login(res.data.token, expirationTime.toISOString());
+          alert('Login successfully!')
           navigate('/',{replace:true})
         })
         .catch(err => {
@@ -99,7 +100,7 @@ function Register() {
 
   return (
     <div className={`${styles.register} d-flex justify-content-center align-items-center`}>
-      <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white`}>
+      <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
         <h2 className={`${styles['form-title']}  display-7`}>Sign Up</h2>
         <p className={`${styles['form-text']}`}>Please provide your details to create a new account</p>
         <Form.Group className={`mb-1 mt-5`} controlId="formBasicEmail" onFocus={handleFocus}>

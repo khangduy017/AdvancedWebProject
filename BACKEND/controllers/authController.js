@@ -34,7 +34,7 @@ const createSendToken = (user, statusCode, res) => {
 
 }
 
-const register = catchAsync(async (req, res,next) => {
+const register = catchAsync(async (req, res, next) => {
   console.log(req.body)
   // // Validate request body
   // if (!Validator.isValidRequestBody(req.body, ['email', 'password', 'passwordConfirm']))
@@ -44,27 +44,27 @@ const register = catchAsync(async (req, res,next) => {
   const { email, password, passwordConfirm } = req.body;
 
   if (Validator.isEmptyString(email) || Validator.isEmptyString(password) || Validator.isEmptyString(passwordConfirm))
-      return next(new AppError("Please provide complete information", 400));
+    return next(new AppError("Please provide complete information", 400));
 
   else if (!Validator.isMatching(email, REGEX.EMAIL))
-      return next(new AppError("Invalid email address", 400));
+    return next(new AppError("Invalid email address", 400));
 
   else if (password.length < 8)
-      return next(new AppError('Your password is too weak (minimum 8 characters)', 400));
+    return next(new AppError('Your password is too weak (minimum 8 characters)', 400));
 
   else if (password !== passwordConfirm)
-      return next(new AppError("Your passwords do not match", 400));
+    return next(new AppError("Your passwords do not match", 400));
 
   const founded_user = await User.findOne({ email: email });
 
   if (founded_user)
-      return next(new AppError("The email already exist", 400));
+    return next(new AppError("The email already exist", 400));
 
   const newUser = await User.create({
     email: email,
-    password: password,  
+    password: password,
     role: 'user',
-    username: req.body.username?req.body.username:'',
+    username: req.body.username ? req.body.username : '',
     fullname: '',
     phone: '',
     dob: '',

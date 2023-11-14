@@ -38,7 +38,7 @@ function Login() {
       axios.post(process.env.REACT_APP_API_HOST + "auth/login", data)
         .then(res => {
           setIsLoading(false)
-          // console.log(res.data)
+          console.log(res.data)
           const expirationTime = new Date(
             new Date().getTime() + +res.data.expiresTime
           );
@@ -64,7 +64,7 @@ function Login() {
 
   return (
     <div className={`${styles.login} d-flex justify-content-center align-items-center`}>
-      <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white`}>
+      <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
         <h2 className={`${styles['form-title']} display-7 `}>Login</h2>
         <p className={`${styles['form-text']}`}>Enter your credentials to access your account</p>
 
