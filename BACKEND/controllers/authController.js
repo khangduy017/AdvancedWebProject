@@ -121,7 +121,7 @@ const protect = catchAsync(async (req, res, next) => {
 
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
-      new AppError('User recently changed password! Please log in again.', 401)
+      new AppError('User recently changed password, Please log in again.', 401)
     );
   }
 
@@ -134,7 +134,10 @@ const changePassword = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-    return next(new AppError('Your current password is wrong.', 401));
+    res.status(200).json({
+      status: 'fail',
+      message: 'Current password is incorrect'
+    });
   }
 
   user.password = req.body.password;
@@ -146,26 +149,41 @@ const changePassword = catchAsync(async (req, res, next) => {
 
 const editProfile = catchAsync(async (req, res, next) => {
 
-  const updatedUser = await User.updateOne(
-    { _id: req.user.id },
-    { 
-      fullname: req.body.fullname,
-      username: req.body.username,
-      dob: req.body.dob,
-      phone: req.body.phone,
-      gender: req.body.gender,
-      role: req.body.role,
-      email: req.body.email,
-      address: req.body.address
-    }
+  const userCheck = await User.findOne(
+    { email: req.body.email },
   );
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      user: updatedUser
-    }
-  });
+  if(userCheck && userCheck._id.toString() !== req.user.id){
+    res.status(200).json({
+      status: 'fail',
+      message: 'Email has been existed'
+    });
+  }
+
+  else{
+    const updatedUser = await User.updateOne(
+      { _id: req.user.id },
+      { 
+        fullname: req.body.fullname,
+        username: req.body.username,
+        dob: req.body.dob,
+        phone: req.body.phone,
+        gender: req.body.gender,
+        role: req.body.role,
+        email: req.body.email,
+        address: req.body.address
+      }
+    );
+    
+    const userData = await User.findOne(
+      { _id: req.user.id },
+    );
+  
+    res.status(200).json({
+      status: 'success',
+      data: userData
+    });
+  }
 });
 
 const getUser = catchAsync(async (req, res, next) => {
