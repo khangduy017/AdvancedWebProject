@@ -43,23 +43,6 @@
     border: none;
 }
 
-/* .edit-profile-cancel{
-    width: 100%;
-    font-size: 0.7rem;
-    background: white;
-    color: #2C2C66;
-    border: 1px solid #5D5FEF;
-    margin-top: 0.5rem;
-    font-weight: 500;
-    padding: 0.4rem;
-}
-
-.edit-profile-cancel:hover{
-    background: #d7d7f3;
-    border: 1px solid #5D5FEF;
-    color: #2C2C66;
-} */
-
 .multi-button-container{
     display: flex;
     gap: 0.5rem;

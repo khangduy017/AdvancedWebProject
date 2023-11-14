@@ -38,7 +38,6 @@ function Login() {
       axios.post(process.env.REACT_APP_API_HOST + "auth/login", data)
         .then(res => {
           setIsLoading(false)
-          console.log(res.data)
           const expirationTime = new Date(
             new Date().getTime() + +res.data.expiresTime
           );
