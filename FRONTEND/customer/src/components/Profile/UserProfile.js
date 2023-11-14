@@ -12,16 +12,12 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
   const [mode, setMode] = useState("General");
-  const [userData, setUserData] = useState({});
   const token = authCtx.token;
+  const userData = authCtx.userData;
+  
   useEffect(() => {
     if(!authCtx.isLoggedIn){
       navigate('/login');
-    }
-    else{
-      const headers = { 'Authorization': `Bearer ${token}` };
-      axios.get('http://127.0.0.1:3000/webAdvanced/api/v1/auth/get-user', { headers })
-          .then(res => setUserData(res.data.data));
     }
   }, []);
 
