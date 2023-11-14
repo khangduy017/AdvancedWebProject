@@ -25,7 +25,7 @@ const MainNavigation = () => {
   useEffect(() => {
     if(authCtx.isLoggedIn){
       const headers = { 'Authorization': `Bearer ${token}` };
-      axios.get('http://127.0.0.1:3000/webAdvanced/api/v1/auth/get-user', { headers })
+      axios.get(process.env.REACT_APP_API_HOST + 'auth/get-user', { headers })
           .then(res => authCtx.setUserDataContext(res.data.data));
     }
   }, []);

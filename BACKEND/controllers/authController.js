@@ -140,11 +140,13 @@ const changePassword = catchAsync(async (req, res, next) => {
     });
   }
 
-  user.password = req.body.password;
-  user.passwordConfirm = req.body.passwordConfirm;
-  await user.save();
-
-  createSendToken(user, 200, res);
+  else{
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save();
+  
+    createSendToken(user, 200, res);
+  }
 });
 
 const editProfile = catchAsync(async (req, res, next) => {
@@ -159,7 +161,12 @@ const editProfile = catchAsync(async (req, res, next) => {
       message: 'Email has been existed'
     });
   }
-
+  else if (!Validator.isMatching(req.body.email, REGEX.EMAIL)){
+    res.status(200).json({
+      status: 'fail',
+      message: 'Invalid email address'
+    });
+  }
   else{
     const updatedUser = await User.updateOne(
       { _id: req.user.id },

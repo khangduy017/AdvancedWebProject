@@ -93,7 +93,7 @@ const ProfileForm = (props) => {
     else{
       axios
         .post(
-          "http://127.0.0.1:3000/webAdvanced/api/v1/auth/edit-profile",
+          process.env.REACT_APP_API_HOST + 'auth/edit-profile',
           dataSubmit,
           { headers }
         )
@@ -133,7 +133,7 @@ const ProfileForm = (props) => {
     else{
       axios
         .post(
-          "http://127.0.0.1:3000/webAdvanced/api/v1/auth/change-password",
+          process.env.REACT_APP_API_HOST + 'auth/change-password',
           dataSubmit,
           { headers }
         )
@@ -143,7 +143,7 @@ const ProfileForm = (props) => {
               new Date().getTime() + +res.data.expiresTime
             );
             authCtx.login(res.data.token, expirationTime.toISOString());
-            toast.success("Update information successfully", styleSuccess);
+            toast.success("Update password successfully", styleSuccess);
           }
           else{
             toast.error(res.data.message, styleError);
