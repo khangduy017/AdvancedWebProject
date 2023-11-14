@@ -1,7 +1,7 @@
 import styles from './register.module.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner'
 import { useState, useRef, useContext } from 'react';
 import axios from 'axios'
@@ -57,8 +57,8 @@ function Register() {
             new Date().getTime() + +res.data.expiresTime
           );
           authCtx.login(res.data.token, expirationTime.toISOString());
-          alert('Login successfully!')
-          navigate('/',{replace:true})
+          alert('Register successfully!')
+          navigate('/', { replace: true })
         })
         .catch(err => {
           setIsLoading(false)
@@ -107,19 +107,19 @@ function Register() {
           <Form.Label>Email address</Form.Label>
           <Form.Control className={`form-control ${emailMessage.type === 'error' && 'is-invalid'}`} ref={emailInputRef} required type="email" placeholder="Enter email..." />
         </Form.Group>
-        {emailMessage.type === 'error' ? <p className={`${styles['error-message']} mb-1`}>{emailMessage.content}</p>:<p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
+        {emailMessage.type === 'error' ? <p className={`${styles['error-message']} mb-1`}>{emailMessage.content}</p> : <p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
 
         <Form.Group className={`mb-1`} controlId="formBasicPassword" onFocus={handleFocus}>
           <Form.Label>Password</Form.Label>
           <Form.Control className={`form-control ${passwordMessage.type === 'error' && 'is-invalid'}`} ref={passwordInputRef} required type="password" placeholder="Password..." />
         </Form.Group>
-        {passwordMessage.type === 'error' ? <p className={`${styles['error-message']} mb-1`}>{passwordMessage.content}</p>:<p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
+        {passwordMessage.type === 'error' ? <p className={`${styles['error-message']} mb-1`}>{passwordMessage.content}</p> : <p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
 
         <Form.Group className={`mb-1`} controlId="formBasicPassword" onFocus={handleFocus}>
           <Form.Label>Password Confirm</Form.Label>
           <Form.Control className={`form-control ${passwordConfirmMessage.type === 'error' && 'is-invalid'}`} ref={passwordConfirmInputRef} required type="password" placeholder="Confirm your password..." />
         </Form.Group>
-        {passwordConfirmMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordConfirmMessage.content}</p>:<p className={`${styles['error-message']}`}>&nbsp;</p>}
+        {passwordConfirmMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordConfirmMessage.content}</p> : <p className={`${styles['error-message']}`}>&nbsp;</p>}
 
         <Button className={`${styles['submit-button']} d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
           Sign up
