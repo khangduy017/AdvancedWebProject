@@ -35,7 +35,6 @@ const createSendToken = (user, statusCode, res) => {
 }
 
 const register = catchAsync(async (req, res, next) => {
-  console.log(req.body)
   // // Validate request body
   // if (!Validator.isValidRequestBody(req.body, ['email', 'password', 'passwordConfirm']))
   //     return next(new AppError("Bad request", 400));
