@@ -1,0 +1,31 @@
+[{
+  "_id": {
+    "$oid": "65537db2d6253a2ec6439f9f"
+  },
+  "username": "giahuy200202",
+  "password": "$2a$12$pudQyDifHQ7iJslhor2DO.zwc1PyUVwmgz31N9lfV/rm0m1WZukQe",
+  "role": "user",
+  "fullname": "Huy",
+  "phone": "0703350128",
+  "email": "giahuy200202@gmail.com",
+  "dob": "",
+  "address": "Ho Chi Minh City",
+  "gender": "Male",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65538053c6f2bcf65c0cee09"
+  },
+  "username": "KhangDinh",
+  "password": "$2a$12$geAcV5xxFjie9Mg.Z.Wxi.U.D80thnBeMj3x6nI96SV2GPTftsCrK",
+  "role": "user",
+  "fullname": "Đinh Duy Khang",
+  "phone": "0976975548",
+  "email": "khangduy017@gmail.com",
+  "dob": "21/04/2002",
+  "address": "1647 Pham The Hien, P6, Q8, TP.HCM",
+  "gender": "Nam",
+  "avatar": "",
+  "__v": 0
+}]

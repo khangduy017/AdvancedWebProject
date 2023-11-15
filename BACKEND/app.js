@@ -16,6 +16,7 @@ const limiter = rateLimit({
 
 const app = express();
 app.use(limiter);
+
 app.use(cors());
 app.use(mongoSanitize());
 app.use(xss());
