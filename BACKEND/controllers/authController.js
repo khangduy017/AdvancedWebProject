@@ -63,11 +63,14 @@ const register = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     email: email,
     password: password,
+    type:'account',
     role: 'user',
     username: req.body.username ? req.body.username : '',
     fullname: '',
     phone: '',
     dob: '',
+    googleId:'',
+    facebookId:'',
     address: '',
     gender: '',
     avatar: '',
@@ -89,6 +92,17 @@ const login = catchAsync(async (req, res, next) => {
   }
 
   createSendToken(user, 200, res);
+})
+
+const loginGoogle = catchAsync(async (req, res, next) => {
+  const token = signToken(req.user._id);
+  const data = {
+    status: 'success',
+    token,
+    expiresTime,
+    data: { user: req.user },
+  };
+  res.redirect('http://localhost:3001/?status=success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
 })
 
 const protect = catchAsync(async (req, res, next) => {
@@ -205,4 +219,4 @@ const getUser = catchAsync(async (req, res, next) => {
   });
 });
 
-export default { register, login, protect, changePassword, editProfile, getUser }
+export default { register, login,loginGoogle, protect, changePassword, editProfile, getUser }

@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
     select: false,
   },
+  type:{
+    type: String,
+    enum: ['account', 'google','facebook'],
+  },
   role: {
       type: String,
       enum: ['user', 'admin'],
@@ -25,6 +29,8 @@ const userSchema = new mongoose.Schema({
   address: String,
   gender: String,
   avatar: String,
+  googleId: String,
+  facebookId:String,
   passwordChangedAt: Date,
   userVerifyToken: String,
   passwordResetExpires: Date,
