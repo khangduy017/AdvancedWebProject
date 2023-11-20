@@ -23,8 +23,31 @@
   background-color:#585ad0 !important;
 }
 
+.register .back-button{
+  /* background-color: #5D5FEF !important; */
+  color: #5D5FEF;
+  cursor: pointer;
+}
+
 .register .error-message{
   color: rgb(196, 0, 0);
   font-style: italic;
   font-size: 14px;
+}
+
+.register .email{
+  color: #5D5FEF;
+}
+
+.register .resend{
+  text-decoration: underline;
+  color: #5D5FEF;
+  cursor: pointer;
+}
+
+.register .input-verify{
+  font-size: 36px;
+  padding: 0px 8px;
+  font-weight: bold;
+  letter-spacing: 5px;
 }

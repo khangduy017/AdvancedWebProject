@@ -14,7 +14,7 @@
 .login .form-text {
   color: #94a3bb;
 }
-≈
+
 .login .submit-button {
   background-color: #5d5fef !important;
 }
@@ -23,8 +23,17 @@
   background-color: #4c4eb6 !important;
 }
 
+.login .forget-password{
+  text-decoration: none !important;
+  color: #5D5FEF;
+}
+
 .login .error-message {
   color: rgb(196, 0, 0);
   font-style: italic;
   font-size: 14px;
+}
+
+.login .social-button{
+  border: solid 1px #000000;
 }

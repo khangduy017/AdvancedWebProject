@@ -5,8 +5,10 @@ import jwt from 'jsonwebtoken'
 import Validator from "../utils/validator.js"
 import REGEX from '../constants/regex.js';
 import { promisify } from 'util';
+import sendMail from '../utils/mailer.js'
 
 const expiresTime = 3*24*3600*1000;
+let verifyCode ='';
 
 const signToken = function (id) {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -59,23 +61,40 @@ const register = catchAsync(async (req, res, next) => {
   if (founded_user)
     return next(new AppError("The email already exist", 400));
 
-  const newUser = await User.create({
-    email: email,
-    password: password,
-    type:'account',
-    role: 'user',
-    username: req.body.username ? req.body.username : '',
-    fullname: '',
-    phone: '',
-    dob: '',
-    googleId:'',
-    facebookId:'',
-    address: '',
-    gender: '',
-    avatar: '',
-  })
+  verifyCode = Math.floor(100000 + Math.random() * 900000);
 
-  createSendToken(newUser, 201, res)
+  await sendMail(email,'Your verify code is ['+verifyCode+']','Use this code to complete the account registration: '+verifyCode)
+
+  res.status(200).json({
+    status: 'success',
+  });
+})
+
+const verifyRegister = catchAsync(async(req,res,next)=>{
+  const data = req.body.data
+  if(req.body.code === verifyCode.toString()){  
+    const newUser = await User.create({
+      email: data.email,
+      password: data.password,
+      type:'account',
+      role: 'user',
+      username: data.username ? data.username : '',
+      fullname: '',
+      phone: '',
+      dob: '',
+      googleId:'',
+      facebookId:'',
+      address: '',
+      gender: '',
+      avatar: '',
+    }) 
+    createSendToken(newUser, 201, res)
+  }
+  else {
+    return res.status(400).json({
+      status: 'Verify code is incorrect',
+    });
+  }
 })
 
 const login = catchAsync(async (req, res, next) => {
@@ -101,7 +120,18 @@ const loginGoogle = catchAsync(async (req, res, next) => {
     expiresTime,
     data: { user: req.user },
   };
-  res.redirect('http://localhost:3001/?status=success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
+  res.redirect('http://localhost:3001/?login-success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
+})
+
+const loginFacebook = catchAsync(async(req,res,next)=>{
+  const token = signToken(req.user._id);
+  const data = {
+    status: 'success',
+    token,
+    expiresTime,
+    data: { user: req.user },
+  };
+  res.redirect('http://localhost:3001/?login-success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
 })
 
 const protect = catchAsync(async (req, res, next) => {
@@ -218,4 +248,4 @@ const getUser = catchAsync(async (req, res, next) => {
   });
 });
 
-export default { register, login,loginGoogle, protect, changePassword, editProfile, getUser }
+export default { register,verifyRegister, login,loginGoogle,loginFacebook, protect, changePassword, editProfile, getUser }

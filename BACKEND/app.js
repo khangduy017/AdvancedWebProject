@@ -6,7 +6,8 @@ import hpp from 'hpp';
 import cors from 'cors';
 import globalErrorhandler from "./controllers/ErrorController.js"
 import authRouter from './routes/authRoutes.js'
-import passportSetup from './config/passport-setup.js'
+import google from './config/passport-setup.js'
+import facebook from './config/passport-setup.js'
 
 
 const limiter = rateLimit({
@@ -33,6 +34,5 @@ app.use(express.json({ limit: '10mb' }));
 
 app.use('/webAdvanced/api/v1/auth', authRouter)
 app.use(globalErrorhandler);
-passportSetup
 
 export default app;
