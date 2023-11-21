@@ -1,0 +1,50 @@
+h3{
+    color: #2C2C66;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.class-content-container{
+    width: 23%;
+    height: 320px;
+    border: 1px solid #a9aae2;
+}
+
+.class-title{
+    font-size: 1.4rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.class-title-container{
+    background: #5D5FEF;
+    color: white;
+    height: 35%;
+}
+
+.class-instructor{
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.class-mid-container{
+    height: 50%;
+    border-bottom: 1px solid #a9aae2;
+}
+
+.size-icon{
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
+.class-footer-container{
+    height: 15%;
+}
+
+.class-assignment-title{
+    font-size: 0.9rem;
+}
