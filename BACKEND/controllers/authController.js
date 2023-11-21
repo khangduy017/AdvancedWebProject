@@ -134,6 +134,34 @@ const loginFacebook = catchAsync(async(req,res,next)=>{
   res.redirect('http://localhost:3001/?login-success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
 })
 
+const forgetPassword = catchAsync(async(req,res,next)=>{
+  const data = req.body
+  if(data.step===1){
+    if (!Validator.isMatching(data.email, REGEX.EMAIL))
+    return next(new AppError("Invalid email address", 400));
+
+    verifyCode = Math.floor(100000 + Math.random() * 900000);
+    await sendMail(data.email,'Your verify code is ['+verifyCode+']','Use this code to complete the account registration: '+verifyCode)
+  
+    return res.status(200).json({
+      status: 'success',
+    });
+  }
+  else if(data.step ===2){
+    if(data.code === verifyCode.toString()){  
+      return res.status(200).json({
+        status: 'success',
+      });
+    }
+    return res.status(400).json({
+      status: 'Verify code is incorrect',
+    });
+  }
+  else{
+
+  }
+})
+
 const protect = catchAsync(async (req, res, next) => {
 
   let token;
@@ -248,4 +276,4 @@ const getUser = catchAsync(async (req, res, next) => {
   });
 });
 
-export default { register,verifyRegister, login,loginGoogle,loginFacebook, protect, changePassword, editProfile, getUser }
+export default { register,verifyRegister, login,loginGoogle,loginFacebook,forgetPassword, protect, changePassword, editProfile, getUser }

@@ -19,6 +19,8 @@ router.get('/facebook/redirect',passport.authenticate('facebook',{
   session:false
 }),authController.loginFacebook)
 
+router.post('/forget-password',authController.forgetPassword)
+
 router.post('/change-password', authController.protect, authController.changePassword);
 router.post('/edit-profile', authController.protect, authController.editProfile);
 router.get('/get-user', authController.protect, authController.getUser);

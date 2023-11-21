@@ -8,11 +8,24 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function ForgetPassword() {
   const emailInputRef = useRef();
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const passwordInputRef = useRef();
+  const passwordConfirmInputRef = useRef();
   const verifyCodeRef = useRef()
 
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   const [message, setMessage] = useState({
+    type: "success",
+    content: ""
+  });
+
+  const [passwordMessage, setPasswordMessage] = useState({
+    type: "success",
+    content: ""
+  });
+
+  const [passwordConfirmMessage, setPasswordConfirmMessage] = useState({
     type: "success",
     content: ""
   });
@@ -20,15 +33,59 @@ export default function ForgetPassword() {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
 
-  const submitHandler = (event) => {
+  const submitEmailHandler = (event) => {
     event.preventDefault()
-  }
+    if (!isLoading) {
+      setIsLoading(true)
 
-  const handleFocus = () => {
+      const data = {
+        step,
+        email: emailInputRef.current.value
+      };
 
+      axios.post(process.env.REACT_APP_API_HOST + "auth/forget-password", data)
+        .then(res => {
+          setIsLoading(false)
+          setStep(2)
+          setEmail(data.email)
+        })
+        .catch(err => {
+          setIsLoading(false)
+          setMessage({
+            type: "error",
+            content: err.response.data.message
+          })
+        })
+    }
   }
 
   const submitVerifyCodeHandler = (event) => {
+    event.preventDefault()
+    const data = {
+      step,
+      code: verifyCodeRef.current.value
+    };
+    if (!isLoading) {
+      setIsLoading(true)
+
+      axios.post(process.env.REACT_APP_API_HOST + "auth/forget-password", data)
+        .then(res => {
+          setIsLoading(false)
+          setStep(3)
+        })
+        .catch(err => {
+          setIsLoading(false)
+          setMessage({
+            type: "error",
+            content: ''
+          })
+          // const message = err.response.data.message
+          // console.log(message)
+        })
+    }
+  }
+
+  const submitPasswordHandler = (event) => {
     event.preventDefault()
     if (!isLoading) {
       setIsLoading(true)
@@ -47,18 +104,36 @@ export default function ForgetPassword() {
     }
   }
 
+  const handleFocus = () => {
+    setMessage({
+      type: "success",
+      content: ""
+    });
+    setPasswordMessage({
+      type: "success",
+      content: ""
+    });
+    setPasswordConfirmMessage({
+      type: "success",
+      content: ""
+    });
+  }
+
   return <div className={`${styles.forget} d-flex justify-content-center align-items-center`}>
-    {step === 0 && <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
+    {/* step 1 */}
+    {step === 1 && <Form onSubmit={submitEmailHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
       <h2 className={`${styles['form-title']} display-7 `}>Forget password</h2>
       <p className={`${styles['form-text']}`}>No worries, we will send you reset instructions</p>
 
-      <Form.Group className={`mb-3 mt-5`} controlId="formBasicEmail" onFocus={handleFocus}>
+      <Form.Group className={`mb-1 mt-5`} controlId="formBasicEmail" onFocus={handleFocus}>
         <Form.Label>Email address</Form.Label>
         <Form.Control ref={emailInputRef} required className={`form-control ${message.type === 'error' && 'is-invalid'}`} type="email" placeholder="Enter email" />
       </Form.Group>
+      {message.type === 'error' ? <p className={`${styles['error-message']} mb-0`}>{message.content}</p> : <p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
 
-      <Button className={`${styles['submit-button']} p-2 d-flex gap-1 align-items-center justify-content-center mt-5 w-100 shadow-sm`} type="submit">
-        Reset password
+
+      <Button className={`${styles['submit-button']} p-2 d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
+        Confirm
         {isLoading && <Spinner size="sm" animation="border" />}
       </Button>
 
@@ -68,7 +143,8 @@ export default function ForgetPassword() {
         Back
       </div>
     </Form>}
-    {step === 0 && <Form onSubmit={submitVerifyCodeHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
+    {/* step 2 */}
+    {step === 2 && <Form onSubmit={submitVerifyCodeHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
       <h2 className={`${styles['form-title']}  display-7`}>Forget password</h2>
       <div className={`d-flex align-items-center gap-1 mt-3 mb-0`}>
         <p className={`${styles['form-text']} mb-0`}>We emailed you the code to</p>
@@ -98,7 +174,36 @@ export default function ForgetPassword() {
           <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
         Back
       </div>
-
     </Form>}
+    {/* step 3 */}
+    {step === 3 && <Form onSubmit={submitPasswordHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
+        <h2 className={`${styles['form-title']} display-7 `}>Forget password</h2>
+        <p className={`${styles['form-text']}`}>Enter your new password to reset password</p>
+
+        <Form.Group className={`mb-0 mt-5`} controlId="formBasicPassword" onFocus={handleFocus}>
+          <Form.Label>Password</Form.Label>
+          <Form.Control ref={passwordInputRef} required className={`form-control ${passwordMessage.type === 'error' && 'is-invalid'}`} type="password" placeholder="Enter password" />
+        </Form.Group>
+        {passwordMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordMessage.content}</p> : <p className={`${styles['error-message']}`}>&nbsp;</p>}
+
+        <Form.Group className={`mb-0 mt-0`} controlId="formBasicPassword" onFocus={handleFocus}>
+          <Form.Label>Password confirm</Form.Label>
+          <Form.Control ref={passwordConfirmInputRef} required className={`form-control ${passwordConfirmMessage.type === 'error' && 'is-invalid'}`} type="password" placeholder="Enter password confirm" />
+        </Form.Group>
+        {passwordConfirmMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordConfirmMessage.content}</p> : <p className={`${styles['error-message']}`}>&nbsp;</p>}
+
+
+        <Button className={`${styles['submit-button']} mb-3 p-2 d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
+          Reset password
+          {isLoading && <Spinner size="sm" animation="border" />}
+        </Button>
+
+        <div onClick={() => { setStep(2) }} className={`${styles['back-button']} rounded-2 p-1 d-flex gap-1 align-items-center justify-content-center`}>
+        <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="#5D5FEF" viewBox="0 0 448 512">
+          <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
+        Back
+      </div>
+
+      </Form>}
   </div>
 }
