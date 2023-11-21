@@ -77,7 +77,7 @@ const verifyRegister = catchAsync(async (req, res, next) => {
       email: data.email,
       password: data.password,
       type: 'account',
-      role: 'user',
+      role: data.role,
       username: data.username ? data.username : '',
       fullname: '',
       phone: '',
@@ -96,12 +96,12 @@ const verifyRegister = catchAsync(async (req, res, next) => {
 })
 
 const login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { role,email, password } = req.body;
   if (!email || !password) {
     return next(new AppError("Enter your email and password", 401));
   }
 
-  const user = await User.findOne({ email: email }).select('+password');
+  const user = await User.findOne({ email: email,role:role }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Email or password is incorrect', 401));

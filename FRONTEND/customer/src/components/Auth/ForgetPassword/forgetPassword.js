@@ -13,6 +13,7 @@ export default function ForgetPassword() {
   const verifyCodeRef = useRef()
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isResendLoading, setIsResendLoading] = useState(false);
   const navigate = useNavigate();
 
   const [message, setMessage] = useState({
@@ -32,7 +33,7 @@ export default function ForgetPassword() {
 
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
-  const [verifyCode,setVerifyCode] = useState('')
+  const [verifyCode, setVerifyCode] = useState('')
 
   const submitEmailHandler = (event) => {
     event.preventDefault()
@@ -68,7 +69,7 @@ export default function ForgetPassword() {
       step,
       code: verifyCodeRef.current.value
     };
-    if (!isLoading) {
+    if (!isLoading && !isResendLoading) {
       setIsLoading(true)
 
       axios.post(process.env.REACT_APP_API_HOST + "auth/forget-password", data)
@@ -94,7 +95,7 @@ export default function ForgetPassword() {
     if (!isLoading) {
       setIsLoading(true)
 
-      const data={
+      const data = {
         code: verifyCode,
         email,
         password: passwordInputRef.current.value,
@@ -141,6 +142,27 @@ export default function ForgetPassword() {
     });
   }
 
+  const handleResend = () => {
+    if (!isResendLoading) {
+      setIsResendLoading(true)
+
+      const data = {
+        step: 1,
+        email: email
+      };
+
+      axios.post(process.env.REACT_APP_API_HOST + "auth/forget-password", data)
+        .then(res => {
+          setIsResendLoading(false)
+          setStep(2)
+        })
+        .catch(err => {
+          setIsResendLoading(false)
+          console.log(err)
+        })
+    }
+  }
+
   return <div className={`${styles.forget} d-flex justify-content-center align-items-center`}>
     {/* step 1 */}
     {step === 1 && <Form onSubmit={submitEmailHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
@@ -183,13 +205,13 @@ export default function ForgetPassword() {
         {message.type === 'error' ? <p className={`${styles['error-message']} mb-1`}>{message.content}</p> : <p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
       </div>
 
-      <Button className={`${styles['submit-button']} d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
+      <Button className={`${styles['submit-button']} d-flex gap-1 align-items-center justify-content-center mt-3 w-100 shadow-sm`} type="submit">
         Confirm
         {isLoading && <Spinner size="sm" animation="border" />}
       </Button>
       <div className={`d-flex align-items-center justify-content-center gap-1 mt-3 mb-3`}>
-        <p className={`display-10`}>Didn't receive the code?</p>
-        <p className={`${styles.resend} display-10`}>Resend</p>
+        <p className={`display-10 mb-0`}>Didn't receive the code?</p>
+        {isResendLoading ? <Spinner size="sm" animation="border" color="#5D5FEF" /> : <p onClick={handleResend} className={`${styles.resend} display-10 mb-0`}>Resend</p>}
       </div>
       <div onClick={() => { setStep(1) }} className={`${styles['back-button']} rounded-2 p-1 d-flex gap-1 align-items-center justify-content-center`}>
         <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="#5D5FEF" viewBox="0 0 448 512">
@@ -199,33 +221,33 @@ export default function ForgetPassword() {
     </Form>}
     {/* step 3 */}
     {step === 3 && <Form onSubmit={submitPasswordHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
-        <h2 className={`${styles['form-title']} display-7 `}>Forget password</h2>
-        <p className={`${styles['form-text']}`}>Enter your new password to reset password</p>
+      <h2 className={`${styles['form-title']} display-7 `}>Forget password</h2>
+      <p className={`${styles['form-text']}`}>Enter your new password to reset password</p>
 
-        <Form.Group className={`mb-0 mt-5`} controlId="formBasicPassword" onFocus={handleFocus}>
-          <Form.Label>Password</Form.Label>
-          <Form.Control autoFocus ref={passwordInputRef} required className={`form-control ${passwordMessage.type === 'error' && 'is-invalid'}`} type="password" placeholder="Enter password" />
-        </Form.Group>
-        {passwordMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordMessage.content}</p> : <p className={`${styles['error-message']}`}>&nbsp;</p>}
+      <Form.Group className={`mb-0 mt-5`} controlId="formBasicPassword" onFocus={handleFocus}>
+        <Form.Label>Password</Form.Label>
+        <Form.Control autoFocus ref={passwordInputRef} required className={`form-control ${passwordMessage.type === 'error' && 'is-invalid'}`} type="password" placeholder="Enter password" />
+      </Form.Group>
+      {passwordMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordMessage.content}</p> : <p className={`${styles['error-message']}`}>&nbsp;</p>}
 
-        <Form.Group className={`mb-0 mt-0`} controlId="formBasicPassword" onFocus={handleFocus}>
-          <Form.Label>Password confirm</Form.Label>
-          <Form.Control ref={passwordConfirmInputRef} required className={`form-control ${passwordConfirmMessage.type === 'error' && 'is-invalid'}`} type="password" placeholder="Enter password confirm" />
-        </Form.Group>
-        {passwordConfirmMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordConfirmMessage.content}</p> : <p className={`${styles['error-message']}`}>&nbsp;</p>}
+      <Form.Group className={`mb-0 mt-0`} controlId="formBasicPassword" onFocus={handleFocus}>
+        <Form.Label>Password confirm</Form.Label>
+        <Form.Control ref={passwordConfirmInputRef} required className={`form-control ${passwordConfirmMessage.type === 'error' && 'is-invalid'}`} type="password" placeholder="Enter password confirm" />
+      </Form.Group>
+      {passwordConfirmMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordConfirmMessage.content}</p> : <p className={`${styles['error-message']}`}>&nbsp;</p>}
 
 
-        <Button className={`${styles['submit-button']} mb-3 p-2 d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
-          Reset password
-          {isLoading && <Spinner size="sm" animation="border" />}
-        </Button>
+      <Button className={`${styles['submit-button']} mb-3 p-2 d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
+        Reset password
+        {isLoading && <Spinner size="sm" animation="border" />}
+      </Button>
 
-        <div onClick={() => { setStep(2) }} className={`${styles['back-button']} rounded-2 p-1 d-flex gap-1 align-items-center justify-content-center`}>
+      <div onClick={() => { setStep(2) }} className={`${styles['back-button']} rounded-2 p-1 d-flex gap-1 align-items-center justify-content-center`}>
         <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="#5D5FEF" viewBox="0 0 448 512">
           <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
         Back
       </div>
 
-      </Form>}
+    </Form>}
   </div>
 }

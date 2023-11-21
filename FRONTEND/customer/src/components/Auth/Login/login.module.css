@@ -37,3 +37,9 @@
 .login .social-button{
   border: solid 1px #000000;
 }
+
+.login .back-button{
+  /* background-color: #5D5FEF !important; */
+  color: #5D5FEF;
+  cursor: pointer;
+}
