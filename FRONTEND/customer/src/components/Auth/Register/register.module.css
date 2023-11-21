@@ -40,14 +40,18 @@
 }
 
 .register .resend{
-  text-decoration: underline;
   color: #5D5FEF;
   cursor: pointer;
 }
 
 .register .input-verify{
-  font-size: 36px;
-  padding: 0px 8px;
+  font-size: 30px;
+  padding: 0px 14px;
   font-weight: bold;
-  letter-spacing: 5px;
+  letter-spacing: 11px;
+}
+
+.register .login{
+  text-decoration: none !important;
+  color: #5D5FEF;
 }

@@ -37,7 +37,7 @@ function Register() {
     content: ""
   });
 
-  const [data,setData] = useState();
+  const [data, setData] = useState();
 
   const submitHandler = (event) => {
     event.preventDefault()
@@ -50,11 +50,11 @@ function Register() {
         password: passwordInputRef.current.value,
         passwordConfirm: passwordConfirmInputRef.current.value
       };
-      
+
       axios.post(process.env.REACT_APP_API_HOST + "auth/register", data)
-      .then(res => {
-        setIsLoading(false)
-        setData(data);
+        .then(res => {
+          setIsLoading(false)
+          setData(data);
           // console.log(res)
           // const expirationTime = new Date(
           //   new Date().getTime() + +res.data.expiresTime
@@ -102,13 +102,13 @@ function Register() {
     });
   }
 
-  const submitVerifyCodeHandler = (event)=>{
+  const submitVerifyCodeHandler = (event) => {
     event.preventDefault()
     if (!isLoading) {
       setIsLoading(true)
       // console.log(data)
 
-      axios.post(process.env.REACT_APP_API_HOST + "auth/verify", {code:verifyCodeRef.current.value,data:data})
+      axios.post(process.env.REACT_APP_API_HOST + "auth/verify", { code: verifyCodeRef.current.value, data: data })
         .then(res => {
           setIsLoading(false)
           // console.log(res)
@@ -121,7 +121,8 @@ function Register() {
         })
         .catch(err => {
           setIsLoading(false)
-          setEmailMessage({type:'error',content:''})
+          const message = err.response.data.message
+          setEmailMessage({ type: 'error', content: message })
         })
     }
   }
@@ -155,7 +156,7 @@ function Register() {
         </Button>
         <div className={`d-flex align-item-center gap-1 mt-5`}>
           <p className={`display-10`}>Already have an account?</p>
-          <Link to={'/login'}>Login</Link>
+          <Link className={styles['login']} to={'/login'}>Login</Link>
         </div>
       </Form>
         :
@@ -166,27 +167,29 @@ function Register() {
             <p className={`${styles.email} display-10 mb-0`}>{data.email}</p>
           </div>
           <p className={`${styles['form-text']} mt-0`}>Enter the code below to confirm your email address</p>
-          <Form.Group className={`mb-1 mt-5 d-flex justify-content-around align-items-center`} controlId="formBasicEmail" onFocus={handleFocus}>
-            <Form.Label>Verify Code</Form.Label>
-            <Form.Control autoFocus maxLength={6} className={`form-control w-50 ${styles['input-verify']}`} ref={verifyCodeRef} required type="text"/>
+          <Form.Group className={`mb-0 mt-5`} controlId="formBasicEmail" onFocus={handleFocus}>
+            <Form.Label>Verify Code:</Form.Label>
+            <div div className={`d-flex align-items-center justify-content-center`}>
+              <Form.Control autoFocus maxLength={6} className={`form-control w-50 ${styles['input-verify']}`} ref={verifyCodeRef} required type="text" />
+            </div>
           </Form.Group>
-          <div className={`d-flex justify-content-center mt-3`}>
-          {emailMessage.type === 'error' ? 
-          <p className={`${styles['error-message']} mb-1`}>Your code is incorrect</p> : <p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
+          <div className={`d-flex justify-content-center mt-1`}>
+            {emailMessage.type === 'error' ? <p className={`${styles['error-message']} mb-1`}>{emailMessage.content}</p> : <p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
           </div>
 
-          <Button className={`${styles['submit-button']} d-flex gap-1 align-items-center justify-content-center mt-3 w-100 shadow-sm`} type="submit">
+          <Button className={`${styles['submit-button']} d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
             Confirm
             {isLoading && <Spinner size="sm" animation="border" />}
           </Button>
+
           <div className={`d-flex align-items-center justify-content-center gap-1 mt-2 mb-3`}>
-          <p className={`display-10`}>Didn't receive the code?</p>
-          <p className={`${styles.resend} display-10`}>Resend</p>
-        </div>
-        <div onClick={()=>{setStep(1)}} className={`${styles['back-button']} rounded-2 p-1 d-flex gap-1 align-items-center justify-content-center`}>
-          <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="#5D5FEF" viewBox="0 0 448 512">
-          <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
-          Back
+            <p className={`display-10`}>Didn't receive the code?</p>
+            <p className={`${styles.resend} display-10`}>Resend</p>
+          </div>
+          <div onClick={() => { setStep(1) }} className={`${styles['back-button']} rounded-2 p-1 d-flex gap-1 align-items-center justify-content-center`}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="#5D5FEF" viewBox="0 0 448 512">
+              <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
+            Back
           </div>
 
         </Form>}

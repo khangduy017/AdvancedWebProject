@@ -7,8 +7,8 @@ import REGEX from '../constants/regex.js';
 import { promisify } from 'util';
 import sendMail from '../utils/mailer.js'
 
-const expiresTime = 3*24*3600*1000;
-let verifyCode ='';
+const expiresTime = 3 * 24 * 3600 * 1000;
+let verifyCode = '';
 
 const signToken = function (id) {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -63,37 +63,35 @@ const register = catchAsync(async (req, res, next) => {
 
   verifyCode = Math.floor(100000 + Math.random() * 900000);
 
-  await sendMail(email,'Your verify code is ['+verifyCode+']','Use this code to complete the account registration: '+verifyCode)
+  await sendMail(email, 'Your verify code is [' + verifyCode + ']', 'Use this code to complete the account registration: ' + verifyCode)
 
   res.status(200).json({
     status: 'success',
   });
 })
 
-const verifyRegister = catchAsync(async(req,res,next)=>{
+const verifyRegister = catchAsync(async (req, res, next) => {
   const data = req.body.data
-  if(req.body.code === verifyCode.toString()){  
+  if (req.body.code === verifyCode.toString()) {
     const newUser = await User.create({
       email: data.email,
       password: data.password,
-      type:'account',
+      type: 'account',
       role: 'user',
       username: data.username ? data.username : '',
       fullname: '',
       phone: '',
       dob: '',
-      googleId:'',
-      facebookId:'',
+      googleId: '',
+      facebookId: '',
       address: '',
       gender: '',
       avatar: '',
-    }) 
+    })
     createSendToken(newUser, 201, res)
   }
   else {
-    return res.status(400).json({
-      status: 'Verify code is incorrect',
-    });
+    return next(new AppError("Verify code is incorrect", 400));
   }
 })
 
@@ -123,7 +121,7 @@ const loginGoogle = catchAsync(async (req, res, next) => {
   res.redirect('http://localhost:3001/?login-success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
 })
 
-const loginFacebook = catchAsync(async(req,res,next)=>{
+const loginFacebook = catchAsync(async (req, res, next) => {
   const token = signToken(req.user._id);
   const data = {
     status: 'success',
@@ -134,31 +132,49 @@ const loginFacebook = catchAsync(async(req,res,next)=>{
   res.redirect('http://localhost:3001/?login-success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
 })
 
-const forgetPassword = catchAsync(async(req,res,next)=>{
+const forgetPassword = catchAsync(async (req, res, next) => {
   const data = req.body
-  if(data.step===1){
+  if (data.step === 1) {
     if (!Validator.isMatching(data.email, REGEX.EMAIL))
-    return next(new AppError("Invalid email address", 400));
+      return next(new AppError("Invalid email address", 400));
+
+    const founded_user = await User.findOne({ email: data.email });
+
+    if (!founded_user)
+      return next(new AppError("The email does not exist", 400));
 
     verifyCode = Math.floor(100000 + Math.random() * 900000);
-    await sendMail(data.email,'Your verify code is ['+verifyCode+']','Use this code to complete the account registration: '+verifyCode)
-  
+    await sendMail(data.email, 'Your verify code is [' + verifyCode + ']', 'Use this code to complete the account registration: ' + verifyCode)
+
     return res.status(200).json({
       status: 'success',
     });
   }
-  else if(data.step ===2){
-    if(data.code === verifyCode.toString()){  
+  else if (data.step === 2) {
+    if (data.code === verifyCode.toString()) {
+      return res.status(200).json({
+        code: data.code,
+        status: 'success',
+      });
+    }
+    return next(new AppError("Verify code is incorrect", 400));
+  }
+  else {
+    if (data.code === verifyCode.toString()) {
+      if (data.password.length < 8)
+        return next(new AppError('Your password is too weak (minimum 8 characters)', 400));
+
+      else if (data.password !== data.passwordConfirm)
+        return next(new AppError("Your passwords do not match", 400));
+
+      const user = await User.findOne({ email: data.email }).select('+password');
+      user.password = data.password;
+      await user.save();
       return res.status(200).json({
         status: 'success',
       });
     }
-    return res.status(400).json({
-      status: 'Verify code is incorrect',
-    });
-  }
-  else{
-
+    return next(new AppError("Verify code is incorrect", 400));
   }
 })
 
@@ -211,11 +227,11 @@ const changePassword = catchAsync(async (req, res, next) => {
     });
   }
 
-  else{
+  else {
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
     await user.save();
-  
+
     createSendToken(user, 200, res);
   }
 });
@@ -226,22 +242,22 @@ const editProfile = catchAsync(async (req, res, next) => {
     { email: req.body.email },
   );
 
-  if(userCheck && userCheck._id.toString() !== req.user.id){
+  if (userCheck && userCheck._id.toString() !== req.user.id) {
     res.status(200).json({
       status: 'fail',
       message: 'Email has been existed'
     });
   }
-  else if (!Validator.isMatching(req.body.email, REGEX.EMAIL)){
+  else if (!Validator.isMatching(req.body.email, REGEX.EMAIL)) {
     res.status(200).json({
       status: 'fail',
       message: 'Invalid email address'
     });
   }
-  else{
+  else {
     const updatedUser = await User.updateOne(
       { _id: req.user.id },
-      { 
+      {
         fullname: req.body.fullname,
         username: req.body.username,
         dob: req.body.dob,
@@ -252,11 +268,11 @@ const editProfile = catchAsync(async (req, res, next) => {
         address: req.body.address
       }
     );
-    
+
     const userData = await User.findOne(
       { _id: req.user.id },
     );
-  
+
     res.status(200).json({
       status: 'success',
       data: userData
@@ -276,4 +292,4 @@ const getUser = catchAsync(async (req, res, next) => {
   });
 });
 
-export default { register,verifyRegister, login,loginGoogle,loginFacebook,forgetPassword, protect, changePassword, editProfile, getUser }
+export default { register, verifyRegister, login, loginGoogle, loginFacebook, forgetPassword, protect, changePassword, editProfile, getUser }

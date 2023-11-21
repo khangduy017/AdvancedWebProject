@@ -32,6 +32,7 @@ export default function ForgetPassword() {
 
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
+  const [verifyCode,setVerifyCode] = useState('')
 
   const submitEmailHandler = (event) => {
     event.preventDefault()
@@ -59,6 +60,8 @@ export default function ForgetPassword() {
     }
   }
 
+
+
   const submitVerifyCodeHandler = (event) => {
     event.preventDefault()
     const data = {
@@ -72,12 +75,13 @@ export default function ForgetPassword() {
         .then(res => {
           setIsLoading(false)
           setStep(3)
+          setVerifyCode(res.data.code)
         })
         .catch(err => {
           setIsLoading(false)
           setMessage({
             type: "error",
-            content: ''
+            content: err.response.data.message
           })
           // const message = err.response.data.message
           // console.log(message)
@@ -89,17 +93,35 @@ export default function ForgetPassword() {
     event.preventDefault()
     if (!isLoading) {
       setIsLoading(true)
+
+      const data={
+        code: verifyCode,
+        email,
+        password: passwordInputRef.current.value,
+        passwordConfirm: passwordConfirmInputRef.current.value,
+      }
       // console.log(data)
 
-      axios.post(process.env.REACT_APP_API_HOST + "auth/verify", {})
+      axios.post(process.env.REACT_APP_API_HOST + "auth/forget-password", data)
         .then(res => {
           setIsLoading(false)
-
+          alert('Reset password successfully!')
+          navigate('/login')
         })
         .catch(err => {
           setIsLoading(false)
           const message = err.response.data.message
-          console.log(message)
+          if (message === 'Your password is too weak (minimum 8 characters)') {
+            setPasswordMessage({
+              type: 'error',
+              content: message
+            })
+          } else if (message === 'Your passwords do not match') {
+            setPasswordConfirmMessage({
+              type: 'error',
+              content: message
+            })
+          }
         })
     }
   }
@@ -154,11 +176,11 @@ export default function ForgetPassword() {
       <Form.Group className={`mb-0 mt-5`} controlId="formBasicEmail" onFocus={handleFocus}>
         <Form.Label>Verify Code:</Form.Label>
         <div div className={`d-flex align-items-center justify-content-center`}>
-          <Form.Control autoFocus maxLength={6} className={`form-control w-50 ${styles['input-verify']} ${message.type === 'error' && 'is-invalid'}`} ref={verifyCodeRef} required type="text" />
+          <Form.Control autoFocus maxLength={6} className={`form-control w-50 ${styles['input-verify']}`} ref={verifyCodeRef} required type="text" />
         </div>
       </Form.Group>
       <div className={`d-flex justify-content-center mt-1`}>
-        {message.type === 'error' ? <p className={`${styles['error-message']} mb-1`}>Your code is incorrect</p> : <p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
+        {message.type === 'error' ? <p className={`${styles['error-message']} mb-1`}>{message.content}</p> : <p className={`${styles['error-message']} mb-1`}>&nbsp;</p>}
       </div>
 
       <Button className={`${styles['submit-button']} d-flex gap-1 align-items-center justify-content-center mt-4 w-100 shadow-sm`} type="submit">
@@ -182,7 +204,7 @@ export default function ForgetPassword() {
 
         <Form.Group className={`mb-0 mt-5`} controlId="formBasicPassword" onFocus={handleFocus}>
           <Form.Label>Password</Form.Label>
-          <Form.Control ref={passwordInputRef} required className={`form-control ${passwordMessage.type === 'error' && 'is-invalid'}`} type="password" placeholder="Enter password" />
+          <Form.Control autoFocus ref={passwordInputRef} required className={`form-control ${passwordMessage.type === 'error' && 'is-invalid'}`} type="password" placeholder="Enter password" />
         </Form.Group>
         {passwordMessage.type === 'error' ? <p className={`${styles['error-message']}`}>{passwordMessage.content}</p> : <p className={`${styles['error-message']}`}>&nbsp;</p>}
 
