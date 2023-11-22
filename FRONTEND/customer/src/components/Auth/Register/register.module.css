@@ -55,3 +55,43 @@
   text-decoration: none !important;
   color: #5D5FEF;
 }
+
+.register .password{
+  position: relative;
+}
+
+.register .show-password-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
+}
+
+.register .hide-password-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-40%,-50%);
+  cursor: pointer;
+}
+
+.register .password-confirm{
+  position: relative;
+}
+
+.register .show-password-confirm-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
+}
+
+.register .hide-password-confirm-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-40%,-50%);
+  cursor: pointer;
+}

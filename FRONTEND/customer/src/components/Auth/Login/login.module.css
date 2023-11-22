@@ -43,3 +43,23 @@
   color: #5D5FEF;
   cursor: pointer;
 }
+
+.login .password{
+  position: relative;
+}
+
+.login .password .show-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
+}
+
+.login .password .hide-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-40%,-50%);
+  cursor: pointer;
+}
