@@ -1,0 +1,30 @@
+.classroom-container{
+    margin: 1rem auto;
+    width: 57%;
+}
+
+.banner-container{
+    height: 14.5rem;
+    position: relative;
+   
+}
+
+.classroom-banner{
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+.classroom-name{
+    position: absolute;
+    bottom: 3rem;
+    left: 1.5rem;
+    color: white;
+}
+
+.classroom-note{
+    position: absolute;
+    bottom: 0.5rem;
+    left: 1.5rem;
+    color: white;
+    font-weight: 500;
+}

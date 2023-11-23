@@ -10,6 +10,10 @@ h3{
     border: 1px solid #a9aae2;
 }
 
+.class-content-container:hover{
+    cursor: pointer;
+}
+
 .class-title{
     font-size: 1.4rem;
     text-overflow: ellipsis;

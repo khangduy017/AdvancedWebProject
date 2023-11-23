@@ -5,9 +5,11 @@ import { useLocation } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import { ReactComponent as LeaveIcon } from "../../assests/svg/leave.svg";
 import { ReactComponent as FolderIcon } from "../../assests/svg/folder.svg";
+import { useNavigate } from "react-router-dom";
 
 const HomePageContent = () => {
   // get information when login with social
+  const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
   const location = useLocation();
   useEffect(() => {
@@ -28,7 +30,7 @@ const HomePageContent = () => {
       <h3>My class</h3>
       <div className="d-flex my-3 flex-wrap justify-content-between">
         {classData.map((data) => (
-          <div className={`${styles["class-content-container"]} mt-4 rounded-3`}>
+          <div onClick={()=>{navigate("/myclass/1");}} className={`${styles["class-content-container"]} mt-4 rounded-3`}>
             <div className={`${styles["class-title-container"]} rounded-top-3`}> 
               <h2 className={`${styles['class-title']} px-3 pt-3`}>2310-CLC-AWP-20KTPM2</h2>
               <div className={`${styles['class-instructor']} px-3 pt-0`}>Advanced Web Programming</div>
