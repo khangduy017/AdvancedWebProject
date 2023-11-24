@@ -7,7 +7,7 @@ h3{
 .class-content-container{
     width: 23%;
     height: 320px;
-    border: 1px solid #a9aae2;
+    border: 1px solid #b9b9d3;
 }
 
 .class-content-container:hover{
@@ -23,9 +23,28 @@ h3{
 }
 
 .class-title-container{
-    background: #5D5FEF;
     color: white;
     height: 35%;
+}
+
+.blue{
+    background: #1C7ED6;
+}
+
+.yellow{
+    background: #F08C00;
+}
+
+.red{
+    background: #F03E3E;
+}
+
+.purple{
+    background: #5D5FEF;
+}
+
+.green{
+    background: #0CA678;
 }
 
 .class-instructor{
@@ -37,7 +56,7 @@ h3{
 
 .class-mid-container{
     height: 50%;
-    border-bottom: 1px solid #a9aae2;
+    border-bottom: 1px solid #b9b9d3;
 }
 
 .size-icon{
@@ -52,3 +71,60 @@ h3{
 .class-assignment-title{
     font-size: 0.9rem;
 }
+
+.form-container{
+    width: 22rem;
+    box-sizing: border-box;
+}
+
+.form-control-container{
+    width: 18.5rem;
+    margin: 0;
+    border: 1px solid #A5A6F6;
+}
+
+.search-icon-customize{
+    top: 0.65rem;
+    right: 0.8rem;
+}
+
+.search-container{
+    height: 2.5rem;
+}
+
+.filter-icon-customize{
+    border: 1px solid #A5A6F6;
+    height: 2.4rem;
+    width: 2.4rem;
+    border-radius: 0.4rem;
+}
+
+.filter-icon-customize:hover{
+    cursor: pointer;
+    background: #EEEEFF;
+}
+
+.find-classroom{
+    height: 2.5rem;
+    width: 10rem;
+    background: #5D5FEF;
+    color: white;
+    border: none;
+}
+
+.find-classroom:hover{
+    background: #4c4eb6;
+}
+
+/* .create-classroom{
+    background: white;
+    width: 8rem;
+    color: #2C2C66 !important;
+    border: 1px solid #5D5FEF;
+    box-sizing: border-box;
+}
+
+
+.create-classroom:hover{
+    background: #EEEEFF;
+} */

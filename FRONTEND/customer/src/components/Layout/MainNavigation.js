@@ -32,12 +32,14 @@ const MainNavigation = () => {
       axios
         .get(process.env.REACT_APP_API_HOST + "auth/get-user", { headers })
         .then((res) => authCtx.setUserDataContext(res.data.data));
+    } else {
+      navigate("/login");
     }
   }, []);
 
   const logoutHandler = () => {
     authCtx.logout();
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -45,13 +47,6 @@ const MainNavigation = () => {
       className="justify-content-between nav-container"
       data-bs-theme="dark"
     >
-      {/* <h4
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        Authentication
-      </h4> */}
       <Container className="sub-nav-container p-0 m-0">
         <Navbar.Brand href="/" className="nav-brand-container">
           AWClassroom
@@ -61,50 +56,33 @@ const MainNavigation = () => {
           activeKey={active}
           onSelect={(selectedKey) => setActive(selectedKey)}
         >
-          <Nav.Link href="/" eventKey="myclass">My class</Nav.Link>
-          <Nav.Link href="/" eventKey="todo">To do</Nav.Link>
-          <Nav.Link href="/" eventKey="schedule">Schedule</Nav.Link>
+          <Nav.Link href="/" eventKey="myclass">
+            My class
+          </Nav.Link>
+          <Nav.Link href="/" eventKey="todo">
+            To do
+          </Nav.Link>
+          <Nav.Link href="/" eventKey="schedule">
+            Schedule
+          </Nav.Link>
         </Nav>
       </Container>
 
-      {!authCtx.isLoggedIn ? (
-        <div className="d-flex">
-          <Button
-            onClick={() => {
-              navigate("/register");
-            }}
-            className="register px-3"
-            type="submit"
-          >
-            Register
-          </Button>
-          <Button
-            onClick={() => {
-              navigate("/login");
-            }}
-            className="login px-3"
-            type="submit"
-          >
-            Login
-          </Button>
-        </div>
-      ) : (
-        <div className="d-flex align-items-center">
-          <div
-            onClick={() => {
-              navigate("./profile");
-            }}
-            className="d-flex info-ava"
-          >
-            <div className="info-container">
-              <div className="role">Hello,</div>
-              <div className="username">{userData.username}</div>
-            </div>
-            <img src={User} className="img-container" />
+      <div className="d-flex align-items-center">
+        <div
+          onClick={() => {
+            navigate("./profile");
+          }}
+          className="d-flex info-ava"
+        >
+          <div className="info-container">
+            <div className="role">Hello,</div>
+            <div className="username">{userData.username}</div>
           </div>
-          <LogoutIcon onClick={logoutHandler} className="icon" />
+          <img src={User} className="img-container" />
         </div>
-      )}
+        <LogoutIcon onClick={logoutHandler} className="icon" />
+      </div>
     </Navbar>
   );
 };
