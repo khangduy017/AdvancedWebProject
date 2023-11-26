@@ -15,19 +15,7 @@ import { useLocation } from "react-router-dom";
 
 
 const AppRoutes = () => {
-    // get information when login with social
     const authCtx = useContext(AuthContext);
-    const location = useLocation();
-    
-    useEffect(() => {
-      const token = new URLSearchParams(location.search).get("token");
-      const expiresTime = new URLSearchParams(location.search).get("expiresTime");
-      const userData = new URLSearchParams(location.search).get("userData");
-      if (token) {
-        const expirationTime = new Date(new Date().getTime() + +expiresTime);
-        authCtx.login(token, expirationTime.toISOString(),JSON.parse(userData).role);
-      }
-    }, [location.search]);
 
   return (
     <Routes>
