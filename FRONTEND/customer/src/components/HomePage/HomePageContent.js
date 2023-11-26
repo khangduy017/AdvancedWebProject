@@ -1,8 +1,5 @@
 import styles from "./HomePageContent.module.css";
-import { RingLoader } from "react-spinners";
-import { useEffect, useContext, useState } from "react";
-import { useLocation } from "react-router-dom";
-import AuthContext from "../../store/auth-context";
+import { useState } from "react";
 import { ReactComponent as LeaveIcon } from "../../assests/svg/leave.svg";
 import { ReactComponent as FolderIcon } from "../../assests/svg/folder.svg";
 import { ReactComponent as SearchIcon } from "../../assests/svg/search.svg";
@@ -13,20 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 
 const HomePageContent = () => {
-  // get information when login with social
   const navigate = useNavigate();
-  const authCtx = useContext(AuthContext);
-  const location = useLocation();
-  useEffect(() => {
-    const token = new URLSearchParams(location.search).get("token");
-    const expiresTime = new URLSearchParams(location.search).get("expiresTime");
-    const userData = new URLSearchParams(location.search).get("userData");
-    if (token) {
-      const expirationTime = new Date(new Date().getTime() + +expiresTime);
-      authCtx.login(token, expirationTime.toISOString());
-      console.log(userData);
-    }
-  }, [location.search]);
 
   const [searchInput, setSearchInput] = useState("");
   const classData = [1, 2, 3, 4, 1, 2, 3, 4];
