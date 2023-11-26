@@ -51,7 +51,7 @@ const MainNavigation = () => {
         <Navbar.Brand href="/" className="nav-brand-container">
           AWClassroom
         </Navbar.Brand>
-        <Nav
+        {/* <Nav
           className="me-auto"
           activeKey={active}
           onSelect={(selectedKey) => setActive(selectedKey)}
@@ -65,7 +65,7 @@ const MainNavigation = () => {
           <Nav.Link href="/" eventKey="schedule">
             Schedule
           </Nav.Link>
-        </Nav>
+        </Nav> */}
       </Container>
 
       <div className="d-flex align-items-center">

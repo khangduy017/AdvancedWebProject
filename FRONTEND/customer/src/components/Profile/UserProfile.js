@@ -22,7 +22,7 @@ const UserProfile = () => {
   }, []);
 
   return (
-    <div>
+    <div className="user-profile-container">
       <h3>Profile</h3>
       <div className="d-flex info-container-content">
         <div className="profile-option-container">
