@@ -9,7 +9,7 @@ h3{
     width: 45%;
     display: flex;
     gap: 1rem;
-    margin: 2rem auto;
+    margin: 2rem 35rem;
 }
 
 .profile-option-container{
@@ -72,4 +72,8 @@ h3{
     background: #494bdb;
     color: white;
     border: none;
+}
+
+.user-profile-container{
+    margin-top: 7rem;
 }
