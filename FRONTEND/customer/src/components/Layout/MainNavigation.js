@@ -74,7 +74,7 @@ const MainNavigation = () => {
           onClick={() => {
             navigate("./profile");
           }}
-          className="d-flex info-ava"
+          className="d-flex justify-content-end info-ava"
         >
           <div className="info-container">
             <div className="role">Hello,</div>

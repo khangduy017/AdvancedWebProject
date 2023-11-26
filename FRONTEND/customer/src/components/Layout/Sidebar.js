@@ -15,7 +15,7 @@ const Sidebar = () => {
   return (
     <div className={`${styles["sidebar-container"]} d-flex`}>
       <CDBSidebar textColor="#5D5FEF" backgroundColor="white">
-        <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
+        <CDBSidebarHeader >
           <a
             href="/"
             className="text-decoration-none"

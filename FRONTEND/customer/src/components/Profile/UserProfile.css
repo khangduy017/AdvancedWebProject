@@ -9,7 +9,7 @@ h3{
     width: 45%;
     display: flex;
     gap: 1rem;
-    margin: 2rem 35rem;
+    margin: 2rem 31rem;
 }
 
 .profile-option-container{
@@ -59,7 +59,7 @@ h3{
 
 .edit-profile-option{
     width: 100%;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     background: #5D5FEF;
     color: white;
     margin-top: 0.5rem;
