@@ -8,9 +8,27 @@ import AuthContext from "../store/auth-context";
 import LoginPage from "../pages/LoginPage";
 import Register from "../components/Auth/Register/register";
 import ForgetPassword from "../components/Auth/ForgetPassword/forgetPassword";
+import { useNavigate } from "react-router-dom";
+import { RingLoader } from "react-spinners";
+import {useState,useEffect  } from "react";
+import { useLocation } from "react-router-dom";
+
 
 const AppRoutes = () => {
-  const authCtx = useContext(AuthContext);
+    // get information when login with social
+    const authCtx = useContext(AuthContext);
+    const location = useLocation();
+    
+    useEffect(() => {
+      const token = new URLSearchParams(location.search).get("token");
+      const expiresTime = new URLSearchParams(location.search).get("expiresTime");
+      const userData = new URLSearchParams(location.search).get("userData");
+      if (token) {
+        const expirationTime = new Date(new Date().getTime() + +expiresTime);
+        authCtx.login(token, expirationTime.toISOString(),JSON.parse(userData).role);
+      }
+    }, [location.search]);
+
   return (
     <Routes>
       {!authCtx.isLoggedIn && (

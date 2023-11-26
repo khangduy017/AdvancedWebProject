@@ -49,10 +49,11 @@ function Login() {
       axios.post(process.env.REACT_APP_API_HOST + "auth/login", data)
         .then(res => {
           setIsLoading(false)
+
           const expirationTime = new Date(
             new Date().getTime() + +res.data.expiresTime
           );
-          authCtx.login(res.data.token, expirationTime.toISOString());
+          authCtx.login(res.data.token, expirationTime.toISOString(),res.data.data.user.role);
           navigate('/', { replace: true })
         })
         .catch(err => {

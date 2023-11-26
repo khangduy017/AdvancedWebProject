@@ -95,3 +95,7 @@
   transform: translate(-40%,-50%);
   cursor: pointer;
 }
+
+.register .email-text{
+  flex-wrap: wrap;
+}

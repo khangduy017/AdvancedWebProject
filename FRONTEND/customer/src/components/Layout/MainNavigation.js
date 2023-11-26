@@ -26,6 +26,7 @@ const MainNavigation = () => {
 
   const token = authCtx.token;
   const headers = { Authorization: `Bearer ${token}` };
+
   useEffect(() => {
     if (authCtx.isLoggedIn) {
       const headers = { Authorization: `Bearer ${token}` };
@@ -35,7 +36,7 @@ const MainNavigation = () => {
     } else {
       navigate("/login");
     }
-  }, [authCtx.isLoggedIn]);
+  },[]);
 
   const logoutHandler = () => {
     authCtx.logout();

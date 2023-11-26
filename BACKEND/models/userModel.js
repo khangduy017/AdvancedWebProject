@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema({
   role: {
       type: String,
   },
+  class: [String],
+  notify: [String],
   fullname: {
       type: String,
   },

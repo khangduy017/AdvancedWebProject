@@ -193,7 +193,7 @@ export default function ForgetPassword() {
     {/* step 2 */}
     {step === 2 && <Form onSubmit={submitVerifyCodeHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
       <h2 className={`${styles['form-title']}  display-7`}>Forget password</h2>
-      <div className={`d-flex align-items-center gap-1 mt-3 mb-0`}>
+      <div className={`${styles['email-text']} d-flex align-items-center gap-1 mt-3 mb-0`}>
         <p className={`${styles['form-text']} mb-0`}>We emailed you the code to</p>
         <p className={`${styles.email} display-10 mb-0`}>{email}</p>
       </div>
