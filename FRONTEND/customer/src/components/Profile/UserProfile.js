@@ -23,7 +23,6 @@ const UserProfile = () => {
 
   return (
     <div className="user-profile-container">
-      <h3>Profile</h3>
       <div className="d-flex info-container-content">
         <div className="profile-option-container">
           <div className="ava-content-container">

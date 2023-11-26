@@ -35,7 +35,7 @@ const MainNavigation = () => {
     } else {
       navigate("/login");
     }
-  }, []);
+  }, [authCtx.isLoggedIn]);
 
   const logoutHandler = () => {
     authCtx.logout();
@@ -73,7 +73,7 @@ const MainNavigation = () => {
           onClick={() => {
             navigate("./profile");
           }}
-          className="d-flex info-ava"
+          className="d-flex justify-content-end info-ava"
         >
           <div className="info-container">
             <div className="role">Hello,</div>
