@@ -1,5 +1,5 @@
 import styles from "./HomePageContent.module.css";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ReactComponent as LeaveIcon } from "../../assests/svg/leave.svg";
 import { ReactComponent as FolderIcon } from "../../assests/svg/folder.svg";
 import { ReactComponent as SearchIcon } from "../../assests/svg/search.svg";
@@ -10,6 +10,10 @@ import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import SidebarMenu from "react-bootstrap-sidebar-menu";
+import axios from "axios";
+import AuthContext from "../../store/auth-context";
+import toast from "react-hot-toast";
+
 
 const HomePageContent = () => {
   const navigate = useNavigate();
@@ -35,6 +39,95 @@ const HomePageContent = () => {
   }
 
   const [idInput, setIdInput] = useState("");
+  const [titleInput, setTitleInput] = useState('')
+  const [contentInput, setContentInput] = useState('')
+  const [topicInput, setTopicInput] = useState('')
+
+  const authCtx = useContext(AuthContext);
+
+  const token = authCtx.token;
+  const userData = authCtx.userData;
+  const headers = { Authorization: `Bearer ${token}` };
+
+  const [allClasses, setAllClasses] = useState([])
+
+  const handleGetAllClasses = ()=>{
+    const data = {
+      _id: localStorage.getItem('_id')
+    }
+
+    axios.post(process.env.REACT_APP_API_HOST + "classes", data,{headers})
+      .then(res => {
+        if(res.data.status==='success'){
+          setAllClasses(res.data.value)
+        }
+        else{
+
+        }
+      })
+      .catch(err => {
+
+      })
+  }
+
+  useEffect(() => {
+    if (authCtx.isLoggedIn) {
+      handleGetAllClasses();
+    }
+  }, []);
+
+  const color = ['#1C7ED6', '#0CA678', '#F08C00', '#F03E3E', '#5D5FEF',
+    '#BE4BDB', '#E64980', '#E8590C', '#74B816', '#15AABF']
+
+  const handleCreate = (event) => {
+    // event.preventDefault();
+    console.log(userData)
+    const dataSubmit = {
+      user: userData._id,
+      title: titleInput,
+      content: contentInput,
+      topic: topicInput,
+      inviteLink: "",
+      color: color[Math.floor(Math.random() * 10)]
+    }
+
+    axios.post(process.env.REACT_APP_API_HOST + 'classes/create', dataSubmit, { headers }
+    )
+      .then((res) => {
+        if (res.data.status === "success") {
+          toast.success("Create class successfully", styleSuccess);
+          handleGetAllClasses()
+          setShow(false)
+          setTitleInput('')
+          setContentInput('')
+          setTopicInput('')
+        }
+        else {
+          toast.error(res.data.message, styleError);
+        }
+      });
+  }
+
+
+  const styleError = {
+    style: {
+      border: "2px solid red",
+      padding: "10px",
+      color: "red",
+      fontWeight: "500",
+    },
+    duration: 4000,
+  };
+
+  const styleSuccess = {
+    style: {
+      border: "2px solid #28a745",
+      padding: "5px",
+      color: "#28a745",
+      fontWeight: "500",
+    },
+    duration: 4000,
+  };
 
   return (
     <div className={`${styles["total-container"]} w-75`}>
@@ -89,8 +182,8 @@ const HomePageContent = () => {
               </Button>
             </Modal.Footer>
           </Modal>
-
-          {/* <Button
+          {/* //////////////////// */}
+          <Button
             onClick={handleShow}
             className={`${styles["find-classroom"]}`}
             type="submit"
@@ -110,22 +203,22 @@ const HomePageContent = () => {
             <Modal.Body>
               <Form className="form-container">
                 <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>Name</Form.Label>
+                  <Form.Label>Title</Form.Label>
                   <Form.Control
                     onChange={(event) => {
-                      setIdInput(event.target.value);
+                      setTitleInput(event.target.value);
                     }}
-                    value={idInput}
+                    value={titleInput}
                     className="form-control-container"
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>Course</Form.Label>
+                  <Form.Label>Content</Form.Label>
                   <Form.Control
                     onChange={(event) => {
-                      setIdInput(event.target.value);
+                      setContentInput(event.target.value);
                     }}
-                    value={idInput}
+                    value={contentInput}
                     className="form-control-container"
                   />
                 </Form.Group>
@@ -133,9 +226,9 @@ const HomePageContent = () => {
                   <Form.Label>Topic</Form.Label>
                   <Form.Control
                     onChange={(event) => {
-                      setIdInput(event.target.value);
+                      setTopicInput(event.target.value);
                     }}
-                    value={idInput}
+                    value={topicInput}
                     className="form-control-container"
                   />
                 </Form.Group>
@@ -151,12 +244,13 @@ const HomePageContent = () => {
               </Button>
               <Button
                 className={`${styles["save-button"]}`}
-                onClick={handleClose}
+                onClick={handleCreate}
               >
                 Create
               </Button>
             </Modal.Footer>
-          </Modal> */}
+          </Modal>
+          {/* ///////////// */}
         </div>
         <Form
           className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
@@ -184,7 +278,7 @@ const HomePageContent = () => {
         </Form>
       </div>
       <div className="d-flex my-2 flex-wrap justify-content-between">
-        {classData.map((data, index) => (
+        {allClasses.map((data, index) => (
           <div
             onClick={() => {
               navigate("/myclass/1");
@@ -193,18 +287,17 @@ const HomePageContent = () => {
             key={index}
           >
             <div
-              className={`${styles["class-title-container"]} ${
-                styles[colorForClass[index]]
-              } rounded-top-3`}
+              style={{ backgroundColor: data.background }}
+              className={`${styles["class-title-container"]} rounded-top-3`}
             >
               <h2 className={`${styles["class-title"]} px-3 pt-3`}>
-                2310-CLC-AWP-20KTPM2
+                {data.title}
               </h2>
               <div className={`${styles["class-instructor"]} px-3 pt-0`}>
-                Advanced Web Programming
+                {data.content}
               </div>
               <div className={`${styles["class-instructor"]} px-3 pt-2 pb-3`}>
-                Gia Huy
+                {data.owner}
               </div>
             </div>
             <div className={`${styles["class-mid-container"]} rounded-top-3`}>

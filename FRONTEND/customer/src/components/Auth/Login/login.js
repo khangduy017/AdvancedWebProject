@@ -55,7 +55,7 @@ function Login() {
           const expirationTime = new Date(
             new Date().getTime() + +res.data.expiresTime
           );
-          authCtx.login(res.data.token, expirationTime.toISOString(), res.data.data.user.role);
+          authCtx.login(res.data.token, expirationTime.toISOString(), res.data.data.user.role,res.data.data.user._id);
           navigate('/', { replace: true })
         })
         .catch(err => {
@@ -87,7 +87,7 @@ function Login() {
     const userData = new URLSearchParams(location.search).get("userData");
     if (token) {
       const expirationTime = new Date(new Date().getTime() + +expiresTime);
-      authCtx.login(token, expirationTime.toISOString(), JSON.parse(userData).role);
+      authCtx.login(token, expirationTime.toISOString(), JSON.parse(userData).role,JSON.parse(userData)._id);
       navigate('/', { replace: true })
     }
   }, [location.search]);

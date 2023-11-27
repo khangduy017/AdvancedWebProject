@@ -55,19 +55,21 @@ export const AuthContextProvider = (props) => {
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('expirationTime');
+    localStorage.removeItem('role');
+    localStorage.removeItem('_id');
 
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
   }, []);
 
-  const loginHandler = (token, expirationTime, role) => {
+  const loginHandler = (token, expirationTime, role,_id) => {
 
-    console.log('loginnnnnnnnnnn')
     setToken(token);
     localStorage.setItem('token', token);
     localStorage.setItem('expirationTime', expirationTime);
     localStorage.setItem('role',role)
+    localStorage.setItem('_id',_id)
 
     const remainingTime = calculateRemainingTime(expirationTime);
     logoutTimer = setTimeout(logoutHandler, remainingTime);

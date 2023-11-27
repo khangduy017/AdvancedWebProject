@@ -115,7 +115,7 @@ function Register() {
           const expirationTime = new Date(
             new Date().getTime() + +res.data.expiresTime
           );
-          authCtx.login(res.data.token, expirationTime.toISOString(),res.data.data.user.role);
+          authCtx.login(res.data.token, expirationTime.toISOString(),res.data.data.user.role,res.data.data.user._id);
           alert('Register successfully!')
           navigate('/', { replace: true })
         })
