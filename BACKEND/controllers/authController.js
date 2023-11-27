@@ -77,6 +77,8 @@ const verifyRegister = catchAsync(async (req, res, next) => {
       email: data.email,
       password: data.password,
       type: 'account',
+      class: [],
+      notify: [],
       role: data.role,
       username: data.username ? data.username : '',
       fullname: '',

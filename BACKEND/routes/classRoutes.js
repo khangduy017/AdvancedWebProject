@@ -1,10 +1,11 @@
 import express from 'express'
 import classController from '../controllers/classController.js';
+import authController from '../controllers/authController.js'
 
 const router = express.Router()
 
-router.get('/', classController.getAllClass);
-router.post('/create', classController.createClass);
+router.post('/create',authController.protect, classController.createClass);
+router.post('/',authController.protect,classController.getAllClass);
 router.get('/:id', classController.getClassDetail);
 
 export default router;

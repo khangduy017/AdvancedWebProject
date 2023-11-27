@@ -10,8 +10,10 @@ const google = passport.use(
     clientSecret: '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',
     passReqToCallback: true,
   }, (req, accessToken, refreshToken, profile, done) => {
-    User.findOne({ googleId: profile.id }).then(async currentUser => {
+    User.findOne({ googleId: profile.id,role: req.query.state }).then(async currentUser => {
       if (currentUser) {
+        // if(currentUser.role!==req.)
+
         done(null, currentUser)
       } else {
         const newUser = await User.create({
@@ -19,6 +21,8 @@ const google = passport.use(
           password: 'googleaccount',
           type: 'google',
           role: req.query.state,
+          class: [],
+          notify: [],
           username: profile.displayName,
           fullname: '',
           phone: '',
@@ -42,7 +46,7 @@ const facebook = passport.use(new FacebookStrategy({
   passReqToCallback: true,
 },
   function (req,accessToken, refreshToken, profile, done) {
-    User.findOne({ facebookId: profile.id }).then(async currentUser => {
+    User.findOne({ facebookId: profile.id,role: req.query.state }).then(async currentUser => {
       if (currentUser) {
         done(null, currentUser)
       } else {
@@ -51,6 +55,8 @@ const facebook = passport.use(new FacebookStrategy({
           password: 'facebookaccount',
           type: 'facebook',
           role: req.query.state,
+          class: [],
+          notify: [],
           username: profile.displayName,
           fullname: '',
           phone: '',

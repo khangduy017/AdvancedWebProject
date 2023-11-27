@@ -2,6 +2,7 @@ import Class from "../models/classModel.js";
 import User from "../models/userModel.js"
 import catchAsync from '../utils/catchAsync.js'
 
+
 const getAllClass = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.body._id)
 
@@ -29,21 +30,25 @@ const createClass = catchAsync(async (req, res, next) => {
     else break
   }
 
+  const user = await User.findById(req.body.user)
+
   const newClass = await Class.create({
     teacher: [req.body.user], // _id of user create class
     student: [],
+    owner: user.username,
     title: req.body.title,
     content: req.body.content,
+    topic: req.body.topic,
     post: [],
     inviteCode: code,
     inviteLink: req.body.inviteLink,
-    grade: String,
+    grade: '',
+    background: req.body.color,
   })
 
-  const user = await User.findById(req.body.user)
   user.class.unshift(newClass._id)
   user.save()
-  
+
   res.status(200).json({
     status: 'success',
     value: newClass
