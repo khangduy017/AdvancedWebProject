@@ -23,6 +23,10 @@ const HomePageContent = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [showFind, setShowFind] = useState(false);
+
+  const handleCloseFind = () => setShowFind(false);
+  const handleShowFind = () => setShowFind(true);
 
   const [searchInput, setSearchInput] = useState("");
   const classData = [1, 2, 3, 4, 1, 2, 3, 4];
@@ -51,17 +55,17 @@ const HomePageContent = () => {
 
   const [allClasses, setAllClasses] = useState([])
 
-  const handleGetAllClasses = ()=>{
+  const handleGetAllClasses = () => {
     const data = {
       _id: localStorage.getItem('_id')
     }
 
-    axios.post(process.env.REACT_APP_API_HOST + "classes", data,{headers})
+    axios.post(process.env.REACT_APP_API_HOST + "classes", data, { headers })
       .then(res => {
-        if(res.data.status==='success'){
+        if (res.data.status === 'success') {
           setAllClasses(res.data.value)
         }
-        else{
+        else {
 
         }
       })
@@ -136,7 +140,7 @@ const HomePageContent = () => {
       >
         <div className="d-flex">
           <Button
-            onClick={handleShow}
+            onClick={handleShowFind}
             className={`${styles["find-classroom"]}`}
             type="submit"
           >
@@ -146,8 +150,8 @@ const HomePageContent = () => {
             className={styles["modal-container"]}
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            show={show}
-            onHide={handleClose}
+            show={showFind}
+            onHide={handleCloseFind}
           >
             <Modal.Header closeButton>
               <h4 className={styles["modal-heading"]}>Join classroom</h4>
@@ -170,88 +174,92 @@ const HomePageContent = () => {
               <Button
                 variant="secondary"
                 className={`${styles["close-button"]}`}
-                onClick={handleClose}
+                onClick={handleCloseFind}
               >
                 Close
               </Button>
               <Button
                 className={`${styles["save-button"]}`}
-                onClick={handleClose}
+                onClick={handleCloseFind}
               >
                 Join
               </Button>
             </Modal.Footer>
           </Modal>
-          {/* //////////////////// */}
-          <Button
-            onClick={handleShow}
-            className={`${styles["find-classroom"]}`}
-            type="submit"
-          >
-            Create classroom
-          </Button>
-          <Modal
-            className={styles["modal-container"]}
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show}
-            onHide={handleClose}
-          >
-            <Modal.Header closeButton>
-              <h4 className={styles["modal-heading"]}>Create classroom</h4>
-            </Modal.Header>
-            <Modal.Body>
-              <Form className="form-container">
-                <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>Title</Form.Label>
-                  <Form.Control
-                    onChange={(event) => {
-                      setTitleInput(event.target.value);
-                    }}
-                    value={titleInput}
-                    className="form-control-container"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>Content</Form.Label>
-                  <Form.Control
-                    onChange={(event) => {
-                      setContentInput(event.target.value);
-                    }}
-                    value={contentInput}
-                    className="form-control-container"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>Topic</Form.Label>
-                  <Form.Control
-                    onChange={(event) => {
-                      setTopicInput(event.target.value);
-                    }}
-                    value={topicInput}
-                    className="form-control-container"
-                  />
-                </Form.Group>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
+
+          {localStorage.getItem("role") === "teacher" && (
+            <>
               <Button
-                variant="secondary"
-                className={`${styles["close-button"]}`}
-                onClick={handleClose}
+                onClick={handleShow}
+                className={`${styles["find-classroom"]}`}
+                type="submit"
               >
-                Close
+                Create classroom
               </Button>
-              <Button
-                className={`${styles["save-button"]}`}
-                onClick={handleCreate}
+              <Modal
+                className={styles["modal-container"]}
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                show={show}
+                onHide={handleClose}
               >
-                Create
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          {/* ///////////// */}
+                <Modal.Header closeButton>
+                  <h4 className={styles["modal-heading"]}>Create classroom</h4>
+                </Modal.Header>
+                <Modal.Body>
+                  <Form className="form-container">
+                    <Form.Group className="mb-3" controlId="formGridAddress1">
+                      <Form.Label>Title</Form.Label>
+                      <Form.Control
+                        onChange={(event) => {
+                          setTitleInput(event.target.value);
+                        }}
+                        value={titleInput}
+                        className="form-control-container"
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formGridAddress1">
+                      <Form.Label>Content</Form.Label>
+                      <Form.Control
+                        onChange={(event) => {
+                          setContentInput(event.target.value);
+                        }}
+                        value={contentInput}
+                        className="form-control-container"
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formGridAddress1">
+                      <Form.Label>Topic</Form.Label>
+                      <Form.Control
+                        onChange={(event) => {
+                          setTopicInput(event.target.value);
+                        }}
+                        value={topicInput}
+                        className="form-control-container"
+                      />
+                    </Form.Group>
+                  </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="secondary"
+                    className={`${styles["close-button"]}`}
+                    onClick={handleClose}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    className={`${styles["save-button"]}`}
+                    onClick={handleClose}
+                  >
+                    Create
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </>
+          )}
         </div>
+
         <Form
           className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
         >
