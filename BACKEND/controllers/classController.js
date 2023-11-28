@@ -1,21 +1,45 @@
+import mongoose from "mongoose";
 import Class from "../models/classModel.js";
 import User from "../models/userModel.js"
 import catchAsync from '../utils/catchAsync.js'
-
+import sendMail from '../utils/mailer.js'
 
 const getAllClass = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.body._id)
 
-  const classes = []
+  const _class = await Class.aggregate([
+    {
+      $lookup:
+      {
+        from: 'users',
+        localField: 'student',
+        foreignField: '_id',
+        as: 'student'
+      }
+    },
+    {
+      $lookup:
+      {
+        from: 'users',
+        localField: 'teacher',
+        foreignField: '_id',
+        as: 'teacher'
+      }
+    },
+    {
+      $match: {
+        $or: [{
+          'student._id': new mongoose.Types.ObjectId(req.body._id)
+        }, {
+          'teacher._id': new mongoose.Types.ObjectId(req.body._id)
+        }]
+      }
+    }
+  ])
 
-  for (let i of user.class) {
-    const _class = await Class.findById(i)
-    classes.push(_class)
-  }
 
   res.status(200).json({
     status: 'success',
-    value: classes
+    value: _class
   });
 });
 
@@ -64,10 +88,49 @@ const getClassDetail = catchAsync(async (req, res, next) => {
   })
 })
 
-const joinClass = catchAsync(async (req, res, next) => {
+const getClassByCode = catchAsync(async (req, res, next) => {
+  const _class = await Class.findOne({ inviteCode: req.body.code })
 
   res.status(200).json({
     status: 'success',
+    value: _class
+  })
+})
+
+const getClassByEmail = catchAsync(async (req, res, next) => {
+  await sendMail(req.body.email, 'Invite link', 'Link: ' + req.body.link)
+
+  res.status(200).json({
+    status: 'success',
+  })
+})
+
+const joinClass = catchAsync(async (req, res, next) => {
+  const _class = await Class.findById(req.body.classId)
+  const _user = await User.findById(req.body.userId)
+
+  if (_user.role === 'teacher') {
+    _class.teacher.unshift(req.body.userId)
+  } else {
+    _class.student.unshift(req.body.userId)
+  }
+  _class.save()
+
+  _user.class.unshift(req.body.classId)
+  _user.save()
+
+  res.status(200).json({
+    status: 'success',
+    value: req.body.classId
+  })
+})
+
+const alreadyInClass = catchAsync(async (req, res, next) => {
+  const _user = await User.findById(req.body.userId)
+
+  res.status(200).json({
+    status: 'success',
+    value: _user.class.includes(req.body.classId)
   })
 })
 
@@ -79,4 +142,4 @@ const outClass = catchAsync(async (req, res, next) => {
   })
 })
 
-export default { getAllClass, createClass, getClassDetail, joinClass, outClass }
+export default { alreadyInClass,getAllClass, createClass, getClassDetail, joinClass, outClass, getClassByCode, getClassByEmail }

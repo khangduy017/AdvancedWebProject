@@ -1,0 +1,16 @@
+.AlreadyInClass{
+  margin: 6rem 31.5rem;
+  width: 57%;
+}
+
+.find-classroom{
+  height: 2.5rem;
+  width: 10rem;
+  background: #5D5FEF;
+  color: white;
+  border: none;
+}
+
+.find-classroom:hover{
+  background: #4c4eb6;
+}

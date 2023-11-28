@@ -14,7 +14,6 @@ import axios from "axios";
 import AuthContext from "../../store/auth-context";
 import toast from "react-hot-toast";
 
-
 const HomePageContent = () => {
   const navigate = useNavigate();
 
@@ -27,6 +26,7 @@ const HomePageContent = () => {
 
   const handleCloseFind = () => setShowFind(false);
   const handleShowFind = () => setShowFind(true);
+
 
   const [searchInput, setSearchInput] = useState("");
   const classData = [1, 2, 3, 4, 1, 2, 3, 4];
@@ -46,6 +46,11 @@ const HomePageContent = () => {
   const [titleInput, setTitleInput] = useState('')
   const [contentInput, setContentInput] = useState('')
   const [topicInput, setTopicInput] = useState('')
+
+  const [inviteCodeInput, setInviteCodeInput] = useState('')
+
+  const [createEnable, setCreateEnable] = useState(true)
+  const [joinEnable,setJoinEnable] = useState(true)
 
   const authCtx = useContext(AuthContext);
 
@@ -133,6 +138,33 @@ const HomePageContent = () => {
     duration: 4000,
   };
 
+  useEffect(() => {
+    if (titleInput.length > 0) setCreateEnable(false)
+    else setCreateEnable(true)
+  }, [titleInput]);
+
+  useEffect(()=>{
+    if(inviteCodeInput.length > 0) setJoinEnable(false)
+    else setJoinEnable(true)
+  },[inviteCodeInput])
+
+  const handleJoinCode = ()=>{
+    const dataSubmit = {
+      code: inviteCodeInput
+    }
+
+    axios.post(process.env.REACT_APP_API_HOST + 'classes/invite-code', dataSubmit, { headers })
+      .then((res) => {
+        if (res.data.status === "success") {
+          console.log(res.data.status)
+          navigate(`/myclass/${res.data.value._id}/join`)
+        }
+        else {
+          toast.error(res.data.message, styleError);
+        }
+      });
+  }
+
   return (
     <div className={`${styles["total-container"]} w-75`}>
       <div
@@ -162,9 +194,9 @@ const HomePageContent = () => {
                   <Form.Label>Invite code</Form.Label>
                   <Form.Control
                     onChange={(event) => {
-                      setIdInput(event.target.value);
+                      setInviteCodeInput(event.target.value);
                     }}
-                    value={idInput}
+                    value={inviteCodeInput}
                     className="form-control-container"
                   />
                 </Form.Group>
@@ -180,7 +212,8 @@ const HomePageContent = () => {
               </Button>
               <Button
                 className={`${styles["save-button"]}`}
-                onClick={handleCloseFind}
+                onClick={handleJoinCode}
+                disabled={joinEnable}
               >
                 Join
               </Button>
@@ -250,7 +283,8 @@ const HomePageContent = () => {
                   </Button>
                   <Button
                     className={`${styles["save-button"]}`}
-                    onClick={handleClose}
+                    onClick={handleCreate}
+                    disabled={createEnable}
                   >
                     Create
                   </Button>
@@ -289,7 +323,7 @@ const HomePageContent = () => {
         {allClasses.map((data, index) => (
           <div
             onClick={() => {
-              navigate("/myclass/1");
+              navigate(`/myclass/${data._id}`);
             }}
             className={`${styles["class-content-container"]} mt-4 rounded-3`}
             key={index}

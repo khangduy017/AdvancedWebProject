@@ -1,8 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const classSchema = new mongoose.Schema({
-  teacher: [String],
-  student: [String],
+  teacher: {
+    type: [mongoose.Types.ObjectId],
+    ref: 'User',
+    default: []
+  },
+  student: {
+    type: [mongoose.Types.ObjectId],
+    ref: 'User',
+    default: []
+  },
   owner: String,
   title: String,
   content: String,
