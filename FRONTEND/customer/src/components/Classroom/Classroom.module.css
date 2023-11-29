@@ -1,30 +1,115 @@
-.classroom-container{
-    margin: 6rem 31.5rem;
-    width: 57%;
+.classroom-container {
+  margin-top: 4rem;
+  margin-left: 17rem;
 }
 
-.banner-container{
-    height: 14.5rem;
-    position: relative;
-   
+.banner-container {
+  height: 14.5rem;
+  position: relative;
 }
 
-.classroom-banner{
-    object-fit: cover;
-    border-radius: 1rem;
+.classroom-banner {
+  object-fit: cover;
+  border-radius: 1rem;
 }
 
-.classroom-name{
-    position: absolute;
-    bottom: 3rem;
-    left: 1.5rem;
-    color: white;
+.classroom-name {
+  position: absolute;
+  bottom: 3rem;
+  left: 1.5rem;
+  color: white;
 }
 
-.classroom-note{
-    position: absolute;
-    bottom: 0.5rem;
-    left: 1.5rem;
-    color: white;
-    font-weight: 500;
+.classroom-note {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 1.5rem;
+  color: white;
+  font-weight: 500;
+}
+
+.sub-nav {
+  border-bottom: 1px solid #b8b8c2;
+  padding: 0 1.5rem;
+}
+
+.tab-layout {
+  height: 3.2rem;
+}
+
+.tab-button {
+  background-color: transparent;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid transparent;
+}
+
+.tab-button:hover {
+  background-color: #eaeaea;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid transparent;
+}
+
+.tab-button-active {
+  color: #5d5fef;
+  border-bottom: 3px solid #5d5fef;
+  border-top: 3px solid transparent;
+}
+
+.tab-button-active:hover {
+  color: #5d5fef;
+  background-color: #e6e6ff;
+  border-bottom: 3px solid #5d5fef;
+}
+
+.invite-email {
+  background-color: #5d5fef !important;
+  padding: 0.2rem 1rem;
+}
+
+.invite-email:hover {
+  background-color: #4c4eb6 !important;
+}
+
+.copy-email {
+  background-color: #5d5fef !important;
+  padding: 0.1rem 0.5rem;
+  font-size: .8rem;
+}
+
+.copy-email:hover {
+  background-color: #4c4eb6 !important;
+}
+
+.content {
+  padding: 0 6rem;
+  padding-top: 1.5rem;
+}
+
+.modal-container {
+  font-size: 0.8rem;
+}
+
+.modal-heading {
+  color: #2c2c66;
+  font-size: 1.4rem;
+}
+
+.close-button {
+  font-size: 0.8rem;
+  border: none;
+  padding: 0.5rem 1rem;
+}
+
+.save-button {
+  font-size: 0.8rem;
+  background: #5d5fef;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+}
+
+.save-button:hover {
+  background: #4c4eb6;
 }

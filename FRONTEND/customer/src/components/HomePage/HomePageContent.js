@@ -50,7 +50,8 @@ const HomePageContent = () => {
   const [inviteCodeInput, setInviteCodeInput] = useState('')
 
   const [createEnable, setCreateEnable] = useState(true)
-  const [joinEnable,setJoinEnable] = useState(true)
+  const [joinEnable, setJoinEnable] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   const authCtx = useContext(AuthContext);
 
@@ -69,6 +70,7 @@ const HomePageContent = () => {
       .then(res => {
         if (res.data.status === 'success') {
           setAllClasses(res.data.value)
+          setLoading(false)
         }
         else {
 
@@ -143,12 +145,12 @@ const HomePageContent = () => {
     else setCreateEnable(true)
   }, [titleInput]);
 
-  useEffect(()=>{
-    if(inviteCodeInput.length > 0) setJoinEnable(false)
+  useEffect(() => {
+    if (inviteCodeInput.length > 0) setJoinEnable(false)
     else setJoinEnable(true)
-  },[inviteCodeInput])
+  }, [inviteCodeInput])
 
-  const handleJoinCode = ()=>{
+  const handleJoinCode = () => {
     const dataSubmit = {
       code: inviteCodeInput
     }
@@ -319,6 +321,11 @@ const HomePageContent = () => {
           </div>
         </Form>
       </div>
+      {loading && <div style={{marginTop:'10rem'}} class="d-flex justify-content-center">
+        <div style={{width:'3rem',height:'3rem', color:'#5D5FEF'}}  class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>}
       <div className="d-flex my-2 flex-wrap justify-content-between">
         {allClasses.map((data, index) => (
           <div
