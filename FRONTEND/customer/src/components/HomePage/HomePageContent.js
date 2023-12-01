@@ -317,7 +317,7 @@ const HomePageContent = () => {
           </div>
         </Form>
       </div>
-      {loading && <div style={{marginTop:'10rem'}} class="d-flex justify-content-center">
+      {loading && !authCtx.classes.length>0 && <div style={{marginTop:'10rem'}} class="d-flex justify-content-center">
         <div style={{width:'3rem',height:'3rem', color:'#5D5FEF'}}  class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>

@@ -120,7 +120,7 @@ const loginGoogle = catchAsync(async (req, res, next) => {
     expiresTime,
     data: { user: req.user },
   };
-  res.redirect('http://localhost:3001/login?success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
+  res.redirect(`${process.env.APP_URL}/login?success&token=` + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
 })
 
 const loginFacebook = catchAsync(async (req, res, next) => {
@@ -131,7 +131,7 @@ const loginFacebook = catchAsync(async (req, res, next) => {
     expiresTime,
     data: { user: req.user },
   };
-  res.redirect('http://localhost:3001/login?success&token=' + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
+  res.redirect(`${process.env.APP_URL}/login?success&token=` + token + '&expiresTime=' + expiresTime + '&userData=' + JSON.stringify(req.user));
 })
 
 const forgetPassword = catchAsync(async (req, res, next) => {

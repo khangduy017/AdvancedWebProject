@@ -1,119 +1,119 @@
-h3{
-    color: #2C2C66;
-    text-align: center;
-    margin-top: 2rem;
+h3 {
+  color: #2c2c66;
+  text-align: center;
+  margin-top: 2rem;
 }
 
-.class-content-container{
-    width: 23%;
-    height: 320px;
-    border: 1px solid #b9b9d3;
+.class-content-container {
+  width: 23%;
+  height: 320px;
+  border: 1px solid #b9b9d3;
 }
 
-.class-content-container:hover{
-    cursor: pointer;
+.class-content-container:hover {
+  cursor: pointer;
 }
 
-.class-title{
-    font-size: 1.4rem;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 100%;
+.class-title {
+  font-size: 1.4rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 }
 
-.class-title-container{
-    color: white;
-    height: 35%;
+.class-title-container {
+  color: white;
+  height: 35%;
 }
 
-.blue{
-    background: #1C7ED6;
+.blue {
+  background: #1c7ed6;
 }
 
-.yellow{
-    background: #F08C00;
+.yellow {
+  background: #f08c00;
 }
 
-.red{
-    background: #F03E3E;
+.red {
+  background: #f03e3e;
 }
 
-.purple{
-    background: #5D5FEF;
+.purple {
+  background: #5d5fef;
 }
 
-.green{
-    background: #0CA678;
+.green {
+  background: #0ca678;
 }
 
-.class-instructor{
-    font-size: 0.8rem;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+.class-instructor {
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.class-mid-container{
-    height: 50%;
-    border-bottom: 1px solid #b9b9d3;
+.class-mid-container {
+  height: 50%;
+  border-bottom: 1px solid #b9b9d3;
 }
 
-.size-icon{
-    width: 1.3rem;
-    height: 1.3rem;
+.size-icon {
+  width: 1.3rem;
+  height: 1.3rem;
 }
 
-.class-footer-container{
-    height: 15%;
+.class-footer-container {
+  height: 15%;
 }
 
-.class-assignment-title{
-    font-size: 0.9rem;
+.class-assignment-title {
+  font-size: 0.9rem;
 }
 
-.form-container{
-    width: 22rem;
-    box-sizing: border-box;
+.form-container {
+  width: 22rem;
+  box-sizing: border-box;
 }
 
-.form-control-container{
-    width: 18.5rem;
-    margin: 0;
-    border: 1px solid #A5A6F6;
+.form-control-container {
+  width: 18.5rem;
+  margin: 0;
+  border: 1px solid #a5a6f6;
 }
 
-.search-icon-customize{
-    top: 0.65rem;
-    right: 0.8rem;
+.search-icon-customize {
+  top: 0.65rem;
+  right: 0.8rem;
 }
 
-.search-container{
-    height: 2.5rem;
+.search-container {
+  height: 2.5rem;
 }
 
-.filter-icon-customize{
-    border: 1px solid #A5A6F6;
-    height: 2.4rem;
-    width: 2.4rem;
-    border-radius: 0.4rem;
+.filter-icon-customize {
+  border: 1px solid #a5a6f6;
+  height: 2.4rem;
+  width: 2.4rem;
+  border-radius: 0.4rem;
 }
 
-.filter-icon-customize:hover{
-    cursor: pointer;
-    background: #EEEEFF;
+.filter-icon-customize:hover {
+  cursor: pointer;
+  background: #eeeeff;
 }
 
-.find-classroom{
-    height: 2.5rem;
-    width: 10rem;
-    background: #5D5FEF;
-    color: white;
-    border: none;
+.find-classroom {
+  height: 2.5rem;
+  width: 10rem;
+  background: #5d5fef;
+  color: white;
+  border: none;
 }
 
-.find-classroom:hover{
-    background: #4c4eb6;
+.find-classroom:hover {
+  background: #4c4eb6;
 }
 
 /* .create-classroom{
@@ -128,36 +128,36 @@ h3{
     background: #EEEEFF;
 } */
 
-.modal-container{
-    font-size: 0.8rem;
+.modal-container {
+  font-size: 0.8rem;
 }
 
-.modal-heading{
-    color: #2C2C66;
-    font-size: 1.4rem;
+.modal-heading {
+  color: #2c2c66;
+  font-size: 1.4rem;
 }
 
-.close-button{
-    font-size: 0.8rem;
-    border: none;
-    padding: 0.5rem 1rem;
+.close-button {
+  font-size: 0.8rem;
+  border: none;
+  padding: 0.5rem 1rem;
 }
 
-.save-button{
-    font-size: 0.8rem;
-    background: #5D5FEF;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
+.save-button {
+  font-size: 0.8rem;
+  background: #5d5fef;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
 }
 
-.save-button:hover{
-    background: #4c4eb6;
+.save-button:hover {
+  background: #4c4eb6;
 }
 
-.total-container{
-    margin-left: 19rem;
-    margin-top: 6.5rem;
+.total-container {
+  margin-left: 19rem;
+  margin-top: 6.5rem;
 }
 
 .more-gap{
