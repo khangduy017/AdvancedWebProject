@@ -4,7 +4,6 @@ import { ReactComponent as LeaveIcon } from "../../assests/svg/leave.svg";
 import { ReactComponent as FolderIcon } from "../../assests/svg/folder.svg";
 import { ReactComponent as SearchIcon } from "../../assests/svg/search.svg";
 import { ReactComponent as FilterIcon } from "../../assests/svg/filter.svg";
-import { ReactComponent as PlusIcon } from "../../assests/svg/plus.svg";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
@@ -317,8 +316,8 @@ const HomePageContent = () => {
           </div>
         </Form>
       </div>
-      {loading && !authCtx.classes.length>0 && <div style={{marginTop:'10rem'}} class="d-flex justify-content-center">
-        <div style={{width:'3rem',height:'3rem', color:'#5D5FEF'}}  class="spinner-border" role="status">
+      {loading && !authCtx.classes.length > 0 && <div style={{ marginTop: '10rem' }} class="d-flex justify-content-center">
+        <div style={{ width: '3rem', height: '3rem', color: '#5D5FEF' }} class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>}
