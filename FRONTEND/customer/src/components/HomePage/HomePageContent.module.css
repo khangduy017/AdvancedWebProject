@@ -159,3 +159,7 @@ h3{
     margin-left: 19rem;
     margin-top: 6.5rem;
 }
+
+.more-gap{
+    gap: 2rem;
+  }

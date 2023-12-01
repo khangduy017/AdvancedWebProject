@@ -6,7 +6,9 @@ const AuthContext = React.createContext({
   token: '',
   isLoggedIn: false,
   userData: {},
+  classes: [],
   setUserDataContext: (userDataParam) => {},
+  setClasses: (classesParam) => {},
   login: (token) => {},
   logout: () => {},
 });
@@ -48,6 +50,7 @@ export const AuthContextProvider = (props) => {
 
   const [token, setToken] = useState(initialToken);
   const [userData, setUserData] = useState({});
+  const [classes, setClasses] = useState([]);
 
   const userIsLoggedIn = !!token;
 
@@ -79,6 +82,11 @@ export const AuthContextProvider = (props) => {
     setUserData(userDataParam);
   }
 
+  const classesHandler = (classesParam) =>{
+    setClasses(classesParam);
+  }
+
+
   useEffect(() => {
     if (tokenData) {
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
@@ -92,6 +100,8 @@ export const AuthContextProvider = (props) => {
     setUserDataContext: setUserDataHandler,
     login: loginHandler,
     logout: logoutHandler,
+    setClasses: classesHandler,
+    classes: classes
   };
 
   return (
