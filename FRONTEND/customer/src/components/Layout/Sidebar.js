@@ -9,13 +9,16 @@ import {
 } from "cdbreact";
 import { NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.css";
+import AuthContext from "../../store/auth-context";
+import { useState, useContext, useEffect } from "react";
 
 const Sidebar = () => {
   // const activeLink = ({ isActive }) => isActive ? `${styles['active-custom']}`: ''};
+  const authCtx = useContext(AuthContext);
   return (
     <div className={`${styles["sidebar-container"]} d-flex`}>
       <CDBSidebar textColor="#5D5FEF" backgroundColor="white">
-        <CDBSidebarHeader >
+        <CDBSidebarHeader>
           <a
             href="/"
             className="text-decoration-none"
@@ -54,18 +57,21 @@ const Sidebar = () => {
             >
               <CDBSidebarMenuItem icon="user">Profile page</CDBSidebarMenuItem>
             </NavLink>
-            <div className={`${styles['middle-line']}`}></div>
-            <NavLink
-              to="/myclass/1"
-              style={({ isActive }) => ({
-                color: isActive ? "#5D5FEF" : "#A5A6F6",
-                fontWeight: isActive ? "700" : "",
-              })}
-            >
-              <CDBSidebarMenuItem icon="book">
-                2310-CLC-AWP-20KTPM2
-              </CDBSidebarMenuItem>
-            </NavLink>
+            <div className={`${styles["middle-line"]}`}></div>
+            {authCtx.classes.map((data, index) => (
+              <NavLink
+                key={index}
+                to={`/myclass/${data._id}`}
+                style={({ isActive }) => ({
+                  color: isActive ? "#5D5FEF" : "#A5A6F6",
+                  fontWeight: isActive ? "700" : "",
+                })}
+              >
+                <CDBSidebarMenuItem icon="book">
+                  {data.title}
+                </CDBSidebarMenuItem>
+              </NavLink>
+            ))}
           </CDBSidebarMenu>
         </CDBSidebarContent>
 

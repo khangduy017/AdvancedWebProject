@@ -59,8 +59,6 @@ const HomePageContent = () => {
   const userData = authCtx.userData;
   const headers = { Authorization: `Bearer ${token}` };
 
-  const [allClasses, setAllClasses] = useState([])
-
   const handleGetAllClasses = () => {
     const data = {
       _id: localStorage.getItem('_id')
@@ -69,7 +67,7 @@ const HomePageContent = () => {
     axios.post(process.env.REACT_APP_API_HOST + "classes", data, { headers })
       .then(res => {
         if (res.data.status === 'success') {
-          setAllClasses(res.data.value)
+          authCtx.setClasses(res.data.value)
           setLoading(false)
         }
         else {
@@ -92,7 +90,6 @@ const HomePageContent = () => {
 
   const handleCreate = (event) => {
     // event.preventDefault();
-    console.log(userData)
     const dataSubmit = {
       user: userData._id,
       title: titleInput,
@@ -158,7 +155,6 @@ const HomePageContent = () => {
     axios.post(process.env.REACT_APP_API_HOST + 'classes/invite-code', dataSubmit, { headers })
       .then((res) => {
         if (res.data.status === "success") {
-          console.log(res.data.status)
           navigate(`/myclass/${res.data.value._id}/join`)
         }
         else {
@@ -326,8 +322,8 @@ const HomePageContent = () => {
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>}
-      <div className="d-flex my-2 flex-wrap justify-content-between">
-        {allClasses.map((data, index) => (
+      <div className={`${styles["more-gap"]} d-flex my-2 flex-wrap`}>
+        {authCtx.classes.map((data, index) => (
           <div
             onClick={() => {
               navigate(`/myclass/${data._id}`);
