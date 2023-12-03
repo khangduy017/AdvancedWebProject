@@ -6,6 +6,7 @@
 .banner-container {
   height: 12.5rem;
   position: relative;
+
 }
 
 .classroom-banner {
@@ -140,4 +141,119 @@
 
 .save-button:hover {
   background: #4c4eb6;
+}
+
+.deadline-container{
+  border: 1px solid #b9b9d3;
+  border-radius: 0.5rem;
+  padding: 1.2rem 1.2rem 0.8rem 1.2rem;
+  height: 9rem;
+}
+
+/* .classroom-detail-container{
+  background: pink;
+} */
+
+.deadline-title{
+  font-size: 0.85rem;
+}
+
+.deadline-content{
+  font-size: 0.8rem;
+  padding-top: 0.5rem;
+  margin: 0;
+}
+
+.deadline-more{
+  text-align: right;
+  color: #5d5fef;
+  font-size: 0.85rem;
+  padding-top: 1rem;
+  padding-right: 0.5rem;
+}
+
+.untyping-container{
+  height: 4.5rem;
+  border: 1px solid #b9b9d3;
+  border-radius: 0.5rem;
+  color: rgba(0,0,0,.549);
+  font-size: 0.8rem;
+}
+
+.untyping-img{
+  border-radius: 50%;
+  width: auto;
+  height: 2.5rem;
+  margin-right: 0.5rem;
+}
+
+.untyping-container:hover{
+  color: #5d5fef;
+  cursor: pointer;
+}
+
+.typing-container{
+  border-radius: 0.5rem;
+  border: 1px solid #b9b9d3;
+  color: rgba(0,0,0,.549);
+  font-size: 0.8rem;
+}
+
+
+.button-post{
+  font-size: 0.8rem;
+  background: #5D5FEF;
+  color: white;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  padding: 0.4rem 1.2rem;
+  border: none;
+}
+
+.button-post:hover{
+  background: #494bdb;
+  color: white;
+  border: none;
+}
+
+.button-cancel{
+  font-size: 0.8rem;
+  background: #6c757d;
+  color: white;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  padding: 0.4rem 1.2rem;
+  border: none;
+}
+
+.button-cancel:hover{
+  background: #4f575e;
+  color: white;
+  border: none;
+}
+
+.content-container{
+  border: 1px solid #b9b9d3;
+  border-radius: 0.5rem;
+  color: rgba(0,0,0,.549);
+  font-size: 0.8rem;
+  margin-top: 1.3rem;
+}
+
+.content-title-creator{
+  font-size: 0.85rem;
+  color: #212529;
+  margin: 0;
+}
+
+.content-title-time{
+  font-size: 0.7rem;
+}
+
+.content-body-container{
+  margin: 1rem 0 0.5rem 0;
+}
+
+.flex-allpart-container{
+  padding-bottom: 2rem;
 }

@@ -10,22 +10,25 @@ import { useParams } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import GradeComponent from "./GradeComponent/GradeComponent";
+import User from "../../assests/img/user.jpg";
+import { MDBInput } from "mdbreact";
 
 const Classroom = () => {
-
   const { id } = useParams();
-  const linkInvite = `http://localhost:3001/myclass/${id}/join`
-
+  const linkInvite = `http://localhost:3001/myclass/${id}/join`;
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [inviteEnable, setInviteEnable] = useState(true)
-  const [currentTab, setCurrentTab] = useState(3)
+
   const [loading, setLoading] = useState(true)
 
+  const [inviteEnable, setInviteEnable] = useState(true);
+  const [currentTab, setCurrentTab] = useState(1);
+  const [typing, setTyping] = useState(false);
+  const [typingContent, setTypingContent] = useState("");
 
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
@@ -50,42 +53,40 @@ const Classroom = () => {
     const dataSubmit = {
       email: emailInput,
       link: linkInvite,
-    }
+    };
 
-    axios.post(process.env.REACT_APP_API_HOST + 'classes/invite-email', dataSubmit, { headers })
+    axios
+      .post(
+        process.env.REACT_APP_API_HOST + "classes/invite-email",
+        dataSubmit,
+        { headers }
+      )
       .then((res) => {
         if (res.data.status === "success") {
-          handleClose()
+          handleClose();
+        } else {
         }
-        else { }
       });
-  }
+  };
 
   useEffect(() => {
-    if (emailInput.length > 0) setInviteEnable(false)
-    else setInviteEnable(true)
-  }, [emailInput])
+    if (emailInput.length > 0) setInviteEnable(false);
+    else setInviteEnable(true);
+  }, [emailInput]);
 
   const handleSwitchTab = (tab) => {
-    setCurrentTab(tab)
+    setCurrentTab(tab);
     if (tab === 1) {
-
-    }
-    else if (tab === 2) {
-
+    } else if (tab === 2) {
     } else {
-
     }
-  }
+  };
 
   const handleCopyClick = async () => {
     try {
       await navigator.clipboard.writeText(linkInvite);
     } catch (err) {
-      console.error(
-        "Unable to copy to clipboard.",
-        err
-      );
+      console.error("Unable to copy to clipboard.", err);
       alert("Copy to clipboard failed.");
     }
   };
@@ -115,7 +116,9 @@ const Classroom = () => {
           <h4 className={styles["modal-heading"]}>Invite</h4>
         </Modal.Header>
         <Modal.Body>
-          <p style={{ fontSize: '.9rem' }} className={`mb-0`}>{linkInvite}</p>
+          <p style={{ fontSize: ".9rem" }} className={`mb-0`}>
+            {linkInvite}
+          </p>
           <Button
             onClick={handleCopyClick}
             className={`${styles["copy-email"]} mt-1 mb-4 d-flex gap-1 align-items-center justify-content-center`}
@@ -123,7 +126,6 @@ const Classroom = () => {
           >
             <svg xmlns="http://www.w3.org/2000/svg" height="14" width="11" viewBox="0 0 448 512">
               <path d="M208 0H332.1c12.7 0 24.9 5.1 33.9 14.1l67.9 67.9c9 9 14.1 21.2 14.1 33.9V336c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V48c0-26.5 21.5-48 48-48zM48 128h80v64H64V448H256V416h64v48c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V176c0-26.5 21.5-48 48-48z" /></svg>
-
             Copy
           </Button>
 
@@ -158,17 +160,45 @@ const Classroom = () => {
         </Modal.Footer>
       </Modal>
 
-      <div className={`${styles['sub-nav']} d-flex align-items-center justify-content-between`}>
-        <div className={`${styles['tab-layout']} d-flex gap-0`}>
-          <Button onClick={() => handleSwitchTab(1)} className={`rounded-0 ${styles['tab-button']} ${currentTab === 1 && styles['tab-button-active']}`} variant="light">Posts</Button>
-          <Button onClick={() => handleSwitchTab(2)} className={`rounded-0 ${styles['tab-button']} ${currentTab === 2 && styles['tab-button-active']}`} variant="light">Members</Button>
-          <Button onClick={() => handleSwitchTab(3)} className={`rounded-0 ${styles['tab-button']} ${currentTab === 3 && styles['tab-button-active']}`} variant="light">Grade</Button>
+      <div
+        className={`${styles["sub-nav"]} d-flex align-items-center justify-content-between`}
+      >
+        <div className={`${styles["tab-layout"]} d-flex gap-0`}>
+          <Button
+            onClick={() => handleSwitchTab(1)}
+            className={`rounded-0 ${styles["tab-button"]} ${
+              currentTab === 1 && styles["tab-button-active"]
+            }`}
+            variant="light"
+          >
+            Posts
+          </Button>
+          <Button
+            onClick={() => handleSwitchTab(2)}
+            className={`rounded-0 ${styles["tab-button"]} ${
+              currentTab === 2 && styles["tab-button-active"]
+            }`}
+            variant="light"
+          >
+            Members
+          </Button>
+          <Button
+            onClick={() => handleSwitchTab(3)}
+            className={`rounded-0 ${styles["tab-button"]} ${
+              currentTab === 3 && styles["tab-button-active"]
+            }`}
+            variant="light"
+          >
+            Grade
+          </Button>
         </div>
         <Button
           onClick={handleShow}
           className={`${styles["invite-email"]}`}
           type="submit"
-        >Invite</Button>
+        >
+          Invite
+        </Button>
       </div>
 
       {loading ? <div style={{ marginTop: '10rem' }} class="d-flex justify-content-center">
