@@ -142,4 +142,4 @@ const outClass = catchAsync(async (req, res, next) => {
   })
 })
 
-export default { alreadyInClass,getAllClass, createClass, getClassDetail, joinClass, outClass, getClassByCode, getClassByEmail }
+export default { alreadyInClass, getAllClass, createClass, getClassDetail, joinClass, outClass, getClassByCode, getClassByEmail }

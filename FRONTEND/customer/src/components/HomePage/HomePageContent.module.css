@@ -1,4 +1,4 @@
-h3 {
+.total-container h3 {
   color: #2c2c66;
   text-align: center;
   margin-top: 2rem;
@@ -149,6 +149,12 @@ h3 {
   color: white;
   border: none;
   padding: 0.5rem 1rem;
+}
+
+.save-button:disabled{
+  background: #5d5fef;
+  opacity: 0.7;
+  cursor:none
 }
 
 .save-button:hover {

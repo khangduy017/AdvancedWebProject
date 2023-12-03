@@ -12,7 +12,6 @@ const google = passport.use(
   }, (req, accessToken, refreshToken, profile, done) => {
     User.findOne({ googleId: profile.id,role: req.query.state }).then(async currentUser => {
       if (currentUser) {
-        // if(currentUser.role!==req.)
 
         done(null, currentUser)
       } else {

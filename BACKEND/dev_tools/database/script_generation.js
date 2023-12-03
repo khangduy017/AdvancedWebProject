@@ -8,6 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import User from './../../models/userModel.js';
+import Class from './../../models/classModel.js'
 
 dotenv.config({ path: './config.env' });
 
@@ -21,11 +22,13 @@ mongoose
 
 // READ JSON FILE
 const users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'));
+const classes = JSON.parse(fs.readFileSync(`${__dirname}/classes.json`, 'utf-8'));
 
 // IMPORT DATA INTO DB
 const importData = async () => {
   try {
     await User.create(users, { validateBeforeSave: false });
+    await Class.create(classes, { validateBeforeSave: false });
     console.log('Data successfully loaded!');
   } catch (err) {
     console.log(err);
@@ -37,6 +40,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await User.deleteMany();
+    await Class.deleteMany();
     console.log('Data successfully deleted!');
   } catch (err) {
     console.log(err);

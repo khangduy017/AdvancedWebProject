@@ -149,7 +149,7 @@ const HomePageContent = () => {
 
   const handleJoinCode = () => {
     const dataSubmit = {
-      code: inviteCodeInput
+      code: inviteCodeInput[0] === '#' ? inviteCodeInput.slice(1) : inviteCodeInput
     }
 
     axios.post(process.env.REACT_APP_API_HOST + 'classes/invite-code', dataSubmit, { headers })
@@ -317,8 +317,8 @@ const HomePageContent = () => {
           </div>
         </Form>
       </div>
-      {loading && !authCtx.classes.length>0 && <div style={{marginTop:'10rem'}} class="d-flex justify-content-center">
-        <div style={{width:'3rem',height:'3rem', color:'#5D5FEF'}}  class="spinner-border" role="status">
+      {loading && !authCtx.classes.length > 0 && <div style={{ marginTop: '10rem' }} class="d-flex justify-content-center">
+        <div style={{ width: '3rem', height: '3rem', color: '#5D5FEF' }} class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>}
@@ -347,7 +347,7 @@ const HomePageContent = () => {
             </div>
             <div className={`${styles["class-mid-container"]} rounded-top-3`}>
               <h5 className={`${styles["class-assignment-title"]} px-3 pt-3`}>
-                Assignment - Due in January
+                Assignment
               </h5>
               <div className={`${styles["class-instructor"]} px-3 pb-1`}>
                 Infinite Scroll

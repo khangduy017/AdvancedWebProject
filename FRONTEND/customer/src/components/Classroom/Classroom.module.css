@@ -4,7 +4,7 @@
 }
 
 .banner-container {
-  height: 14.5rem;
+  height: 12.5rem;
   position: relative;
 }
 
@@ -15,17 +15,35 @@
 
 .classroom-name {
   position: absolute;
-  bottom: 3rem;
+  top: 1.5rem;
   left: 1.5rem;
   color: white;
 }
 
 .classroom-note {
   position: absolute;
-  bottom: 0.5rem;
+  top: 5rem;
   left: 1.5rem;
   color: white;
   font-weight: 500;
+}
+
+.classroom-owner {
+  position: absolute;
+  top: 6.5rem;
+  left: 1.5rem;
+  color: white;
+  font-weight: 500;
+}
+
+.classroom-code{
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+}
+
+.text-cote{
+  color: white;
 }
 
 .sub-nav {
@@ -43,12 +61,15 @@
   padding: 0.5rem 1.5rem;
   border-bottom: 3px solid transparent;
   border-top: 3px solid transparent;
+  font-weight: bold;
+  color: #2c2c66;
 }
 
 .tab-button:hover {
   background-color: #eaeaea;
   border-bottom: 3px solid transparent;
   border-top: 3px solid transparent;
+  color: #2c2c66;
 }
 
 .tab-button-active {
@@ -76,6 +97,7 @@
   background-color: #5d5fef !important;
   padding: 0.1rem 0.5rem;
   font-size: .8rem;
+  border: none;
 }
 
 .copy-email:hover {
@@ -108,6 +130,12 @@
   color: white;
   border: none;
   padding: 0.5rem 1rem;
+}
+
+.save-button:disabled{
+  background: #5d5fef;
+  opacity: 0.7;
+  cursor:none
 }
 
 .save-button:hover {

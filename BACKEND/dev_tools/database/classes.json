@@ -1,0 +1,273 @@
+[{
+  "_id": {
+    "$oid": "65662f5ff969bdad577c1022"
+  },
+  "teacher": [
+    {
+      "$oid": "65645674be27f5ebf5f9089e"
+    }
+  ],
+  "student": [],
+  "owner": "Dinh Khang",
+  "title": "Đinh Nguyễn Duy Khang",
+  "content": "",
+  "topic": "",
+  "post": [],
+  "inviteCode": "15269",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#74B816",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6566301d4def00c23fe9416f"
+  },
+  "teacher": [
+    {
+      "$oid": "65645674be27f5ebf5f9089e"
+    }
+  ],
+  "student": [],
+  "owner": "Dinh Khang",
+  "title": "Đinh Nguyễn Duy Khang Test",
+  "content": "",
+  "topic": "",
+  "post": [],
+  "inviteCode": "24186",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#F08C00",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "656630264def00c23fe94177"
+  },
+  "teacher": [
+    {
+      "$oid": "65645674be27f5ebf5f9089e"
+    }
+  ],
+  "student": [],
+  "owner": "Dinh Khang",
+  "title": "TEST KHANG",
+  "content": "",
+  "topic": "",
+  "post": [],
+  "inviteCode": "23793",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#F08C00",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "656630494def00c23fe9418b"
+  },
+  "teacher": [
+    {
+      "$oid": "65645674be27f5ebf5f9089e"
+    }
+  ],
+  "student": [],
+  "owner": "Dinh Khang",
+  "title": "TEST KHANG",
+  "content": "",
+  "topic": "",
+  "post": [],
+  "inviteCode": "34686",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#F03E3E",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6566304f4def00c23fe94193"
+  },
+  "teacher": [
+    {
+      "$oid": "65645674be27f5ebf5f9089e"
+    }
+  ],
+  "student": [],
+  "owner": "Dinh Khang",
+  "title": "TEST KHANG",
+  "content": "",
+  "topic": "",
+  "post": [],
+  "inviteCode": "10630",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#15AABF",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65686e17cb30d6ffdcd7139c"
+  },
+  "teacher": [
+    {
+      "$oid": "65686dfbcb30d6ffdcd71393"
+    }
+  ],
+  "student": [],
+  "owner": "Yuki No Hana",
+  "title": "Advanced Web ",
+  "content": "Assignment & Test",
+  "topic": "",
+  "post": [],
+  "inviteCode": "69612",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#74B816",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65686e4bcb30d6ffdcd713a4"
+  },
+  "teacher": [
+    {
+      "$oid": "65686dfbcb30d6ffdcd71393"
+    }
+  ],
+  "student": [],
+  "owner": "Yuki No Hana",
+  "title": "Math",
+  "content": "Test",
+  "topic": "",
+  "post": [],
+  "inviteCode": "25804",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#5D5FEF",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65687808cb30d6ffdcd71412"
+  },
+  "teacher": [
+    {
+      "$oid": "65686dfbcb30d6ffdcd71393"
+    }
+  ],
+  "student": [],
+  "owner": "Yuki No Hana",
+  "title": "Literature",
+  "content": "Content",
+  "topic": "",
+  "post": [],
+  "inviteCode": "52288",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#E64980",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6568796fcb30d6ffdcd71426"
+  },
+  "teacher": [
+    {
+      "$oid": "65686dfbcb30d6ffdcd71393"
+    }
+  ],
+  "student": [],
+  "owner": "Yuki No Hana",
+  "title": "Physics",
+  "content": "Content",
+  "topic": "",
+  "post": [],
+  "inviteCode": "26550",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#BE4BDB",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65687a47cb30d6ffdcd71448"
+  },
+  "teacher": [
+    {
+      "$oid": "65686dfbcb30d6ffdcd71393"
+    }
+  ],
+  "student": [],
+  "owner": "Yuki No Hana",
+  "title": "English",
+  "content": "Exercise",
+  "topic": "",
+  "post": [],
+  "inviteCode": "91536",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#E64980",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "656989fbd5c9da5482de4ffb"
+  },
+  "teacher": [
+    {
+      "$oid": "65645674be27f5ebf5f9089e"
+    }
+  ],
+  "student": [],
+  "owner": "Dinh Khang",
+  "title": "TEST ttttt",
+  "content": "TEST ttttt",
+  "topic": "Đinh Nguyễn Duy Khang",
+  "post": [],
+  "inviteCode": "53698",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#F08C00",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65698a18d5c9da5482de5005"
+  },
+  "teacher": [
+    {
+      "$oid": "65645674be27f5ebf5f9089e"
+    }
+  ],
+  "student": [],
+  "owner": "Dinh Khang",
+  "title": "khangduy017@gmail.com",
+  "content": "TEST KHANG",
+  "topic": "1000000",
+  "post": [],
+  "inviteCode": "65684",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#74B816",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "656a25ab4b5c61b3c354bd82"
+  },
+  "teacher": [
+    {
+      "$oid": "65645674be27f5ebf5f9089e"
+    }
+  ],
+  "student": [],
+  "owner": "Dinh Khang",
+  "title": "2310-CLC-AWP-20KTPM2",
+  "content": "Advanced Web Programming",
+  "topic": "Đinh Nguyễn Duy Khang 1111",
+  "post": [],
+  "inviteCode": "58032",
+  "inviteLink": "",
+  "grade": "",
+  "background": "#15AABF",
+  "__v": 0
+}]
