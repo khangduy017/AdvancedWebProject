@@ -73,7 +73,19 @@ const register = catchAsync(async (req, res, next) => {
 const verifyRegister = catchAsync(async (req, res, next) => {
   const data = req.body.data
   if (req.body.code === verifyCode.toString()) {
+    let id = ''
+    if (data.role === 'student') {
+      id = Math.floor(10000000 + Math.random() * 90000000).toString()
+      while (1) {
+        const _student = await User.findOne({ id: id })
+        if (_student) {
+          id = Math.floor(10000000 + Math.random() * 90000000).toString();
+        }
+        else break
+      }
+    }
     const newUser = await User.create({
+      id: id,
       email: data.email,
       password: data.password,
       type: 'account',
@@ -98,12 +110,12 @@ const verifyRegister = catchAsync(async (req, res, next) => {
 })
 
 const login = catchAsync(async (req, res, next) => {
-  const { role,email, password } = req.body;
+  const { role, email, password } = req.body;
   if (!email || !password) {
     return next(new AppError("Enter your email and password", 401));
   }
 
-  const user = await User.findOne({ email: email,role:role }).select('+password');
+  const user = await User.findOne({ email: email, role: role }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Email or password is incorrect', 401));
@@ -283,10 +295,7 @@ const editProfile = catchAsync(async (req, res, next) => {
 });
 
 const getUser = catchAsync(async (req, res, next) => {
-
-  const userData = await User.findOne(
-    { _id: req.user.id },
-  );
+  const userData = await User.findById(req.user._id);
 
   res.status(200).json({
     status: 'success',

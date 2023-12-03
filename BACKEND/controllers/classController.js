@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Class from "../models/classModel.js";
 import User from "../models/userModel.js"
+import Grade from "../models/GradeModel.js";
 import catchAsync from '../utils/catchAsync.js'
 import sendMail from '../utils/mailer.js'
 
@@ -56,6 +57,11 @@ const createClass = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(req.body.user)
 
+  const newGrade = await Grade.create({
+    structure: [],
+    grades: [],
+  })
+
   const newClass = await Class.create({
     teacher: [req.body.user], // _id of user create class
     student: [],
@@ -66,7 +72,7 @@ const createClass = catchAsync(async (req, res, next) => {
     post: [],
     inviteCode: code,
     inviteLink: req.body.inviteLink,
-    grade: '',
+    grade: newGrade._id,
     background: req.body.color,
   })
 
