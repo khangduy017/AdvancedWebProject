@@ -8,6 +8,9 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
     select: false,
   },
+  id:{
+    type: String,
+  },
   type:{
     type: String,
     enum: ['account', 'google','facebook'],

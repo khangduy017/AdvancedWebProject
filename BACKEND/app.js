@@ -6,6 +6,7 @@ import hpp from 'hpp';
 import cors from 'cors';
 import globalErrorhandler from "./controllers/ErrorController.js"
 import authRouter from './routes/authRoutes.js'
+import gradeRouter from './routes/gradeRoutes.js'
 import classRouter from './routes/classRoutes.js'
 import postRouter from './routes/postRoutes.js'
 import google from './config/passport-setup.js'
@@ -37,6 +38,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use('/webAdvanced/api/v1/auth', authRouter)
 app.use('/webAdvanced/api/v1/classes', classRouter)
 app.use('/webAdvanced/api/v1/posts', postRouter)
+app.use('/webAdvanced/api/v1/grade', gradeRouter)
 app.use(globalErrorhandler);
 
 export default app;

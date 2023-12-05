@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import toast from "react-hot-toast";
 import AuthContext from "../../store/auth-context";
 import { useParams } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
@@ -22,10 +23,32 @@ const Classroom = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [loading, setLoading] = useState(true);
+
+  const styleSuccess = {
+    style: {
+      border: "2px solid #28a745",
+      padding: "5px",
+      color: "#28a745",
+      fontWeight: "500",
+    },
+    duration: 4000,
+  };
+
+  const styleError = {
+    style: {
+      border: "2px solid red",
+      padding: "10px",
+      color: "red",
+      fontWeight: "500",
+    },
+    duration: 4000,
+  };
+
+
+  const [loading, setLoading] = useState(true)
 
   const [inviteEnable, setInviteEnable] = useState(true);
-  const [currentTab, setCurrentTab] = useState(1);
+  const [currentTab, setCurrentTab] = useState(3);
   const [typing, setTyping] = useState(false);
   const [typingContent, setTypingContent] = useState("");
   const [typingTitle, setTypingTitle] = useState("");
@@ -78,7 +101,10 @@ const Classroom = () => {
       .then((res) => {
         if (res.data.status === "success") {
           handleClose();
+      toast.success('Invite successfully!', styleSuccess);
         } else {
+      toast.error('Invite failed!', styleError);
+
         }
       });
   };
@@ -99,18 +125,23 @@ const Classroom = () => {
   const handleCopyClick = async () => {
     try {
       await navigator.clipboard.writeText(linkInvite);
+      toast.success('Copied!', styleSuccess);
     } catch (err) {
       console.error("Unable to copy to clipboard.", err);
-      alert("Copy to clipboard failed.");
+      toast.error('Copy to clipboard failed!', styleError);
     }
   };
 
   const handleCopyCode = async () => {
     try {
       await navigator.clipboard.writeText(classData.inviteCode);
+      toast.success('Copied!', styleSuccess);
     } catch (err) {
-      console.error("Unable to copy to clipboard.", err);
-      alert("Copy to clipboard failed.");
+      console.error(
+        "Unable to copy to clipboard.",
+        err
+      );
+      toast.error('Copy to clipboard failed!', styleError);
     }
   };
 
