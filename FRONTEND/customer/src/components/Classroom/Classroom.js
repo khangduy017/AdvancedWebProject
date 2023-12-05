@@ -85,9 +85,9 @@ const Classroom = () => {
       .then((res) => {
         if (res.data.status === "success") {
           handleClose();
-      toast.success('Invite successfully!', styleSuccess);
+          toast.success('Invite successfully!', styleSuccess);
         } else {
-      toast.error('Invite failed!', styleError);
+          toast.error('Invite failed!', styleError);
 
         }
       });
@@ -192,27 +192,24 @@ const Classroom = () => {
         <div className={`${styles["tab-layout"]} d-flex gap-0`}>
           <Button
             onClick={() => handleSwitchTab(1)}
-            className={`rounded-0 ${styles["tab-button"]} ${
-              currentTab === 1 && styles["tab-button-active"]
-            }`}
+            className={`rounded-0 ${styles["tab-button"]} ${currentTab === 1 && styles["tab-button-active"]
+              }`}
             variant="light"
           >
             Posts
           </Button>
           <Button
             onClick={() => handleSwitchTab(2)}
-            className={`rounded-0 ${styles["tab-button"]} ${
-              currentTab === 2 && styles["tab-button-active"]
-            }`}
+            className={`rounded-0 ${styles["tab-button"]} ${currentTab === 2 && styles["tab-button-active"]
+              }`}
             variant="light"
           >
             Members
           </Button>
           <Button
             onClick={() => handleSwitchTab(3)}
-            className={`rounded-0 ${styles["tab-button"]} ${
-              currentTab === 3 && styles["tab-button-active"]
-            }`}
+            className={`rounded-0 ${styles["tab-button"]} ${currentTab === 3 && styles["tab-button-active"]
+              }`}
             variant="light"
           >
             Grade

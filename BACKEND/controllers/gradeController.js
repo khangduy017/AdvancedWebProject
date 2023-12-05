@@ -81,9 +81,9 @@ const editStructure = catchAsync(async (req, res, next) => {
 const updateStudentList = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
   const studentList = []
-  for(let i of req.body.value){
-    const student = await User.findOne({id:i.studentId})
-    student?studentList.push({...i,_id:student._id}):studentList.push(i)
+  for (let i of req.body.value) {
+    const student = await User.findOne({ id: i.studentId })
+    student ? studentList.push({ ...i, _id: student._id }) : studentList.push(i)
   }
 
   grade.grades = studentList
@@ -99,4 +99,4 @@ const updateStudentList = catchAsync(async (req, res, next) => {
 
 
 
-export default { getGrade, addStructure, editStructure,updateStudentList }
+export default { getGrade, addStructure, editStructure, updateStudentList }
