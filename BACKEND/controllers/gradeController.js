@@ -6,12 +6,13 @@ import catchAsync from '../utils/catchAsync.js'
 
 const getGrade = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
-
   res.status(200).json({
     status: 'success',
     value: grade
   });
 });
+
+
 
 const addStructure = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
@@ -20,19 +21,17 @@ const addStructure = catchAsync(async (req, res, next) => {
     if (i.name === req.body.value.name) {
       return res.status(200).json({
         status: 'failed',
-        value: "The name already exists."
+        value: "The name already exists"
       });
     }
     scaleSum += Number(i.scale)
     if (scaleSum > 100) {
-      console.log('vao day')
       return res.status(200).json({
         status: 'failed',
-        value: "The total scale value of the columns exceeds 100%."
+        value: "The total scale value exceeds 100%"
       });
     }
   }
-
   grade.structure.push(req.body.value)
   grade.save()
 
@@ -52,7 +51,7 @@ const editStructure = catchAsync(async (req, res, next) => {
     if (nameSet.has(item.name)) {
       return res.status(200).json({
         status: 'failed',
-        value: 'There are two identical values for the name.'
+        value: 'There are two identical values for the name'
       });
     }
     nameSet.add(item.name);
@@ -66,7 +65,7 @@ const editStructure = catchAsync(async (req, res, next) => {
   if (scaleTotal > 100) {
     return res.status(200).json({
       status: 'failed',
-      value: 'The total scale value of the columns exceeds 100%.'
+      value: 'The total scale value exceeds 100%'
     });
   }
 
@@ -79,6 +78,25 @@ const editStructure = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateStudentList = catchAsync(async (req, res, next) => {
+  const grade = await Grade.findById(req.body.id)
+  const studentList = []
+  for(let i of req.body.value){
+    const student = await User.findOne({id:i.studentId})
+    student?studentList.push({...i,_id:student._id}):studentList.push(i)
+  }
+
+  grade.grades = studentList
+  grade.save()
+
+  res.status(200).json({
+    status: 'success',
+    value: grade.grades
+  });
+});
 
 
-export default { getGrade, addStructure, editStructure }
+
+
+
+export default { getGrade, addStructure, editStructure,updateStudentList }

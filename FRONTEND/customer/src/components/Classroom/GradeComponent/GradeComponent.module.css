@@ -72,7 +72,7 @@
 }
 
 
-.grade-item{
+.grade-item,.student-list-item{
   padding: 0;
   margin: 0;
   flex-direction: row !important;
@@ -162,4 +162,53 @@
 .grade-item-field:nth-child(3) input{
   width: 20%;
   padding: 0.1rem 0.2rem;
+}
+
+.student-list-field{
+  font-weight: 600;
+  background: #5d5fef;
+  padding: 0.7rem 0.5rem;
+  color: white;
+}
+
+.student-list-field p:nth-child(1){
+  width: 15%;
+  padding-left: 1.5rem;  
+}
+
+.student-list-field p:nth-child(2){
+  width: 30%;
+}
+
+.student-list-field p:nth-child(3){
+  width: 40%;
+}
+
+
+.student-item-field:nth-child(1){
+  width: 15%;
+  padding-left: 1.5rem;  
+}
+
+.student-item-field:nth-child(2){
+  width: 30%;
+}
+
+.student-item-field:nth-child(3){
+  width: 41%;
+}
+
+.student-list-button{
+  padding: 0.3rem 0.8rem;
+  background: #5d5fef;
+  border: none;
+}
+
+.student-list-button{
+  background: #5d5fef;
+}
+
+.student-list-button:hover{
+  background: #4c4eb6;
+  border: none;
 }
