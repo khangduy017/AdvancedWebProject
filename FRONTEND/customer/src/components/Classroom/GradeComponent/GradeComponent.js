@@ -5,7 +5,6 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import React, { forwardRef } from "react";
-import COMMENTS from "./MOCK_DATA.json";
 import { GrDrag } from "react-icons/gr";
 import moment from "moment";
 import AuthContext from "../../../store/auth-context";
@@ -13,6 +12,7 @@ import toast from "react-hot-toast";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import GradeItem from "./GradeItem/GradeItem";
 
 const GradeComponent = (props) => {
 
@@ -103,7 +103,8 @@ const GradeComponent = (props) => {
     axios.post(process.env.REACT_APP_API_HOST + 'grade/add-structure', data, { headers })
       .then((res) => {
         if (res.data.status === "success") {
-          setGradeStructure(prev => [...prev, res.data.value])
+          setGradeStructure(res.data.value.structure)
+          setGrades(res.data.value.grades)
           setNameGrade('')
           setScaleGrade('')
           toast.success('Add successfully!', styleSuccess);
@@ -189,7 +190,8 @@ const GradeComponent = (props) => {
     axios.post(process.env.REACT_APP_API_HOST + 'grade/edit-structure', data, { headers })
       .then((res) => {
         if (res.data.status === "success") {
-          setGradeStructure(res.data.value)
+          setGradeStructure(res.data.value.structure)
+          setGrades(res.data.value.grades)
           setEditGradeStructure(false)
           toast.success('Edit successfully!', styleSuccess);
         }
@@ -207,7 +209,6 @@ const GradeComponent = (props) => {
     let scaleTotal = 0;
 
     for (const item of dataArray) {
-      // Chuyển đổi giá trị 'scale' thành số và kiểm tra xem có phải là số hay không
       const scaleValue = parseInt(item.scale, 10);
       if (!isNaN(scaleValue)) {
         scaleTotal += scaleValue;
@@ -278,7 +279,7 @@ const GradeComponent = (props) => {
             jsonData = jsonData.map((item) => {
               return { _id: '', studentId: item.StudentId.toString(), fullname: item.FullName.toString() };
             });
-            setStudentList(jsonData)
+            // setStudentList(jsonData)
             toast.success('Upload data is success!', styleSuccess)
 
             const data = {
@@ -289,8 +290,9 @@ const GradeComponent = (props) => {
             axios.post(process.env.REACT_APP_API_HOST + 'grade/update-student-list', data, { headers })
               .then((res) => {
                 if (res.data.status === "success") {
-                  // console.log(res.data.value)
+                  console.log(res.data.value)
                   setStudentList(res.data.value)
+                  setGrades(res.data.value)
                 }
                 else {
                   toast.error(res.data.value, styleError);
@@ -313,10 +315,51 @@ const GradeComponent = (props) => {
     }
   };
 
-
-
-
   // PART 3
+  const [grades, setGrades] = useState([]);
+  const [gradesClone, setGradesClone] = useState([])
+
+
+  useEffect(() => {
+    if (gradeValue.grades) {
+      setGrades(gradeValue.grades)
+    }
+  }, [gradeValue])
+
+  const [editGrade, setEditGrade] = useState(false)
+  const handleEditGrade = () => {
+    setEditGrade(!editGrade)
+    setGradesClone(grades)
+  }
+
+  const onChangeEdit =(value,_index)=>{
+    const updatedData = gradesClone.map((item,index) => {
+      if ( _index=== index) {
+        return value
+      }
+      return item
+    });
+    setGradesClone(updatedData)
+  }
+
+  const handleEditGradeDone=()=>{
+    const data = {
+      id: props.id,
+      value: gradesClone
+    }
+
+    axios.post(process.env.REACT_APP_API_HOST + 'grade/edit-grades', data, { headers })
+      .then((res) => {
+        if (res.data.status === "success") {
+          setGrades(res.data.value)
+          setEditGrade(!editGrade)
+          toast.success('Edit successfully!', styleSuccess);
+        }
+        else {
+          toast.error(res.data.value, styleError);
+        }
+      });
+  }
 
   return (
     <>{
@@ -384,18 +427,19 @@ const GradeComponent = (props) => {
             <div className={`d-flex align-items-center justify-content-between`}>
               {!editGradeStructure && <Button
                 onClick={handleShow}
-                className={`${styles['grade-structure-add-button']} p-0`}
+                className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-1`}
                 type="submit"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" viewBox="0 0 448 512">
+                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
                   <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" /></svg>
+                Add
               </Button>}
               {!editGradeStructure && <Button
                 onClick={handleEdit}
-                className={`${styles['grade-structure-edit-button']}`}
-                type="submit"
+                className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512"><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" /></svg>
+                Edit
               </Button>}
 
               {editGradeStructure && <Button
@@ -424,7 +468,7 @@ const GradeComponent = (props) => {
             <DragDropContext onDragEnd={dragEnded} >
               <Droppable droppableId="comments-wrapper">
                 {(provided, snapshot) => (
-                  <GradeItems ref={provided.innerRef} {...provided.droppableProps}>
+                  <StructureItems ref={provided.innerRef} {...provided.droppableProps}>
 
                     {!editGradeStructure ? gradeStructure.map((_comment, index) => {
                       return (
@@ -434,7 +478,7 @@ const GradeComponent = (props) => {
                           key={_comment._id}
                         >
                           {(_provided, _snapshot) => (
-                            <GradeItem
+                            <StructureItem
                               ref={_provided.innerRef}
                               dragHandleProps={_provided.dragHandleProps}
                               {..._provided.draggableProps}
@@ -456,7 +500,7 @@ const GradeComponent = (props) => {
                             key={_comment._id}
                           >
                             {(_provided, _snapshot) => (
-                              <GradeItem
+                              <StructureItem
                                 ref={_provided.innerRef}
                                 dragHandleProps={_provided.dragHandleProps}
                                 {..._provided.draggableProps}
@@ -476,7 +520,7 @@ const GradeComponent = (props) => {
                     }
 
                     {/* {provided.placeholder} */}
-                  </GradeItems>
+                  </StructureItems>
                 )}
               </Droppable>
             </DragDropContext>
@@ -485,8 +529,8 @@ const GradeComponent = (props) => {
             <p>Total scale: </p>
             <p style={{ fontWeight: '600', color: '#5d5fef' }}>{calculateScaleTotal(gradeStructure)}%</p>
           </div>
-          {/* PART 2 */}
-          <div className={`d-flex align-items-center justify-content-between mb-3 mt-4`}>
+          {/*========================= PART 2 =========================*/}
+          <div className={`d-flex align-items-center justify-content-between mb-3 mt-5`}>
             <h3 className={`${styles['grade-structure-title']} mt-0`}>Student list</h3>
             <div className={`d-flex align-items-center justify-content-between`}>
               <Button
@@ -549,26 +593,26 @@ const GradeComponent = (props) => {
 
             </div>)}
           </div>
-          {/* PART 3 */}
-          <div className={`d-flex align-items-center justify-content-between mb-3 mt-5`}>
+          {/*========================= PART 3 =========================*/}
+          <div style={{marginTop:'4rem'}} className={`d-flex align-items-center justify-content-between mb-3`}>
             <h3 className={`${styles['grade-structure-title']} mt-0`}>Grade board</h3>
             <div className={`d-flex align-items-center justify-content-between`}>
-              <Button
-                onClick={() => { }}
+              {!editGrade && <Button
+                onClick={handleEditGrade}
                 className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512"><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" /></svg>
                 Edit
-              </Button>
-              <Button
+              </Button>}
+              {!editGrade && <Button
                 onClick={() => { }}
                 className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
                   <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z" /></svg>
                 Download file
-              </Button>
-              <Button
+              </Button>}
+              {!editGrade && <Button
                 onClick={() => { }}
                 style={{ cursor: 'pointer' }}
                 className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
@@ -576,8 +620,37 @@ const GradeComponent = (props) => {
                 <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
                   <path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" /></svg>
                 Upload file
-              </Button>
+              </Button>}
+              {editGrade && <Button
+                onClick={() => { setEditGrade(!editGrade) }}
+                className={`${styles['grade-structure-cancel-button']} p-0`}
+                type="submit"
+              >
+                Cancel
+              </Button>}
+              {editGrade && <Button
+                onClick={handleEditGradeDone}
+                className={`${styles['grade-structure-done-button']} p-0`}
+                type="submit"
+              >
+                Done
+              </Button>}
             </div>
+          </div>
+          <div className={`${styles['grades-field']}  mt-3 gap-0 d-flex align-items-center rounded-2`}>
+            <p className={`mb-0`}>#</p>
+            <div style={{ width: '93%' }} className={`d-flex align-items-center`}>
+              <p style={{ width: `${93 / gradeStructure.length + 2}%`, fontWeight: 'bold' }} className={`mb-0 ml-0`}>Student ID</p>
+              {gradeStructure.map((value, index) =>
+                <p style={{ width: `${93 / gradeStructure.length + 2}%` }} className={`mb-0 p-0`}>{value.name}</p>
+              )}
+              <p style={{ width: `${93 / gradeStructure.length + 2}%`, fontWeight: 'bold' }} className={`p-0 mb-0`}>Total</p>
+            </div>
+          </div>
+          <div>
+            {grades.map((value, index) =>
+              <GradeItem edit={editGrade} onChangeEdit={onChangeEdit} structure={gradeStructure} index={index} value={value} />
+            )}
           </div>
         </div>
     }</>
@@ -585,7 +658,9 @@ const GradeComponent = (props) => {
   );
 };
 
-const GradeItems = forwardRef(({ children, ...props }, ref) => {
+// >>>>>>>>>>>>>>>>>>>>>>>>> Graggable >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+const StructureItems = forwardRef(({ children, ...props }, ref) => {
   return (
     <ul ref={ref} className={`${styles['grade-items']} p-0`}>
       {children}
@@ -593,8 +668,7 @@ const GradeItems = forwardRef(({ children, ...props }, ref) => {
   );
 });
 
-
-const GradeItem = forwardRef(
+const StructureItem = forwardRef(
   ({ _id, name, scale, _public, dragHandleProps, snapshot, edit, remove, editName, editScale, editPublic, ...props }, ref) => {
 
     const [nameValue, setNameValue] = useState(name)
@@ -632,33 +706,33 @@ const GradeItem = forwardRef(
         ref={ref}
         {...props}
         className={
-          `${styles['grade-item']} d-flex align-items-center card p-2 mt-2`
+          `${styles['structure-item']} d-flex align-items-center card p-2 mt-2`
         }
       >
-        <span {...dragHandleProps} className={`${styles['grade-item-on-hand']}`}>
+        <span {...dragHandleProps} className={`${styles['structure-item-on-hand']}`}>
           {edit && <GrDrag />}
         </span>
 
-        <div className={`${styles['grade-item-field']} w-50`}>
+        <div className={`${styles['structure-item-field']} w-50`}>
           {!edit ? <small className="ml-2 text-dark">{name}</small>
             :
             <input type="text" onChange={handleEditName} value={nameValue} className={`${styles['']} form-control rounded-1`}   ></input>
           }
         </div>
 
-        <div className={`${styles['grade-item-field']} `}>
+        <div className={`${styles['structure-item-field']} `}>
           {!edit ? <small>{scale}</small> :
             <input type="text" onChange={handleEditScale} value={scaleValue} className={`${styles['']} form-control rounded-1`}   ></input>
           }
         </div>
 
-        <div className={`form-check ${styles['grade-item-field']}`}>
+        <div className={`form-check ${styles['structure-item-field']}`}>
           <input onChange={handleEditPublic} checked={isPublic} disabled={!edit} style={{ width: '1.2rem', height: '1.2rem', cursor: "pointer" }} className={`form-check-input`} type="checkbox" value="" id="flexCheckIndeterminate" />
         </div>
 
         {edit && <Button
           onClick={handleRemove}
-          className={`${styles['grade-item-field']}`}
+          className={`${styles['structure-item-field']}`}
           type="submit"
         ><svg xmlns="http://www.w3.org/2000/svg" height="14" width="11" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" /></svg>
         </Button>}

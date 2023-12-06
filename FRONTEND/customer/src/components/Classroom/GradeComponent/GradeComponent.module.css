@@ -1,5 +1,4 @@
 
-
 .grade-structure-title{
   text-align: start;
 }
@@ -10,36 +9,6 @@
 
 .grade-structure-field p:nth-child(2){
   width: 32%;
-}
-
-.grade-structure-add-button{
-  width: 2.1rem;
-  height: 2.1rem;
-  background: #5d5fef;
-  border: none;
-  font-weight: bold;
-}
-
-.grade-structure-add-button:hover{
-  width: 2.1rem;
-  height: 2.1rem;
-  background: #4c4eb6;
-  border: none;
-}
-
-.grade-structure-edit-button{
-  width: 2.1rem;
-  height: 2.1rem;
-  background: #5d5fef;
-  padding: 0rem 0rem 0.3rem 0.1rem;
-  border: none;
-}
-
-.grade-structure-edit-button:hover{
-  width: 2.1rem;
-  height: 2.1rem;
-  background: #4c4eb6;
-  border: none;
 }
 
 .grade-structure-cancel-button{
@@ -72,7 +41,7 @@
 }
 
 
-.grade-item,.student-list-item{
+.structure-item,.student-list-item{
   padding: 0;
   margin: 0;
   flex-direction: row !important;
@@ -80,16 +49,16 @@
   height: 2.8rem;
 }
 
-.grade-item-on-hand{
+.structure-item-on-hand{
   width: 1rem;
 }
 
-.grade-item-field:nth-child(2){
+.structure-item-field:nth-child(2){
   display: inline !important;
   margin-left: 3rem;
 }
 
-.grade-item-field:nth-child(3){
+.structure-item-field:nth-child(3){
   width: 32%;
 }
 
@@ -98,17 +67,17 @@
   left: auto !important;
 }
 
-.grade-item-field:nth-child(4){
+.structure-item-field:nth-child(4){
   margin-left: 1rem;
 }
 
 
-.grade-item-field:nth-child(4) input:checked{
+.structure-item-field:nth-child(4) input:checked{
   background-color: #5d5fef;
   border: none;
 }
 
-.grade-item-field:nth-child(5){
+.structure-item-field:nth-child(5){
   margin-left: 2.4rem;
   width: 1.8rem;
   height: 1.8rem;
@@ -117,7 +86,7 @@
   border: none;
 }
 
-.grade-item-field:nth-child(5):hover{
+.structure-item-field:nth-child(5):hover{
   background: #e03737;
 }
 
@@ -154,12 +123,12 @@
   background: #4c4eb6;
 }
 
-.grade-item-field:nth-child(2) input{
+.structure-item-field:nth-child(2) input{
   width: 75%;
   padding: 0.1rem 0.2rem;
 }
 
-.grade-item-field:nth-child(3) input{
+.structure-item-field:nth-child(3) input{
   width: 20%;
   padding: 0.1rem 0.2rem;
 }
@@ -211,4 +180,16 @@
 .student-list-button:hover{
   background: #4c4eb6;
   border: none;
+}
+
+.grades-field{
+  /* font-weight: 600; */
+  background: #5d5fef;
+  padding: 0.7rem 0.5rem;
+  color: white;
+}
+
+.grades-field p:nth-child(1){
+  width: 7%;
+  padding-left: 1.5rem;  
 }

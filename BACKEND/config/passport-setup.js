@@ -14,20 +14,8 @@ const google = passport.use(
       if (currentUser) {
         done(null, currentUser)
       } else {
-        let id = ''
-        if(req.query.state==='student'){
-          id = Math.floor(10000000 + Math.random() * 90000000).toString();
-          while (1) {
-            const _student = await User.findOne({ id: id })
-            if (_student) {
-              id = Math.floor(10000000 + Math.random() * 90000000).toString();
-            }
-            else break
-          }
-        }
-
         const newUser = await User.create({
-          id: id,
+          id: '',
           email: profile.emails[0].value,
           password: 'googleaccount',
           type: 'google',
@@ -61,19 +49,8 @@ const facebook = passport.use(new FacebookStrategy({
       if (currentUser) {
         done(null, currentUser)
       } else {
-        let id = ''
-        if(req.query.state==='student'){
-          id = Math.floor(10000000 + Math.random() * 90000000).toString();
-          while (1) {
-            const _student = await User.findOne({ id: id })
-            if (_student) {
-              id = Math.floor(10000000 + Math.random() * 90000000).toString();
-            }
-            else break
-          }
-        }
         const newUser = await User.create({
-          id:id,
+          id:'',
           email: '',
           password: 'facebookaccount',
           type: 'facebook',

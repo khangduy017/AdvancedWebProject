@@ -59,6 +59,7 @@ const createClass = catchAsync(async (req, res, next) => {
 
   const newGrade = await Grade.create({
     structure: [],
+    students:[],
     grades: [],
   })
 

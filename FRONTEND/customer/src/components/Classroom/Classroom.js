@@ -303,7 +303,7 @@ const Classroom = () => {
       ) : (
         <div className={`${styles["content"]}`}>
           <div
-            style={{ backgroundColor: classData.background }}
+            style={{ backgroundColor: `${classData && classData.background?classData.background:'#5d5fef'}` }}
             className={`${styles["banner-container"]} rounded-4 w-100`}
           >
             <h2 className={`${styles["classroom-name"]}`}>{classData.title}</h2>
@@ -492,7 +492,7 @@ const Classroom = () => {
           {currentTab === 2 && <div>MEMBERS</div>}
           {currentTab === 3 && (
             <div className={`${styles["grade"]}`}>
-              <GradeComponent />
+              <GradeComponent id={classData.grade} />
             </div>
           )}
         </div>

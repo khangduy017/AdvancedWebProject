@@ -5,6 +5,10 @@ const gradeSchema = new mongoose.Schema({
     type: [],
     default: [],
   },
+  // students: {
+  //   type: [],
+  //   default: [],
+  // },
   grades: {
     type: [],
     default: [],

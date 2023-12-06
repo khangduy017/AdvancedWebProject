@@ -73,19 +73,8 @@ const register = catchAsync(async (req, res, next) => {
 const verifyRegister = catchAsync(async (req, res, next) => {
   const data = req.body.data
   if (req.body.code === verifyCode.toString()) {
-    let id = ''
-    if (data.role === 'student') {
-      id = Math.floor(10000000 + Math.random() * 90000000).toString()
-      while (1) {
-        const _student = await User.findOne({ id: id })
-        if (_student) {
-          id = Math.floor(10000000 + Math.random() * 90000000).toString();
-        }
-        else break
-      }
-    }
     const newUser = await User.create({
-      id: id,
+      id: '',
       email: data.email,
       password: data.password,
       type: 'account',

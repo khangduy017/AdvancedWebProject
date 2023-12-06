@@ -12,8 +12,6 @@ const getGrade = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
 const addStructure = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
   let scaleSum = Number(req.body.value.scale)
@@ -32,17 +30,24 @@ const addStructure = catchAsync(async (req, res, next) => {
       });
     }
   }
+
+  const newGrade = []
+  for (let item of grade.grades) {
+    newGrade.push({ ...item, grade: { ...item.grade, [req.body.value.name]: '0' } })
+  }
+
   grade.structure.push(req.body.value)
+  grade.grades = newGrade
   grade.save()
 
   res.status(200).json({
     status: 'success',
-    value: req.body.value
+    value: grade
   });
 });
 
 const editStructure = catchAsync(async (req, res, next) => {
-  const grade = await Grade.findById(req.body.id)
+  let grade = await Grade.findById(req.body.id)
 
   const nameSet = new Set();
   let scaleTotal = 0;
@@ -69,21 +74,56 @@ const editStructure = catchAsync(async (req, res, next) => {
     });
   }
 
+  // let newGrade = []
+  // let nameList = Array.from(nameSet)
+  // for (let item of grade.grades) {
+  //   let gradeObject = {}
+  //   for (let n of nameList) {
+  //     gradeObject[n] = item.grade[n] || '0'
+  //   }
+  //   newGrade.push({ ...item, grade: gradeObject })
+  // }
+
+  let newGrade = grade.grades.map(item => ({
+    ...item,
+    grade: Array.from(nameSet).reduce((acc, n) => ({ ...acc, [n]: item.grade[n] || '0' }), {})
+  }));
+
   grade.structure = req.body.value
+  grade.grades = newGrade
   grade.save()
 
   res.status(200).json({
     status: 'success',
-    value: req.body.value
+    value: grade
   });
 });
 
 const updateStudentList = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
+  const listId = req.body.value.map(value => value.studentId)
+  const listName = req.body.value.map(value => value.fullname)
+
   const studentList = []
+  for (let i of grade.grades) {
+    if (listId.includes(i.studentId)) {
+      studentList.push({...i,fullname: listName[listId.indexOf(i.studentId)]})
+      listName.splice(listId.indexOf(i.studentId), 1)
+      listId.splice(listId.indexOf(i.studentId), 1)
+    }
+  }
+
+  let _grade = {}
+  for (let i of grade.structure) {
+    _grade = { ..._grade, [i.name]: "0" }
+  }
+
   for (let i of req.body.value) {
-    const student = await User.findOne({ id: i.studentId })
-    student ? studentList.push({ ...i, _id: student._id }) : studentList.push(i)
+    if (listId.includes(i.studentId)) {
+      const student = await User.findOne({ id: i.studentId })
+      student ? studentList.push({ ...i, _id: student._id, grade: _grade }) : studentList.push({ ...i, grade: _grade })
+      listId.splice(studentList.indexOf(i.studentId), 1)
+    }
   }
 
   grade.grades = studentList
@@ -95,8 +135,42 @@ const updateStudentList = catchAsync(async (req, res, next) => {
   });
 });
 
+const editGrades = catchAsync(async (req, res, next) => {
+  let grade = await Grade.findById(req.body.id)
+
+  function isFloatingPointInRange(value) {
+    const regex = /^(\d+(\.\d{1,2})?)$/;
+
+    return regex.test(value) && parseFloat(value) >= 0 && parseFloat(value) <= 10;
+  }
+
+  function isGradeInRange(grade) {
+    for (let key in grade) {
+      const value = grade[key].replace(',', '.');
+      if (!isFloatingPointInRange(value)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const result = req.body.value.every(item => isGradeInRange(item.grade));
+  if (!result) {
+    return res.status(200).json({
+      status: 'failed',
+      value: "It contains invalid data"
+    });
+  }
+
+  grade.grades = req.body.value
+  grade.save()
+
+  res.status(200).json({
+    status: 'success',
+    value: grade.grades
+  });
+});
 
 
 
-
-export default { getGrade, addStructure, editStructure, updateStudentList }
+export default { getGrade, addStructure, editGrades, editStructure, updateStudentList }
