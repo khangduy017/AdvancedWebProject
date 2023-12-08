@@ -1,176 +1,178 @@
-[{
-  "_id": {
-    "$oid": "6553910c6de690637127b578"
-  },
-  "username": "giahuy200202",
-  "password": "$2a$12$ZAuLwRmPnzrsYOyRbEPCreIIx6e1bYjWHR6wfjCDuaskB.IL/dP1W",
-  "role": "teacher",
-  "fullname": "giahuy200202",
-  "phone": "0703061972",
-  "email": "giahuy200202@gmail.com",
-  "dob": "11/09/2002",
-  "address": "Ho Chi Minh City, VietNam",
-  "gender": "Male",
-  "avatar": "",
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65633750c2e6e9831f16c8b2"
-  },
-  "username": "Yuki No Hana",
-  "password": "$2a$12$HtRh47jqAtsGESufRm9sj.9hyVaVTC9Av3YDz8vPEvBDWjiKIScdK",
-  "type": "google",
-  "role": "student",
-  "fullname": "",
-  "phone": "",
-  "email": "giahuy200202@gmail.com",
-  "dob": "",
-  "address": "",
-  "gender": "",
-  "avatar": "https://lh3.googleusercontent.com/a/ACg8ocKWSbCHmQFi4TG-n5PpWSszK2X9tx98oTiO11pkeJyVChc=s96-c",
-  "googleId": "102381736488864937362",
-  "facebookId": "",
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "656454d4be27f5ebf5f9088f"
-  },
-  "username": "Dinh Khang",
-  "password": "$2a$12$ZoEBeo.L3rhDZLuhBeRwCurXc.rgUovQS82lT25m/hkT2fYOjtU7S",
-  "type": "google",
-  "role": "student",
-  "class": [],
-  "notify": [],
-  "fullname": "",
-  "phone": "",
-  "email": "khangkn2211@gmail.com",
-  "dob": "",
-  "address": "",
-  "gender": "",
-  "avatar": "https://lh3.googleusercontent.com/a/ACg8ocJqC1JjZoyafkiP3fd199dfeHK-bSRw1ELb6ekZLRJ_=s96-c",
-  "googleId": "110535097945795747103",
-  "facebookId": "",
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65645520be27f5ebf5f90894"
-  },
-  "username": "Khang Dinh",
-  "password": "$2a$12$MHSDKwfJmQg9uiWsvOKCnuNVKeERkN4WHFurWfjcUK7HT0yiKKUI2",
-  "type": "facebook",
-  "role": "teacher",
-  "class": [],
-  "notify": [],
-  "fullname": "",
-  "phone": "",
-  "email": "",
-  "dob": "",
-  "address": "",
-  "gender": "",
-  "avatar": "",
-  "googleId": "",
-  "facebookId": "1872017499861802",
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65645674be27f5ebf5f9089e"
-  },
-  "username": "Dinh Khang",
-  "password": "$2a$12$uiyblL4SvCa2x6MYgJElreme6p6GVo.D4wC7/hhmsw94Q9LGEpXNy",
-  "type": "google",
-  "role": "teacher",
-  "class": [
-    "656a25ab4b5c61b3c354bd82",
-    "65698a18d5c9da5482de5005",
-    "656989fbd5c9da5482de4ffb",
-    "6566304f4def00c23fe94193",
-    "656630494def00c23fe9418b",
-    "656630264def00c23fe94177",
-    "6566301d4def00c23fe9416f",
-    "65662f5ff969bdad577c1022"
-  ],
-  "notify": [],
-  "fullname": "",
-  "phone": "",
-  "email": "khangkn2211@gmail.com",
-  "dob": "",
-  "address": "",
-  "gender": "",
-  "avatar": "https://lh3.googleusercontent.com/a/ACg8ocJqC1JjZoyafkiP3fd199dfeHK-bSRw1ELb6ekZLRJ_=s96-c",
-  "googleId": "110535097945795747103",
-  "facebookId": "",
-  "__v": 23
-},
-{
-  "_id": {
-    "$oid": "65686dfbcb30d6ffdcd71393"
-  },
-  "username": "Yuki No Hana",
-  "password": "$2a$12$rw/U0x4e29.gxl./bNcXAuTwKgZhMS6ibtWMPiqIIEBvJ2ix6IYSe",
-  "type": "google",
-  "role": "teacher",
-  "class": [
-    "65687a47cb30d6ffdcd71448",
-    "6568796fcb30d6ffdcd71426",
-    "65687808cb30d6ffdcd71412",
-    "65686e4bcb30d6ffdcd713a4",
-    "65686e17cb30d6ffdcd7139c"
-  ],
-  "notify": [],
-  "fullname": "",
-  "phone": "",
-  "email": "giahuy200202@gmail.com",
-  "dob": "",
-  "address": "",
-  "gender": "",
-  "avatar": "https://lh3.googleusercontent.com/a/ACg8ocKWSbCHmQFi4TG-n5PpWSszK2X9tx98oTiO11pkeJyVChc=s96-c",
-  "googleId": "102381736488864937362",
-  "facebookId": "",
-  "__v": 5
-},
-{
-  "_id": {
-    "$oid": "65698e25d5c9da5482de504c"
-  },
-  "username": "Khang Dinh",
-  "password": "$2a$12$3FvyDd2xh1XgjqjDP4/5Rudqbm3eus0gSdGW2Qr8ARNpyy.HTbS0e",
-  "type": "facebook",
-  "role": "student",
-  "class": [],
-  "notify": [],
-  "fullname": "",
-  "phone": "",
-  "email": "",
-  "dob": "",
-  "address": "",
-  "gender": "",
-  "avatar": "",
-  "googleId": "",
-  "facebookId": "1872017499861802",
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "656c137bcd66c989b63a5cb4"
-  },
-  "username": "",
-  "password": "$2a$12$pBfk7Dw31dvTXLhtAr6beekWQl3UEZvL1jFexo0uPCgrg9IO8HtxO",
-  "type": "account",
-  "role": "student",
-  "class": [],
-  "notify": [],
-  "fullname": "",
-  "phone": "",
-  "email": "khangduy017@gmail.com",
-  "dob": "",
-  "address": "",
-  "gender": "",
-  "avatar": "",
-  "googleId": "",
-  "facebookId": "",
-  "__v": 0
-}]
+[
+    {
+        "_id": {
+            "$oid": "6553910c6de690637127b578"
+        },
+        "username": "giahuy200202",
+        "password": "$2a$12$ZAuLwRmPnzrsYOyRbEPCreIIx6e1bYjWHR6wfjCDuaskB.IL/dP1W",
+        "role": "teacher",
+        "fullname": "giahuy200202",
+        "phone": "0703061972",
+        "email": "giahuy200202@gmail.com",
+        "dob": "11/09/2002",
+        "address": "Ho Chi Minh City, VietNam",
+        "gender": "Male",
+        "avatar": "",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "65633750c2e6e9831f16c8b2"
+        },
+        "username": "Yuki No Hana",
+        "password": "$2a$12$HtRh47jqAtsGESufRm9sj.9hyVaVTC9Av3YDz8vPEvBDWjiKIScdK",
+        "type": "google",
+        "role": "student",
+        "fullname": "",
+        "phone": "",
+        "email": "giahuy200202@gmail.com",
+        "dob": "",
+        "address": "",
+        "gender": "",
+        "avatar": "https://lh3.googleusercontent.com/a/ACg8ocKWSbCHmQFi4TG-n5PpWSszK2X9tx98oTiO11pkeJyVChc=s96-c",
+        "googleId": "102381736488864937362",
+        "facebookId": "",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "656454d4be27f5ebf5f9088f"
+        },
+        "username": "Dinh Khang",
+        "password": "$2a$12$ZoEBeo.L3rhDZLuhBeRwCurXc.rgUovQS82lT25m/hkT2fYOjtU7S",
+        "type": "google",
+        "role": "student",
+        "class": [],
+        "notify": [],
+        "fullname": "",
+        "phone": "",
+        "email": "khangkn2211@gmail.com",
+        "dob": "",
+        "address": "",
+        "gender": "",
+        "avatar": "https://lh3.googleusercontent.com/a/ACg8ocJqC1JjZoyafkiP3fd199dfeHK-bSRw1ELb6ekZLRJ_=s96-c",
+        "googleId": "110535097945795747103",
+        "facebookId": "",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "65645520be27f5ebf5f90894"
+        },
+        "username": "Khang Dinh",
+        "password": "$2a$12$MHSDKwfJmQg9uiWsvOKCnuNVKeERkN4WHFurWfjcUK7HT0yiKKUI2",
+        "type": "facebook",
+        "role": "teacher",
+        "class": [],
+        "notify": [],
+        "fullname": "",
+        "phone": "",
+        "email": "",
+        "dob": "",
+        "address": "",
+        "gender": "",
+        "avatar": "",
+        "googleId": "",
+        "facebookId": "1872017499861802",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "65645674be27f5ebf5f9089e"
+        },
+        "username": "Dinh Khang",
+        "password": "$2a$12$uiyblL4SvCa2x6MYgJElreme6p6GVo.D4wC7/hhmsw94Q9LGEpXNy",
+        "type": "google",
+        "role": "teacher",
+        "class": [
+            "656a25ab4b5c61b3c354bd82",
+            "65698a18d5c9da5482de5005",
+            "656989fbd5c9da5482de4ffb",
+            "6566304f4def00c23fe94193",
+            "656630494def00c23fe9418b",
+            "656630264def00c23fe94177",
+            "6566301d4def00c23fe9416f",
+            "65662f5ff969bdad577c1022"
+        ],
+        "notify": [],
+        "fullname": "",
+        "phone": "",
+        "email": "khangkn2211@gmail.com",
+        "dob": "",
+        "address": "",
+        "gender": "",
+        "avatar": "https://lh3.googleusercontent.com/a/ACg8ocJqC1JjZoyafkiP3fd199dfeHK-bSRw1ELb6ekZLRJ_=s96-c",
+        "googleId": "110535097945795747103",
+        "facebookId": "",
+        "__v": 23
+    },
+    {
+        "_id": {
+            "$oid": "65686dfbcb30d6ffdcd71393"
+        },
+        "username": "Yuki No Hana",
+        "password": "$2a$12$rw/U0x4e29.gxl./bNcXAuTwKgZhMS6ibtWMPiqIIEBvJ2ix6IYSe",
+        "type": "google",
+        "role": "teacher",
+        "class": [
+            "65687a47cb30d6ffdcd71448",
+            "6568796fcb30d6ffdcd71426",
+            "65687808cb30d6ffdcd71412",
+            "65686e4bcb30d6ffdcd713a4",
+            "65686e17cb30d6ffdcd7139c"
+        ],
+        "notify": [],
+        "fullname": "",
+        "phone": "",
+        "email": "giahuy200202@gmail.com",
+        "dob": "",
+        "address": "",
+        "gender": "",
+        "avatar": "https://lh3.googleusercontent.com/a/ACg8ocKWSbCHmQFi4TG-n5PpWSszK2X9tx98oTiO11pkeJyVChc=s96-c",
+        "googleId": "102381736488864937362",
+        "facebookId": "",
+        "__v": 5
+    },
+    {
+        "_id": {
+            "$oid": "65698e25d5c9da5482de504c"
+        },
+        "username": "Khang Dinh",
+        "password": "$2a$12$3FvyDd2xh1XgjqjDP4/5Rudqbm3eus0gSdGW2Qr8ARNpyy.HTbS0e",
+        "type": "facebook",
+        "role": "student",
+        "class": [],
+        "notify": [],
+        "fullname": "",
+        "phone": "",
+        "email": "",
+        "dob": "",
+        "address": "",
+        "gender": "",
+        "avatar": "",
+        "googleId": "",
+        "facebookId": "1872017499861802",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "656c137bcd66c989b63a5cb4"
+        },
+        "username": "",
+        "password": "$2a$12$pBfk7Dw31dvTXLhtAr6beekWQl3UEZvL1jFexo0uPCgrg9IO8HtxO",
+        "type": "account",
+        "role": "student",
+        "class": [],
+        "notify": [],
+        "fullname": "",
+        "phone": "",
+        "email": "khangduy017@gmail.com",
+        "dob": "",
+        "address": "",
+        "gender": "",
+        "avatar": "",
+        "googleId": "",
+        "facebookId": "",
+        "__v": 0
+    }
+]

@@ -167,13 +167,30 @@
   width: 41%;
 }
 
+.dropdown{
+  position: relative;
+}
+
+.dropdown-contant{
+  position: absolute;
+  
+}
+
 .student-list-button{
   padding: 0.3rem 0.8rem;
   background: #5d5fef;
   border: none;
 }
 
-.student-list-button{
+.student-list-button:focus{
+  background: #5d5fef;
+}
+
+.student-list-button:active{
+  background: #5d5fef;
+}
+
+.student-list-button:window-inactive{
   background: #5d5fef;
 }
 

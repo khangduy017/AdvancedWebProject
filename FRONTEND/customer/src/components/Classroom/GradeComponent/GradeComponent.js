@@ -8,11 +8,12 @@ import React, { forwardRef } from "react";
 import { GrDrag } from "react-icons/gr";
 import moment from "moment";
 import AuthContext from "../../../store/auth-context";
-import toast from "react-hot-toast";
+import toast, { useToaster } from "react-hot-toast";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import GradeItem from "./GradeItem/GradeItem";
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const GradeComponent = (props) => {
 
@@ -265,7 +266,7 @@ const GradeComponent = (props) => {
           let jsonData = XLSX.utils.sheet_to_json(worksheet);
 
           const containsStudentId = jsonData.every((row) => row.StudentId !== undefined);
-          const containsFullName = jsonData.every((row) => row.FullName !== undefined);
+          const containsFullName = jsonData.every((row) => row.FullName !== undefined && row.FullName.length > 0);
 
           // const isValidData = jsonData.every((row) => {
           //   const hasStudentId = row.StudentId !== undefined && row.StudentId !== null && row.StudentId !== '';
@@ -273,14 +274,15 @@ const GradeComponent = (props) => {
 
           //   return hasStudentId && hasFullName;
           // });
-
+          console.log(jsonData)
 
           if (containsStudentId && containsFullName) {
             jsonData = jsonData.map((item) => {
               return { _id: '', studentId: item.StudentId.toString(), fullname: item.FullName.toString() };
             });
-            // setStudentList(jsonData)
+            setStudentList(jsonData)
             toast.success('Upload data is success!', styleSuccess)
+
 
             const data = {
               id: props.id,
@@ -332,9 +334,9 @@ const GradeComponent = (props) => {
     setGradesClone(grades)
   }
 
-  const onChangeEdit =(value,_index)=>{
-    const updatedData = gradesClone.map((item,index) => {
-      if ( _index=== index) {
+  const onChangeEdit = (value, _index) => {
+    const updatedData = gradesClone.map((item, index) => {
+      if (_index === index) {
         return value
       }
       return item
@@ -342,7 +344,7 @@ const GradeComponent = (props) => {
     setGradesClone(updatedData)
   }
 
-  const handleEditGradeDone=()=>{
+  const handleEditGradeDone = () => {
     const data = {
       id: props.id,
       value: gradesClone
@@ -361,6 +363,147 @@ const GradeComponent = (props) => {
       });
   }
 
+  const _weekScale = (gradeStructure, weekName) => {
+    const week = gradeStructure.find(week => week.name === weekName);
+    return week ? parseInt(week.scale) : 0;
+  };
+
+  const handleExportGradeBoard = () => {
+    const wb = XLSX.utils.book_new();
+
+    const columns = gradeStructure.map(week => week.name);
+    const sheetData = grades.map(student => {
+      const total = columns.reduce((acc, column) => {
+        const weekScore = parseFloat(student.grade[column]) || 0;
+        const weekScale = parseInt(_weekScale(gradeStructure, column)) || 0;
+        return acc + weekScore * weekScale;
+      }, 0);
+
+      const roundedTotal = Math.round(total * 0.01 * 100) / 100;
+      console.log(roundedTotal)
+      return {
+        'StudentId': student.studentId,
+        ...student.grade,
+        'Total': roundedTotal,
+      };
+    });
+
+    const ws = XLSX.utils.json_to_sheet(sheetData);
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Students');
+
+    XLSX.writeFile(wb, 'student-grades.xlsx');
+  }
+
+  const [showDowloadModal, setShowDownloadModal] = useState(false)
+  const [downloadTemplateValue, setDownloadTemplateValue] = useState()
+
+  const handleDownloadTemplate = () => {
+    const wb = XLSX.utils.book_new();
+    let sheetData;
+    if (downloadTemplateValue === 'all') {
+      sheetData = grades.map(student => ({
+        'StudentId': student.studentId,
+        ...Object.keys(student.grade).reduce((acc, key) => {
+          acc[key] = '';
+          return acc;
+        }, {}),
+      }));
+    } else {
+      sheetData = grades.map(student => ({
+        'StudentId': student.studentId,
+        [downloadTemplateValue]: '',
+      }));
+    }
+
+    const ws = XLSX.utils.json_to_sheet(sheetData);
+    XLSX.utils.book_append_sheet(wb, ws, 'Students');
+    XLSX.writeFile(wb, 'grade-board-template.xlsx');
+
+    setShowDownloadModal(false)
+  }
+
+  const gradeFileInputRef = useRef(null);
+
+  const _handleUploadGradeBoard = () => {
+    if (gradeFileInputRef.current) {
+      gradeFileInputRef.current.click();
+    }
+  };
+
+  const handleUploadGradeBoard = (event) => {
+
+    event.preventDefault();
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+
+          let jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+          const containsStudentId = jsonData.every((row) => row.StudentId !== undefined);
+
+
+          for (const boardItem of jsonData) {
+            const studentItem = grades.find(student => student.studentId === boardItem.StudentId);
+
+            if (studentItem) {
+              for (const weekKey in boardItem) {
+                if (weekKey !== "StudentId") {
+                  if (studentItem.grade.hasOwnProperty(weekKey)) {
+                    studentItem.grade[weekKey] = boardItem[weekKey].toString();
+                  }
+                }
+              }
+            }
+          }
+
+          if (containsStudentId) {
+            setGrades(grades)
+            toast.success('Upload data is success!', styleSuccess)
+
+            const data = {
+              id: props.id,
+              value: grades
+            }
+
+            axios.post(process.env.REACT_APP_API_HOST + 'grade/edit-grades', data, { headers })
+              .then((res) => {
+                if (res.data.status === "success") {
+                  console.log(res.data.value)
+                  setGrades(res.data.value)
+                }
+                else {
+                  toast.error(res.data.value, styleError);
+                }
+              });
+
+          } else {
+            toast.error('', styleError)
+          }
+
+          if (fileInputRef.current) {
+            fileInputRef.current.value = null;
+          }
+        } catch (error) {
+          console.error('Lỗi khi chuyển đổi file Excel:', error);
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+  }
+
+
   return (
     <>{
       loading ?
@@ -371,6 +514,7 @@ const GradeComponent = (props) => {
         </div>
         :
         <div className={`${styles["grade-container"]}`}>
+          {/* add new structure modal */}
           <Modal
             className={styles["modal-container"]}
             aria-labelledby="contained-modal-title-vcenter"
@@ -419,6 +563,44 @@ const GradeComponent = (props) => {
                 disabled={addEnable}
               >
                 Add
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/* download file modal */}
+          <Modal
+            className={styles["modal-container"]}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            show={showDowloadModal}
+            onHide={() => { setShowDownloadModal(false) }}
+          >
+            <Modal.Header closeButton>
+              <h4 className={styles["modal-heading"]}>Download template</h4>
+            </Modal.Header>
+            <Modal.Body>
+              <Form className="form-container">
+                <Form.Group className="mb-5" controlId="formGridAddress1">
+                  <Form.Label>Column</Form.Label>
+                  <Form.Select onChange={(e) => { setDownloadTemplateValue(e.target.value) }}>
+                    {gradeStructure.map((value, index) => <option value={value.name}>{value.name}</option>)}
+                    <option value="all">All columns</option>
+                  </Form.Select>
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                className={`${styles["close-button"]}`}
+                onClick={() => { setShowDownloadModal(false) }}
+              >
+                Close
+              </Button>
+              <Button
+                className={`${styles["save-button"]}`}
+                onClick={handleDownloadTemplate}
+              >
+                Download
               </Button>
             </Modal.Footer>
           </Modal>
@@ -594,7 +776,7 @@ const GradeComponent = (props) => {
             </div>)}
           </div>
           {/*========================= PART 3 =========================*/}
-          <div style={{marginTop:'4rem'}} className={`d-flex align-items-center justify-content-between mb-3`}>
+          <div style={{ marginTop: '4rem' }} className={`d-flex align-items-center justify-content-between mb-3`}>
             <h3 className={`${styles['grade-structure-title']} mt-0`}>Grade board</h3>
             <div className={`d-flex align-items-center justify-content-between`}>
               {!editGrade && <Button
@@ -604,22 +786,40 @@ const GradeComponent = (props) => {
                 <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512"><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" /></svg>
                 Edit
               </Button>}
+              {!editGrade &&
+                <div className={`${styles["dropdown"]}`}>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
+                      id="dropdown-basic">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
+                        <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z" /></svg>
+                      Download file
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={() => { setShowDownloadModal(true); setDownloadTemplateValue(gradeStructure[0].name) }} style={{ color: '#2C2C66' }} href="">Download template</Dropdown.Item>
+                      <Dropdown.Item onClick={handleExportGradeBoard} style={{ color: '#2C2C66' }} href="">Export grade board</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+
+                </div>
+              }
               {!editGrade && <Button
-                onClick={() => { }}
-                className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
-                  <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z" /></svg>
-                Download file
-              </Button>}
-              {!editGrade && <Button
-                onClick={() => { }}
+                onClick={_handleUploadGradeBoard}
                 style={{ cursor: 'pointer' }}
                 className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
                   <path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" /></svg>
                 Upload file
+                <input
+                  type="file"
+                  accept=".xlsx, .xls"
+                  ref={gradeFileInputRef}
+                  style={{ display: 'none' }}
+                  onChange={handleUploadGradeBoard}
+                />
               </Button>}
               {editGrade && <Button
                 onClick={() => { setEditGrade(!editGrade) }}
