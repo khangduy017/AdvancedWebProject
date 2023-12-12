@@ -1,0 +1,100 @@
+.nav-container{
+  padding: 0.7rem 4rem;
+  border-bottom: 1px solid #5D5FEF;
+  background: #5D5FEF;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  z-index: 10;
+}
+
+.nav-container:hover{
+  cursor: pointer;
+}
+
+.d-flex{
+  gap: 0.5rem;
+}
+
+.login{
+  margin-top: 0;
+  background: white;
+  font-weight: 550;
+  color: #5D5FEF;
+  border: none;
+  font-size: 0.8rem;
+}
+
+.register{
+  color: white;
+  background: #5D5FEF;
+  border: 1px solid white;
+  font-weight: 550;
+  font-size: 0.8rem;
+}
+
+.login:hover{
+  background: #EEEEFF;
+  color: #5D5FEF;
+}
+
+.register:hover{
+  background: #494bdb;
+  border: 1px solid white;
+}
+
+h4{
+  color: white;
+  margin: 0;
+}
+
+.img-container{
+  border-radius: 50%;
+  width: auto;
+  height: 2.3rem;
+}
+
+.info-container{
+  text-align: right;
+}
+
+.info-ava{
+  width: 30rem;
+}
+
+.info-ava:hover{
+  cursor: pointer;
+}
+
+.username{
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: white;
+}
+
+.role{
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: white;
+}
+
+.icon{
+  width: 2rem;
+  height: 1.4rem;
+  fill: white;
+}
+
+.icon:hover{
+  cursor: pointer;
+}
+
+.sub-nav-container{
+  color: white;
+  font-size: 1rem;
+}
+
+.nav-brand-container{
+  color: white;
+  font-weight: 600;
+  padding-bottom: 0.45rem;
+}

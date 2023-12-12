@@ -1,0 +1,65 @@
+.login {
+  background-color: #eeeeff;
+  height: 100vh;
+}
+
+.login .form-size {
+  width: 500px;
+}
+
+.login .form-title {
+  color: #2c2c66;
+}
+
+.login .form-text {
+  color: #94a3bb;
+}
+
+.login .submit-button {
+  background-color: #5d5fef !important;
+}
+
+.login .submit-button:hover {
+  background-color: #4c4eb6 !important;
+}
+
+.login .forget-password{
+  text-decoration: none !important;
+  color: #5D5FEF;
+}
+
+.login .error-message {
+  color: rgb(196, 0, 0);
+  font-style: italic;
+  font-size: 14px;
+}
+
+.login .social-button{
+  border: solid 1px #000000;
+}
+
+.login .back-button{
+  /* background-color: #5D5FEF !important; */
+  color: #5D5FEF;
+  cursor: pointer;
+}
+
+.login .password{
+  position: relative;
+}
+
+.login .password .show-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
+}
+
+.login .password .hide-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-40%,-50%);
+  cursor: pointer;
+}

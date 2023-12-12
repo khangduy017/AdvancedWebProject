@@ -1,0 +1,101 @@
+.register{
+  background-color: #EEEEFF;
+  height: 100vh;
+}
+
+.register .form-size{
+  width: 500px;
+}
+
+.register .form-title{
+  color: #2C2C66;
+}
+
+.register .form-text{
+  color: #94A3BB;
+}
+
+.register .submit-button{
+  background-color: #5D5FEF !important;
+}
+
+.register .submit-button:hover{
+  background-color:#585ad0 !important;
+}
+
+.register .back-button{
+  /* background-color: #5D5FEF !important; */
+  color: #5D5FEF;
+  cursor: pointer;
+}
+
+.register .error-message{
+  color: rgb(196, 0, 0);
+  font-style: italic;
+  font-size: 14px;
+}
+
+.register .email{
+  color: #5D5FEF;
+}
+
+.register .resend{
+  color: #5D5FEF;
+  cursor: pointer;
+}
+
+.register .input-verify{
+  font-size: 30px;
+  padding: 0px 14px;
+  font-weight: bold;
+  letter-spacing: 11px;
+}
+
+.register .login{
+  text-decoration: none !important;
+  color: #5D5FEF;
+}
+
+.register .password{
+  position: relative;
+}
+
+.register .show-password-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
+}
+
+.register .hide-password-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-40%,-50%);
+  cursor: pointer;
+}
+
+.register .password-confirm{
+  position: relative;
+}
+
+.register .show-password-confirm-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
+}
+
+.register .hide-password-confirm-icon{
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translate(-40%,-50%);
+  cursor: pointer;
+}
+
+.register .email-text{
+  flex-wrap: wrap;
+}

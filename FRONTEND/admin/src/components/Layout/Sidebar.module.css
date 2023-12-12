@@ -1,0 +1,18 @@
+.sidebar-container{
+    border-right: 1px solid #b8b8c2;
+    top: 4.1rem;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    font-size: 1.1rem;
+    width: 17rem;
+}
+
+.active-custom{
+    background: pink;
+}
+
+.middle-line{
+    border-bottom: 1px solid #b8b8c2;
+    margin: 2.3rem 0 1.8rem 0;
+}
