@@ -14,6 +14,7 @@ import User from "../../assests/img/user.jpg";
 import { MDBInput } from "mdbreact";
 import GradeComponent from "./GradeComponent/GradeComponent";
 import Navbar from 'react-bootstrap/Navbar';
+import MemberComponent from "./MemberComponent/MemberComponent";
 
 const Classroom = () => {
   const { id } = useParams();
@@ -49,7 +50,7 @@ const Classroom = () => {
   const [loading, setLoading] = useState(true)
 
   const [inviteEnable, setInviteEnable] = useState(true);
-  const [currentTab, setCurrentTab] = useState(3);
+  const [currentTab, setCurrentTab] = useState(2);
   const [typing, setTyping] = useState(false);
   const [typingContent, setTypingContent] = useState("");
   const [typingTitle, setTypingTitle] = useState("");
@@ -490,12 +491,8 @@ const Classroom = () => {
             </div>
           )}
 
-          {currentTab === 2 && <div>MEMBERS</div>}
-          {currentTab === 3 && (
-            <div className={`${styles["grade"]}`}>
-              <GradeComponent id={classData.grade} />
-            </div>
-          )}
+          {currentTab === 2 && <MemberComponent id={classData._id} />}
+          {currentTab === 3 && <GradeComponent id={classData.grade} />}
         </div>
       )}
     </div>

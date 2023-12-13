@@ -1,0 +1,12 @@
+.teacher-title{
+  text-align: start;
+}
+
+.member-item{
+  padding: .9rem 1.2rem;
+  border-top: 1px solid #dddde9;
+}
+
+.member-item img{
+  width: 2rem;
+}
