@@ -107,7 +107,7 @@ const updateStudentList = catchAsync(async (req, res, next) => {
   const studentList = []
   for (let i of grade.grades) {
     if (listId.includes(i.studentId)) {
-      studentList.push({...i,fullname: listName[listId.indexOf(i.studentId)]})
+      studentList.push({ ...i, fullname: listName[listId.indexOf(i.studentId)] })
       listName.splice(listId.indexOf(i.studentId), 1)
       listId.splice(listId.indexOf(i.studentId), 1)
     }
@@ -122,10 +122,10 @@ const updateStudentList = catchAsync(async (req, res, next) => {
     if (listId.includes(i.studentId)) {
       const student = await User.findOne({ id: i.studentId })
       student ? studentList.push({ ...i, _id: student._id, grade: _grade }) : studentList.push({ ...i, grade: _grade })
-      listId.splice(studentList.indexOf(i.studentId), 1)
+      listId.splice(listId.indexOf(i.studentId), 1)
     }
   }
-
+  
   grade.grades = studentList
   grade.save()
 

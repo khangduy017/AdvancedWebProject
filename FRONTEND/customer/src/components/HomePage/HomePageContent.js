@@ -29,18 +29,6 @@ const HomePageContent = () => {
 
 
   const [searchInput, setSearchInput] = useState("");
-  const classData = [1, 2, 3, 4, 1, 2, 3, 4];
-  const colorForClass = [];
-  for (let i = 0; i < classData.length; i++) {
-    let randomColorNumber = Math.floor(Math.random() * 5);
-    let randomColor;
-    if (randomColorNumber === 0) randomColor = "blue";
-    else if (randomColorNumber === 1) randomColor = "yellow";
-    else if (randomColorNumber === 2) randomColor = "red";
-    else if (randomColorNumber === 3) randomColor = "purple";
-    else if (randomColorNumber === 4) randomColor = "green";
-    colorForClass.push(randomColor);
-  }
 
   const [idInput, setIdInput] = useState("");
   const [titleInput, setTitleInput] = useState('')
@@ -78,12 +66,6 @@ const HomePageContent = () => {
 
       })
   }
-
-  useEffect(() => {
-    if (authCtx.isLoggedIn) {
-      handleGetAllClasses();
-    }
-  }, []);
 
   const color = ['#1C7ED6', '#0CA678', '#F08C00', '#F03E3E', '#5D5FEF',
     '#BE4BDB', '#E64980', '#E8590C', '#74B816', '#15AABF']

@@ -401,6 +401,7 @@ const GradeComponent = (props) => {
   const handleDownloadTemplate = () => {
     const wb = XLSX.utils.book_new();
     let sheetData;
+    let name = ''
     if (downloadTemplateValue === 'all') {
       sheetData = grades.map(student => ({
         'StudentId': student.studentId,
@@ -410,6 +411,7 @@ const GradeComponent = (props) => {
         }, {}),
       }));
     } else {
+      name = downloadTemplateValue
       sheetData = grades.map(student => ({
         'StudentId': student.studentId,
         [downloadTemplateValue]: '',
@@ -418,7 +420,7 @@ const GradeComponent = (props) => {
 
     const ws = XLSX.utils.json_to_sheet(sheetData);
     XLSX.utils.book_append_sheet(wb, ws, 'Students');
-    XLSX.writeFile(wb, 'grade-board-template.xlsx');
+    XLSX.writeFile(wb, `grade-board-template-${name}.xlsx`);
 
     setShowDownloadModal(false)
   }
@@ -468,7 +470,6 @@ const GradeComponent = (props) => {
 
           if (containsStudentId) {
             setGrades(grades)
-            toast.success('Upload data is success!', styleSuccess)
 
             const data = {
               id: props.id,
@@ -478,11 +479,11 @@ const GradeComponent = (props) => {
             axios.post(process.env.REACT_APP_API_HOST + 'grade/edit-grades', data, { headers })
               .then((res) => {
                 if (res.data.status === "success") {
-                  console.log(res.data.value)
                   setGrades(res.data.value)
+                  toast.success('Upload data is success!', styleSuccess)
                 }
                 else {
-                  toast.error(res.data.value, styleError);
+                  toast.error('Upload data failed! ' + res.data.value, styleError);
                 }
               });
 
@@ -616,7 +617,7 @@ const GradeComponent = (props) => {
                   <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" /></svg>
                 Add
               </Button>}
-              {!editGradeStructure && <Button
+              {!editGradeStructure && gradeStructure.length > 0 && <Button
                 onClick={handleEdit}
                 className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
               >
@@ -646,35 +647,15 @@ const GradeComponent = (props) => {
             <p className={`p-0 mb-0`}>Public</p>
           </div>
           <div className="w-100">
-            {/* rendering comments */}
-            <DragDropContext onDragEnd={dragEnded} >
-              <Droppable droppableId="comments-wrapper">
-                {(provided, snapshot) => (
-                  <StructureItems ref={provided.innerRef} {...provided.droppableProps}>
+            {!gradeStructure.length > 0 ? <div className={`${styles['grade-empty']} d-flex align-items-center justify-content-center p-4`}>
+              <p className="p-0 m-0">No data available...</p>
+            </div> : <div style={{ height: `${3.3 * gradeStructure.length}rem` }}>
+              <DragDropContext onDragEnd={dragEnded} >
+                <Droppable droppableId="comments-wrapper">
+                  {(provided, snapshot) => (
+                    <StructureItems ref={provided.innerRef} {...provided.droppableProps}>
 
-                    {!editGradeStructure ? gradeStructure.map((_comment, index) => {
-                      return (
-                        <Draggable
-                          draggableId={`comment-${_comment._id}`}
-                          index={index}
-                          key={_comment._id}
-                        >
-                          {(_provided, _snapshot) => (
-                            <StructureItem
-                              ref={_provided.innerRef}
-                              dragHandleProps={_provided.dragHandleProps}
-                              {..._provided.draggableProps}
-                              snapshot={_snapshot}
-                              {..._comment}
-                              edit={editGradeStructure}
-                              remove={removeGradeItem}
-                            />
-                          )}
-
-                        </Draggable>
-                      );
-                    }) :
-                      gradeStructureClone.map((_comment, index) => {
+                      {!editGradeStructure ? gradeStructure.map((_comment, index) => {
                         return (
                           <Draggable
                             draggableId={`comment-${_comment._id}`}
@@ -690,30 +671,53 @@ const GradeComponent = (props) => {
                                 {..._comment}
                                 edit={editGradeStructure}
                                 remove={removeGradeItem}
-                                editName={editNameGrade}
-                                editScale={editScaleGrade}
-                                editPublic={editPublicGrade}
                               />
                             )}
 
                           </Draggable>
                         );
-                      })
-                    }
+                      }) :
+                        gradeStructureClone.map((_comment, index) => {
+                          return (
+                            <Draggable
+                              draggableId={`comment-${_comment._id}`}
+                              index={index}
+                              key={_comment._id}
+                            >
+                              {(_provided, _snapshot) => (
+                                <StructureItem
+                                  ref={_provided.innerRef}
+                                  dragHandleProps={_provided.dragHandleProps}
+                                  {..._provided.draggableProps}
+                                  snapshot={_snapshot}
+                                  {..._comment}
+                                  edit={editGradeStructure}
+                                  remove={removeGradeItem}
+                                  editName={editNameGrade}
+                                  editScale={editScaleGrade}
+                                  editPublic={editPublicGrade}
+                                />
+                              )}
 
-                    {/* {provided.placeholder} */}
-                  </StructureItems>
-                )}
-              </Droppable>
-            </DragDropContext>
+                            </Draggable>
+                          );
+                        })
+                      }
+
+                      {/* {provided.placeholder} */}
+                    </StructureItems>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </div>}
           </div>
-          <div className={`d-flex align-items-center`}>
-            <p>Total scale: </p>
-            <p style={{ fontWeight: '600', color: '#5d5fef' }}>{calculateScaleTotal(gradeStructure)}%</p>
-          </div>
+          {<div className={`d-flex align-items-center`} style={{ height: '2rem', paddingTop: '1rem' }}>
+            {!editGradeStructure && <p>Total scale: </p>}
+            {!editGradeStructure && <p style={{ fontWeight: '600', color: '#5d5fef' }}>{calculateScaleTotal(gradeStructure)}%</p>}
+          </div>}
           {/*========================= PART 2 =========================*/}
           <div className={`d-flex align-items-center justify-content-between mb-3 mt-5`}>
-            <h3 className={`${styles['grade-structure-title']} mt-0`}>Student list</h3>
+            <h3 className={`${styles['grade-structure-title']} m-0`}>Student list</h3>
             <div className={`d-flex align-items-center justify-content-between`}>
               <Button
                 onClick={exportStudentListToExcel}
@@ -748,38 +752,41 @@ const GradeComponent = (props) => {
             <p className={`mb-0`}>Full name</p>
             <p className={`p-0 mb-0`}>Account</p>
           </div>
-          <div>
-            {studentList.map((value, index) => <div
-              key={value.studentId}
-              className={
-                `${styles['student-list-item']} d-flex align-items-center card p-2 mt-2`
-              }
-            >
-              <div className={`${styles['student-item-field']}`}>
-                <small className="ml-2 text-dark">{index + 1}</small>
-              </div>
-
-              <div className={`${styles['student-item-field']} `}>
-                <small>{value.studentId}</small>
-              </div>
-
-              <div className={`${styles['student-item-field']}`}>
-                <small>{value.fullname}</small>
-              </div>
-
-              {value._id.length > 1 &&
-                <div className={`${styles['student-item-field']}`}>
-                  <small style={{ color: '#099268', textDecoration: 'underline', cursor: 'pointer' }}>View</small>
-                </div>
-              }
-
-            </div>)}
+          {!studentList.length > 0 ? <div className={`${styles['grade-empty']} d-flex align-items-center justify-content-center p-4`}>
+            <p className="p-0 m-0">No data available...</p>
           </div>
+            : <div>
+              {studentList.map((value, index) => <div
+                key={value.studentId}
+                className={
+                  `${styles['student-list-item']} d-flex align-items-center card p-2 mt-2`
+                }
+              >
+                <div className={`${styles['student-item-field']}`}>
+                  <small className="ml-2 text-dark">{index + 1}</small>
+                </div>
+
+                <div className={`${styles['student-item-field']} `}>
+                  <small>{value.studentId}</small>
+                </div>
+
+                <div className={`${styles['student-item-field']}`}>
+                  <small>{value.fullname}</small>
+                </div>
+
+                {value._id.length > 1 &&
+                  <div className={`${styles['student-item-field']}`}>
+                    <small style={{ color: '#099268', textDecoration: 'underline', cursor: 'pointer' }}>View</small>
+                  </div>
+                }
+
+              </div>)}
+            </div>}
           {/*========================= PART 3 =========================*/}
           <div style={{ marginTop: '4rem' }} className={`d-flex align-items-center justify-content-between mb-3`}>
-            <h3 className={`${styles['grade-structure-title']} mt-0`}>Grade board</h3>
+            <h3 className={`${styles['grade-structure-title']} m-0`}>Grade board</h3>
             <div className={`d-flex align-items-center justify-content-between`}>
-              {!editGrade && <Button
+              {!editGrade && grades.length > 0 && <Button
                 onClick={handleEditGrade}
                 className={`${styles['student-list-button']} rounded-2 d-flex align-items-center gap-2`}
               >
@@ -837,21 +844,25 @@ const GradeComponent = (props) => {
               </Button>}
             </div>
           </div>
+
           <div className={`${styles['grades-field']}  mt-3 gap-0 d-flex align-items-center rounded-2`}>
             <p className={`mb-0`}>#</p>
-            <div style={{ width: '93%' }} className={`d-flex align-items-center`}>
-              <p style={{ width: `${93 / gradeStructure.length + 2}%`, fontWeight: 'bold' }} className={`mb-0 ml-0`}>Student ID</p>
+            <p style={{ width: `18%`, fontWeight: 'bold' }} className={`mb-0 ml-0`}>Student ID</p>
+            <div style={{ width: '75%' }} className={`d-flex align-items-center`}>
               {gradeStructure.map((value, index) =>
-                <p style={{ width: `${93 / gradeStructure.length + 2}%` }} className={`mb-0 p-0`}>{value.name}</p>
+                  <p  style={{ width: `${75 / gradeStructure.length + 1}%`,textOverflow:'ellipsis',overflow:'hidden',whiteSpace:'nowrap'}} className={`m-0 p-0`}>{value.name}</p>
               )}
-              <p style={{ width: `${93 / gradeStructure.length + 2}%`, fontWeight: 'bold' }} className={`p-0 mb-0`}>Total</p>
+              <p style={{ width: `${75 / gradeStructure.length + 1}%`, fontWeight: 'bold' }} className={`p-0 mb-0`}>Total</p>
             </div>
           </div>
-          <div>
-            {grades.map((value, index) =>
-              <GradeItem edit={editGrade} onChangeEdit={onChangeEdit} structure={gradeStructure} index={index} value={value} />
-            )}
+          {!grades.length > 0 ? <div className={`${styles['grade-empty']} d-flex align-items-center justify-content-center p-4`}>
+            <p className="p-0 m-0">No data available...</p>
           </div>
+            : <div>
+              {grades.map((value, index) =>
+                <GradeItem edit={editGrade} onChangeEdit={onChangeEdit} structure={gradeStructure} index={index} value={value} />
+              )}
+            </div>}
         </div>
     }</>
 
@@ -906,7 +917,7 @@ const StructureItem = forwardRef(
         ref={ref}
         {...props}
         className={
-          `${styles['structure-item']} d-flex align-items-center card p-2 mt-2`
+          `${styles['structure-item']} d-flex align-items-center card p-2`
         }
       >
         <span {...dragHandleProps} className={`${styles['structure-item-on-hand']}`}>

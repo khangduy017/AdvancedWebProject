@@ -11,10 +11,38 @@ import { NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import AuthContext from "../../store/auth-context";
 import { useState, useContext, useEffect } from "react";
+import axios from "axios";
 
 const Sidebar = () => {
   // const activeLink = ({ isActive }) => isActive ? `${styles['active-custom']}`: ''};
   const authCtx = useContext(AuthContext);
+  const token = authCtx.token;
+  const headers = { Authorization: `Bearer ${token}` };
+
+  const handleGetAllClasses = () => {
+    const data = {
+      _id: localStorage.getItem('_id')
+    }
+
+    axios.post(process.env.REACT_APP_API_HOST + "classes", data, { headers })
+      .then(res => {
+        if (res.data.status === 'success') {
+          authCtx.setClasses(res.data.value)
+        }
+        else {
+
+        }
+      })
+      .catch(err => {
+
+      })
+  }
+
+  useEffect(() => {
+    if (authCtx.isLoggedIn) {
+      handleGetAllClasses();
+    }
+  }, []);
   return (
     <div className={`${styles["sidebar-container"]} d-flex`}>
       <CDBSidebar textColor="#5D5FEF" backgroundColor="white">

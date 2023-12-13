@@ -1,9 +1,11 @@
 .classroom-container {
-  margin-top: 4rem;
+  margin-top: 4.1rem;
   margin-left: 17rem;
+  position: relative;
 }
 
 .banner-container {
+  margin-top: 3rem;
   height: 12.5rem;
   position: relative;
 
@@ -50,6 +52,12 @@
 .sub-nav {
   border-bottom: 1px solid #b8b8c2;
   padding: 0 1.5rem;
+  position: fixed;
+  z-index: 10;
+  background-color: white;
+  width: 82%;
+  /* top: 0; */
+  /* left: 0; */
 }
 
 .tab-layout {
@@ -59,7 +67,8 @@
 .tab-button {
   background-color: transparent;
   border: none;
-  padding: 0.5rem 1.5rem;
+  width: 7rem;
+  padding: 0.5rem 0rem;
   border-bottom: 3px solid transparent;
   border-top: 3px solid transparent;
   color: #2c2c66;
@@ -73,7 +82,7 @@
 }
 
 .tab-button-active {
-  /* font-weight: bold; */
+  font-weight: bold;
   color: #5d5fef;
   border-bottom: 3px solid #5d5fef;
   border-top: 3px solid transparent;
@@ -88,6 +97,7 @@
 .invite-email {
   background-color: #5d5fef !important;
   padding: 0.1rem 0.8rem;
+  border: none;
 }
 
 .invite-email:hover {
