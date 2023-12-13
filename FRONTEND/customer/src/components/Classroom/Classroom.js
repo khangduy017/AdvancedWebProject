@@ -13,6 +13,7 @@ import Tabs from "react-bootstrap/Tabs";
 import User from "../../assests/img/user.jpg";
 import { MDBInput } from "mdbreact";
 import GradeComponent from "./GradeComponent/GradeComponent";
+import Navbar from 'react-bootstrap/Navbar';
 
 const Classroom = () => {
   const { id } = useParams();
@@ -289,7 +290,7 @@ const Classroom = () => {
 
       {loading ? (
         <div
-          style={{ marginTop: "10rem" }}
+          style={{ marginTop: "0rem" }}
           class="d-flex justify-content-center"
         >
           <div
@@ -303,7 +304,7 @@ const Classroom = () => {
       ) : (
         <div className={`${styles["content"]}`}>
           <div
-            style={{ backgroundColor: `${classData && classData.background?classData.background:'#5d5fef'}` }}
+            style={{ backgroundColor: `${classData && classData.background ? classData.background : '#5d5fef'}` }}
             className={`${styles["banner-container"]} rounded-4 w-100`}
           >
             <h2 className={`${styles["classroom-name"]}`}>{classData.title}</h2>

@@ -34,21 +34,20 @@ export default function GradeItem(props) {
       }
     >
       <p className={`mb-0`}>{props.index + 1}</p>
-      <div style={{ width: '93%' }} className={`d-flex align-items-center`}>
-        <p style={{ width: `${93 / props.structure.length + 2}%` }} className={`mb-0 ml-0`}>
-          <small>
+        <p style={{ width: `18%` }} className={`mb-0 ml-0`}>
+          <small style={{textDecoration:`${props.value._id.length>0?'underline':''}`,cursor:`${props.value._id.length>0?'pointer':''}`}}>
             {props.value.studentId}
           </small>
         </p>
+      <div style={{ width: '75%' }} className={`d-flex align-items-center`}>
         {props.structure.map((value, index) => (
-          !props.edit ? <small style={{ width: `${93 / props.structure.length + 2}%` }} className={`mb-0 p-0`}>{props.value.grade[value.name]}</small> :
-            <input type="text" onChange={(e) => { handleEdit(e, value.name) }} value={inputState[value.name]} style={{ width: `${93 / props.structure.length + 2}%`, padding: '0.1rem 0.2rem' }} className={`${styles['']} form-control rounded-1`} ></input>
+          !props.edit ? <small style={{ width: `${75 / props.structure.length + 1}%` }} className={`mb-0 p-0`}>{props.value.grade[value.name]}</small> :
+            <input type="text" onChange={(e) => { handleEdit(e, value.name) }} value={inputState[value.name]} style={{ width: `${75 / props.structure.length + 1}%`, padding: '0.1rem 0.2rem' }} className={`${styles['']} form-control rounded-1`} ></input>
         ))}
-        <p style={{ width: `${93 / props.structure.length + 2}%`, fontWeight: 'bold' }} className={`p-0 mb-0`}>
+        <p style={{ width: `${75 / props.structure.length + 1}%`, fontWeight: 'bold' }} className={`p-0 mb-0`}>
           {calTotal()}
         </p>
       </div>
-
     </div>
   )
 }
