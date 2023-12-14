@@ -25,15 +25,16 @@
 
 .classroom-note {
   position: absolute;
-  top: 5rem;
+  top: 4rem;
   left: 1.5rem;
   color: white;
   font-weight: 500;
+  font-size: 1.2rem;
 }
 
 .classroom-owner {
   position: absolute;
-  top: 6.5rem;
+  bottom: .5rem;
   left: 1.5rem;
   color: white;
   font-weight: 500;
@@ -41,7 +42,7 @@
 
 .classroom-code{
   position: absolute;
-  bottom: 1.5rem;
+  top: 1.5rem;
   right: 1.5rem;
 }
 

@@ -750,7 +750,7 @@ const GradeComponent = (props) => {
             <p className={`mb-0`}>#</p>
             <p className={`mb-0 ml-0`}>Student ID</p>
             <p className={`mb-0`}>Full name</p>
-            <p className={`p-0 mb-0`}>Account</p>
+            {/* <p className={`p-0 mb-0`}>Account</p> */}
           </div>
           {!studentList.length > 0 ? <div className={`${styles['grade-empty']} d-flex align-items-center justify-content-center p-4`}>
             <p className="p-0 m-0">No data available...</p>
@@ -767,18 +767,12 @@ const GradeComponent = (props) => {
                 </div>
 
                 <div className={`${styles['student-item-field']} `}>
-                  <small>{value.studentId}</small>
+                  <small style={{ textDecoration: `${value._id.length > 1 ? 'underline' : ''}`, cursor: `${value._id.length > 1 ? 'pointer' : ''}` }}>{value.studentId}</small>
                 </div>
 
                 <div className={`${styles['student-item-field']}`}>
                   <small>{value.fullname}</small>
                 </div>
-
-                {value._id.length > 1 &&
-                  <div className={`${styles['student-item-field']}`}>
-                    <small style={{ color: '#099268', textDecoration: 'underline', cursor: 'pointer' }}>View</small>
-                  </div>
-                }
 
               </div>)}
             </div>}
@@ -805,8 +799,8 @@ const GradeComponent = (props) => {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Dropdown.Item onClick={() => { setShowDownloadModal(true); setDownloadTemplateValue(gradeStructure[0].name) }} style={{ color: '#2C2C66' }} href="">Download template</Dropdown.Item>
-                      <Dropdown.Item onClick={handleExportGradeBoard} style={{ color: '#2C2C66' }} href="">Export grade board</Dropdown.Item>
+                      <Dropdown.Item className={`${styles['download-file-option']}`} onClick={() => { setShowDownloadModal(true); setDownloadTemplateValue(gradeStructure[0].name) }} style={{ color: '#2C2C66' }} href="">Download template</Dropdown.Item>
+                      <Dropdown.Item className={`${styles['download-file-option']}`} onClick={handleExportGradeBoard} style={{ color: '#2C2C66' }} href="">Export grade board</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
 
@@ -850,7 +844,7 @@ const GradeComponent = (props) => {
             <p style={{ width: `18%`, fontWeight: 'bold' }} className={`mb-0 ml-0`}>Student ID</p>
             <div style={{ width: '75%' }} className={`d-flex align-items-center`}>
               {gradeStructure.map((value, index) =>
-                  <p  style={{ width: `${75 / gradeStructure.length + 1}%`,textOverflow:'ellipsis',overflow:'hidden',whiteSpace:'nowrap'}} className={`m-0 p-0`}>{value.name}</p>
+                <p style={{ width: `${75 / gradeStructure.length + 1}%`, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }} className={`m-0 p-0`}>{value.name}</p>
               )}
               <p style={{ width: `${75 / gradeStructure.length + 1}%`, fontWeight: 'bold' }} className={`p-0 mb-0`}>Total</p>
             </div>

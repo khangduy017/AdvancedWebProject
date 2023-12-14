@@ -221,7 +221,7 @@ const protect = catchAsync(async (req, res, next) => {
 
 const changePassword = catchAsync(async (req, res, next) => {
 
-  const user = await User.findById(req.user.id).select('+password');
+  const user = await User.findById(req.user._id).select('+password');
 
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     res.status(200).json({
@@ -245,7 +245,7 @@ const editProfile = catchAsync(async (req, res, next) => {
     { email: req.body.email },
   );
 
-  if (userCheck && userCheck._id.toString() !== req.user.id) {
+  if (userCheck && userCheck._id.toString() !== req.user._id.toString()) {
     res.status(200).json({
       status: 'fail',
       message: 'Email has been existed'
@@ -259,7 +259,7 @@ const editProfile = catchAsync(async (req, res, next) => {
   }
   else {
     const updatedUser = await User.updateOne(
-      { _id: req.user.id },
+      { _id: req.user._id },
       {
         fullname: req.body.fullname,
         username: req.body.username,
@@ -273,7 +273,7 @@ const editProfile = catchAsync(async (req, res, next) => {
     );
 
     const userData = await User.findOne(
-      { _id: req.user.id },
+      { _id: req.user._id },
     );
 
     res.status(200).json({
