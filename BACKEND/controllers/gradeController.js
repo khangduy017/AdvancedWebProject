@@ -6,6 +6,17 @@ import catchAsync from '../utils/catchAsync.js'
 
 const getGrade = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
+  const _class = await Class.findOne({ grade: req.body.id })
+
+  const studentList = []
+  for (let i of grade.grades) {
+    const student = await User.findOne({ id: i.studentId })
+    student && student.class.includes(_class._id.toString()) ? studentList.push({ ...i, _id: student._id }) : studentList.push({ ...i, _id: '' })
+  }
+
+  grade.grades = studentList
+  grade.save()
+
   res.status(200).json({
     status: 'success',
     value: grade
@@ -100,6 +111,7 @@ const editStructure = catchAsync(async (req, res, next) => {
 });
 
 const updateStudentList = catchAsync(async (req, res, next) => {
+  const _class = await Class.findOne({ grade: req.body.id })
   const grade = await Grade.findById(req.body.id)
   const listId = req.body.value.map(value => value.studentId)
   const listName = req.body.value.map(value => value.fullname)
@@ -107,7 +119,8 @@ const updateStudentList = catchAsync(async (req, res, next) => {
   const studentList = []
   for (let i of grade.grades) {
     if (listId.includes(i.studentId)) {
-      studentList.push({ ...i, fullname: listName[listId.indexOf(i.studentId)] })
+      const student = await User.findOne({ id: i.studentId })
+      student && student.class.includes(_class._id.toString()) ? studentList.push({ ...i, _id: student._id, fullname: listName[listId.indexOf(i.studentId)] }) : studentList.push({ ...i, fullname: listName[listId.indexOf(i.studentId)] })
       listName.splice(listId.indexOf(i.studentId), 1)
       listId.splice(listId.indexOf(i.studentId), 1)
     }
@@ -121,11 +134,11 @@ const updateStudentList = catchAsync(async (req, res, next) => {
   for (let i of req.body.value) {
     if (listId.includes(i.studentId)) {
       const student = await User.findOne({ id: i.studentId })
-      student ? studentList.push({ ...i, _id: student._id, grade: _grade }) : studentList.push({ ...i, grade: _grade })
+      student && student.class.includes(_class._id.toString()) ? studentList.push({ ...i, _id: student._id, grade: _grade }) : studentList.push({ ...i, grade: _grade })
       listId.splice(listId.indexOf(i.studentId), 1)
     }
   }
-  
+
   grade.grades = studentList
   grade.save()
 

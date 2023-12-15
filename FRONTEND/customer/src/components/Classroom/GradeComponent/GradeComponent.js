@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import GradeItem from "./GradeItem/GradeItem";
 import Dropdown from 'react-bootstrap/Dropdown';
+import StudentProfile from "./StudentProfile/StudentProfile";
 
 const GradeComponent = (props) => {
 
@@ -505,6 +506,22 @@ const GradeComponent = (props) => {
   }
 
 
+  const [showProfileModal, setShowProfileModal] = useState(false)
+  const [studentProfile, setStudentProfile] = useState({})
+  const handleShowProfile = (id) => {
+    setShowProfileModal(true)
+
+    axios.post(process.env.REACT_APP_API_HOST + 'auth/get-user-by-id', { _id: id }, { headers })
+      .then((res) => {
+        if (res.data.status === "success") {
+          setStudentProfile(res.data.data)
+        }
+        else {
+        }
+      });
+  }
+
+
   return (
     <>{
       loading ?
@@ -602,6 +619,30 @@ const GradeComponent = (props) => {
                 onClick={handleDownloadTemplate}
               >
                 Download
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/* student profile modal */}
+          <Modal
+            className={styles["modal-container"]}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            show={showProfileModal}
+            onHide={() => { setShowProfileModal(false);setStudentProfile({}) }}
+          >
+            <Modal.Header closeButton>
+              <h4 className={styles["modal-heading"]}>Profile</h4>
+            </Modal.Header>
+            <Modal.Body>
+              <StudentProfile value={studentProfile} />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                className={`${styles["close-button"]}`}
+                onClick={() => { setShowProfileModal(false);setStudentProfile({}) }}
+              >
+                Close
               </Button>
             </Modal.Footer>
           </Modal>
@@ -767,7 +808,7 @@ const GradeComponent = (props) => {
                 </div>
 
                 <div className={`${styles['student-item-field']} `}>
-                  <small style={{ textDecoration: `${value._id.length > 1 ? 'underline' : ''}`, cursor: `${value._id.length > 1 ? 'pointer' : ''}` }}>{value.studentId}</small>
+                  <small onClick={()=>{handleShowProfile(value._id)}} style={{ textDecoration: `${value._id.length > 1 ? 'underline' : ''}`, cursor: `${value._id.length > 1 ? 'pointer' : ''}` }}>{value.studentId}</small>
                 </div>
 
                 <div className={`${styles['student-item-field']}`}>
@@ -854,7 +895,7 @@ const GradeComponent = (props) => {
           </div>
             : <div>
               {grades.map((value, index) =>
-                <GradeItem edit={editGrade} onChangeEdit={onChangeEdit} structure={gradeStructure} index={index} value={value} />
+                <GradeItem onShowProfile={handleShowProfile} edit={editGrade} onChangeEdit={onChangeEdit} structure={gradeStructure} index={index} value={value} />
               )}
             </div>}
         </div>

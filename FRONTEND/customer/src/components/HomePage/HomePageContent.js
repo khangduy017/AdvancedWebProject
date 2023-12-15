@@ -56,16 +56,22 @@ const HomePageContent = () => {
       .then(res => {
         if (res.data.status === 'success') {
           authCtx.setClasses(res.data.value)
-          setLoading(false)
         }
         else {
 
         }
+        setLoading(false)
       })
       .catch(err => {
 
       })
   }
+
+  useEffect(() => {
+    if (authCtx.isLoggedIn) {
+      handleGetAllClasses();
+    }
+  }, []);
 
   const color = ['#1C7ED6', '#0CA678', '#F08C00', '#F03E3E', '#5D5FEF',
     '#BE4BDB', '#E64980', '#E8590C', '#74B816', '#15AABF']

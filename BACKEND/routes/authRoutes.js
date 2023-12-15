@@ -33,6 +33,7 @@ router.post('/forget-password', authController.forgetPassword)
 
 router.post('/change-password', authController.protect, authController.changePassword);
 router.post('/edit-profile', authController.protect, authController.editProfile);
+router.post('/get-user-by-id', authController.protect, authController.getUserById);
 router.get('/get-user', authController.protect, authController.getUser);
 
 export default router;

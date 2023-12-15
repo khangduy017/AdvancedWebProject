@@ -292,4 +292,13 @@ const getUser = catchAsync(async (req, res, next) => {
   });
 });
 
-export default { register, verifyRegister, login, loginGoogle, loginFacebook, forgetPassword, protect, changePassword, editProfile, getUser }
+const getUserById = catchAsync(async (req, res, next) => {
+  const userData = await User.findById(req.body._id);
+
+  res.status(200).json({
+    status: 'success',
+    data: userData
+  });
+});
+
+export default { register,getUserById, verifyRegister, login, loginGoogle, loginFacebook, forgetPassword, protect, changePassword, editProfile, getUser }

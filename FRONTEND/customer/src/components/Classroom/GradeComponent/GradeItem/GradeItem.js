@@ -26,6 +26,12 @@ export default function GradeItem(props) {
     props.onChangeEdit({ ...props.value, grade: { ...inputState, [structure]: e.target.value } }, props.index)
   }
 
+  const handleShowProfile=()=>{
+    if(props.value._id.length>0){
+      props.onShowProfile(props.value._id)
+    }
+  }
+
   return (
     <div
       key={props.value.studentId}
@@ -34,11 +40,11 @@ export default function GradeItem(props) {
       }
     >
       <p className={`mb-0`}>{props.index + 1}</p>
-        <p style={{ width: `18%` }} className={`mb-0 ml-0`}>
-          <small style={{textDecoration:`${props.value._id.length>0?'underline':''}`,cursor:`${props.value._id.length>0?'pointer':''}`}}>
-            {props.value.studentId}
-          </small>
-        </p>
+      <p style={{ width: `18%` }} className={`mb-0 ml-0`}>
+        <small onClick={handleShowProfile} style={{ textDecoration: `${props.value._id.length > 0 ? 'underline' : ''}`, cursor: `${props.value._id.length > 0 ? 'pointer' : ''}` }}>
+          {props.value.studentId}
+        </small>
+      </p>
       <div style={{ width: '75%' }} className={`d-flex align-items-center`}>
         {props.structure.map((value, index) => (
           !props.edit ? <small style={{ width: `${75 / props.structure.length + 1}%` }} className={`mb-0 p-0`}>{props.value.grade[value.name]}</small> :
