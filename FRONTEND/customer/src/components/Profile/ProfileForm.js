@@ -39,7 +39,7 @@ const ProfileForm = (props) => {
     if (authCtx.isLoggedIn) {
       setFullname(userData.fullname === undefined ? "" : userData.fullname);
       setUsername(userData.username === undefined ? "" : userData.username);
-      setStudentId(userData.studentId === undefined ? "" : userData.studentId);
+      setStudentId(userData.id === undefined ? "" : userData.id);
       setPhone(userData.phone === undefined ? "" : userData.phone);
       setGender(userData.gender === undefined ? "" : userData.gender);
       setRole(userData.role === undefined ? "" : userData.role);
@@ -192,7 +192,7 @@ const ProfileForm = (props) => {
               />
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPassword">
-              <Form.Label>Day of birth</Form.Label>
+              <Form.Label>Student ID</Form.Label>
               <Form.Control
                 onChange={(event) => {
                   setStudentId(event.target.value);
