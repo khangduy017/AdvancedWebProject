@@ -33,7 +33,7 @@ const ProfileForm = (props) => {
 
   const token = authCtx.token;
   const userData = authCtx.userData;
-
+  
   const headers = { Authorization: `Bearer ${token}` };
   useEffect(() => {
     if (authCtx.isLoggedIn) {
