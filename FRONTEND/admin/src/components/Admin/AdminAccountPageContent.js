@@ -1,4 +1,4 @@
-import styles from "./AdminPageContent.module.css";
+import styles from "./AdminAccountPageContent.module.css";
 import { useState, useContext, useEffect } from "react";
 import { ReactComponent as LeaveIcon } from "../../assests/svg/leave.svg";
 import { ReactComponent as SearchIcon } from "../../assests/svg/search.svg";
@@ -117,7 +117,7 @@ const AdminPageContent = () => {
 
   return (
     <div className={`${styles["total-container"]} w-75`}>
-      <h3>Manage classroom</h3>
+      <h3>Manage account</h3>
       <div
         className={`${styles["search-container"]} d-flex mt-4 p-0 align-items-center justify-content-between`}
       >

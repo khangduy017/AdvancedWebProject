@@ -6,6 +6,10 @@ const classSchema = new mongoose.Schema({
     ref: 'User',
     default: []
   },
+  active: {
+    type: Boolean,
+    default: true
+  },
   student: {
     type: [mongoose.Types.ObjectId],
     ref: 'User',

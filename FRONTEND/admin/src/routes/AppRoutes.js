@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import AdminPage from "../pages/AdminPage";
+import AdminAccountPage from "../pages/AdminAccountPage";
 import AuthContext from "../store/auth-context";
 import LoginPage from "../pages/LoginPage";
 import Register from "../components/Auth/Register/register";
@@ -24,6 +25,7 @@ const AppRoutes = () => {
 
       <Route element={<Layout />}>
         <Route path="/" element={<AdminPage />} />
+        <Route path="/account" element={<AdminAccountPage />} />
       </Route>
     </Routes>
   );

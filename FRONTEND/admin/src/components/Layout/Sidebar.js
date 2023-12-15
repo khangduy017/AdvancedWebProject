@@ -40,38 +40,23 @@ const Sidebar = () => {
               <CDBSidebarMenuItem icon="list">All classes</CDBSidebarMenuItem>
             </NavLink>
             <NavLink
-              to="/deadline"
+              to="/account"
               style={({ isActive }) => ({
                 color: isActive ? "#5D5FEF" : "#A5A6F6",
                 fontWeight: isActive ? "700" : "",
               })}
             >
-              <CDBSidebarMenuItem icon="clock">Deadline</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="user">Account</CDBSidebarMenuItem>
             </NavLink>
             <NavLink
-              to="/profile"
+              to="/student"
               style={({ isActive }) => ({
                 color: isActive ? "#5D5FEF" : "#A5A6F6",
                 fontWeight: isActive ? "700" : "",
               })}
             >
-              <CDBSidebarMenuItem icon="user">Profile page</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="map">Student mapping</CDBSidebarMenuItem>
             </NavLink>
-            <div className={`${styles["middle-line"]}`}></div>
-            {authCtx.classes.map((data, index) => (
-              <NavLink
-                key={index}
-                to={`/myclass/${data._id}`}
-                style={({ isActive }) => ({
-                  color: isActive ? "#5D5FEF" : "#A5A6F6",
-                  fontWeight: isActive ? "700" : "",
-                })}
-              >
-                <CDBSidebarMenuItem icon="book">
-                  {data.title}
-                </CDBSidebarMenuItem>
-              </NavLink>
-            ))}
           </CDBSidebarMenu>
         </CDBSidebarContent>
 
