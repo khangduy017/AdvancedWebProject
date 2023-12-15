@@ -20,7 +20,7 @@ const ProfileForm = (props) => {
 
   const [fullname, setFullname] = useState("");
   const [username, setUsername] = useState("");
-  const [dob, setDob] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [role, setRole] = useState("");
@@ -39,7 +39,7 @@ const ProfileForm = (props) => {
     if (authCtx.isLoggedIn) {
       setFullname(userData.fullname === undefined ? "" : userData.fullname);
       setUsername(userData.username === undefined ? "" : userData.username);
-      setDob(userData.dob === undefined ? "" : userData.dob);
+      setStudentId(userData.studentId === undefined ? "" : userData.studentId);
       setPhone(userData.phone === undefined ? "" : userData.phone);
       setGender(userData.gender === undefined ? "" : userData.gender);
       setRole(userData.role === undefined ? "" : userData.role);
@@ -74,7 +74,7 @@ const ProfileForm = (props) => {
     const dataSubmit = {
       fullname: fullname,
       username: username,
-      dob: dob,
+      studentId: studentId,
       phone: phone,
       gender: gender,
       role: role,
@@ -82,8 +82,8 @@ const ProfileForm = (props) => {
       address: address,
     };
 
-    if(fullname===''){
-      toast.error('Name must not be empty', styleError);
+    if(username===''){
+      toast.error('Username must not be empty', styleError);
     }
 
     else if(email===''){
@@ -195,9 +195,9 @@ const ProfileForm = (props) => {
               <Form.Label>Day of birth</Form.Label>
               <Form.Control
                 onChange={(event) => {
-                  setDob(event.target.value);
+                  setStudentId(event.target.value);
                 }}
-                value={dob}
+                value={studentId}
                 readOnly={props.mode === "General"}
                 className="form-control-container"
               />

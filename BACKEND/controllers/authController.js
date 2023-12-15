@@ -244,7 +244,7 @@ const editProfile = catchAsync(async (req, res, next) => {
   const userCheck = await User.findOne(
     { email: req.body.email },
   );
-
+  
   if (userCheck && userCheck._id.toString() !== req.user.id) {
     res.status(200).json({
       status: 'fail',
@@ -263,7 +263,7 @@ const editProfile = catchAsync(async (req, res, next) => {
       {
         fullname: req.body.fullname,
         username: req.body.username,
-        dob: req.body.dob,
+        id: req.body.studentId,
         phone: req.body.phone,
         gender: req.body.gender,
         role: req.body.role,
