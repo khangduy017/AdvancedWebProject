@@ -50,7 +50,7 @@ const Classroom = () => {
   const [loading, setLoading] = useState(true)
 
   const [inviteEnable, setInviteEnable] = useState(true);
-  const [currentTab, setCurrentTab] = useState(2);
+  const [currentTab, setCurrentTab] = useState(1);
   const [typing, setTyping] = useState(false);
   const [typingContent, setTypingContent] = useState("");
   const [typingTitle, setTypingTitle] = useState("");

@@ -14,23 +14,23 @@
 .grade-structure-cancel-button{
   width: 4rem;
   height: 2.1rem;
-  background: #fa5252;
+  background: #fa5252 !important;
   border: none;
 }
 
 .grade-structure-cancel-button:hover{
-  background: #e03737;
+  background: #e03737 !important;
 }
 
 .grade-structure-done-button{
   width: 3.4rem;
   height: 2.1rem;
-  background: #12b886;
+  background: #12b886 !important;
   border: none;
 }
 
 .grade-structure-done-button:hover{
-  background: #099268;
+  background: #099268 !important;
 }
 
 .grade-structure-field{
@@ -38,6 +38,10 @@
   background: #5d5fef;
   padding: 0.7rem 0.5rem;
   color: white;
+}
+
+.download-file-option:hover{
+  background-color: #e2e2e2;
 }
 
 
@@ -118,20 +122,20 @@
 
 .save-button {
   font-size: 0.8rem;
-  background: #5d5fef;
+  background-color: #5d5fef !important;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
 }
 
 .save-button:disabled{
-  background: #5d5fef;
+  background: #5d5fef !important;
   opacity: 0.7;
   cursor:none
 }
 
 .save-button:hover {
-  background: #4c4eb6;
+  background-color: #4c4eb6 !important;
 }
 
 .structure-item-field:nth-child(2) input{
@@ -157,7 +161,7 @@
 }
 
 .student-list-field p:nth-child(2){
-  width: 30%;
+  width: 35%;
 }
 
 .student-list-field p:nth-child(3){
@@ -171,11 +175,11 @@
 }
 
 .student-item-field:nth-child(2){
-  width: 30%;
+  width: 35%;
 }
 
 .student-item-field:nth-child(3){
-  width: 41%;
+  width: 40%;
 }
 
 .dropdown{
@@ -189,24 +193,24 @@
 
 .student-list-button{
   padding: 0.3rem 0.8rem;
-  background: #5d5fef;
+  background: #5d5fef !important;
   border: none;
 }
 
 .student-list-button:focus{
-  background: #5d5fef;
+  background: #5d5fef !important;
 }
 
 .student-list-button:active{
-  background: #5d5fef;
+  background: #5d5fef !important;
 }
 
 .student-list-button:window-inactive{
-  background: #5d5fef;
+  background: #5d5fef !important;
 }
 
 .student-list-button:hover{
-  background: #4c4eb6;
+  background: #4c4eb6 !important;
   border: none;
 }
 

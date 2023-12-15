@@ -59,7 +59,7 @@ const createClass = catchAsync(async (req, res, next) => {
 
   const newGrade = await Grade.create({
     structure: [],
-    students:[],
+    students: [],
     grades: [],
   })
 
@@ -153,14 +153,13 @@ const getClassMember = catchAsync(async (req, res, next) => {
   const _class = await Class.findById(req.body.id)
   const teachers = []
   const students = []
-  console.log(_class)
-  if(_class){
-    for(let i of _class.teacher){
+  if (_class) {
+    for (let i of _class.teacher) {
       const teacher = await User.findById(i)
       teachers.push(teacher)
     }
-    
-    for(let i of _class.student){
+
+    for (let i of _class.student) {
       const student = await User.findById(i)
       students.push(student)
     }
@@ -173,4 +172,4 @@ const getClassMember = catchAsync(async (req, res, next) => {
   })
 })
 
-export default { alreadyInClass, getAllClass, createClass, getClassDetail, joinClass, outClass, getClassByCode, getClassByEmail,getClassMember }
+export default { alreadyInClass, getAllClass, createClass, getClassDetail, joinClass, outClass, getClassByCode, getClassByEmail, getClassMember }
