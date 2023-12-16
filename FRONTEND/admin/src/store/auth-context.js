@@ -7,8 +7,12 @@ const AuthContext = React.createContext({
   isLoggedIn: false,
   userData: {},
   classes: [],
+  listUser: [],
+  listStudent: [],
   setUserDataContext: (userDataParam) => {},
   setClasses: (classesParam) => {},
+  setListUser: (listUserParam) => {},
+  setListStudent: (listStudentParam) => {},
   login: (token) => {},
   logout: () => {},
 });
@@ -51,6 +55,8 @@ export const AuthContextProvider = (props) => {
   const [token, setToken] = useState(initialToken);
   const [userData, setUserData] = useState({});
   const [classes, setClasses] = useState([]);
+  const [listUser, setListUser] = useState([]);
+  const [listStudent, setListStudent] = useState([]);
 
   const userIsLoggedIn = !!token;
 
@@ -86,6 +92,14 @@ export const AuthContextProvider = (props) => {
     setClasses(classesParam);
   }
 
+  const listUserHandler = (listUserParam) =>{
+    setListUser(listUserParam);
+  }
+
+  const listStudentHandler = (listStudentParam) =>{
+    setListStudent(listStudentParam);
+  }
+
 
   useEffect(() => {
     if (tokenData) {
@@ -101,7 +115,11 @@ export const AuthContextProvider = (props) => {
     login: loginHandler,
     logout: logoutHandler,
     setClasses: classesHandler,
-    classes: classes
+    classes: classes,
+    setListUser: listUserHandler,
+    listUser: listUser,
+    setListStudent: listStudentHandler,
+    listStudent: listStudent,
   };
 
   return (

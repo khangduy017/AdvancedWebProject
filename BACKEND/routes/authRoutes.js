@@ -35,5 +35,7 @@ router.post('/change-password', authController.protect, authController.changePas
 router.post('/edit-profile', authController.protect, authController.editProfile);
 router.post('/get-user-by-id', authController.protect, authController.getUserById);
 router.get('/get-user', authController.protect, authController.getUser);
+router.get('/get-all-user', authController.protect, authController.getAllUser);
+router.post('/update-status', authController.updateUserStatus);
 
 export default router;

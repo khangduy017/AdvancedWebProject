@@ -83,6 +83,15 @@ const createClass = catchAsync(async (req, res, next) => {
     });
 });
 
+const getAllClassAllAccount = catchAsync(async (req, res, next) => {
+    const _class = await Class.find();
+
+    res.status(200).json({
+        status: 'success',
+        value: _class,
+    });
+});
+
 const getClassDetail = catchAsync(async (req, res, next) => {
     const _class = await Class.findById(req.params['id']);
 
@@ -104,36 +113,7 @@ const getClassByCode = catchAsync(async (req, res, next) => {
 const updateClassStatus = catchAsync(async (req, res, next) => {
     const getClass = await Class.findOne({ _id: req.body.id });
     await Class.updateOne({ _id: req.body.id }, { active: !getClass.active });
-    const _class = await Class.aggregate([
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'student',
-                foreignField: '_id',
-                as: 'student',
-            },
-        },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'teacher',
-                foreignField: '_id',
-                as: 'teacher',
-            },
-        },
-        {
-            $match: {
-                $or: [
-                    {
-                        'student._id': new mongoose.Types.ObjectId(req.body._id),
-                    },
-                    {
-                        'teacher._id': new mongoose.Types.ObjectId(req.body._id),
-                    },
-                ],
-            },
-        },
-    ]);
+    const _class = await Class.find();
     res.status(200).json({
         status: 'success',
         value: _class,
@@ -207,6 +187,7 @@ const getClassMember = catchAsync(async (req, res, next) => {
 });
 
 export default {
+    getAllClassAllAccount,
     updateClassStatus,
     alreadyInClass,
     getAllClass,

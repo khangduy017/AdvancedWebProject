@@ -19,6 +19,7 @@ const AdminPageContent = () => {
   //   const [idInput, setIdInput] = useState("");
   //   const [loading, setLoading] = useState(false);
 
+  const [isAcs, setIsAcs] = useState(true);
   const authCtx = useContext(AuthContext);
 
   const token = authCtx.token;
@@ -26,15 +27,11 @@ const AdminPageContent = () => {
   const headers = { Authorization: `Bearer ${token}` };
 
   const handleGetAllClasses = () => {
-    const data = {
-      _id: localStorage.getItem("_id"),
-    };
-
     axios
-      .post(process.env.REACT_APP_API_HOST + "classes", data, { headers })
+      .get(process.env.REACT_APP_API_HOST + "auth/get-all-user", { headers })
       .then((res) => {
         if (res.data.status === "success") {
-          authCtx.setClasses(res.data.value);
+          authCtx.setListUser(res.data.value);
         } else {
         }
       })
@@ -48,10 +45,12 @@ const AdminPageContent = () => {
     };
 
     axios
-      .post(process.env.REACT_APP_API_HOST + "classes/update-status", data, { headers })
+      .post(process.env.REACT_APP_API_HOST + "auth/update-status", data, {
+        headers,
+      })
       .then((res) => {
         if (res.data.status === "success") {
-          authCtx.setClasses(res.data.value);
+          authCtx.setListUser(res.data.value);
         } else {
         }
       })
@@ -123,11 +122,19 @@ const AdminPageContent = () => {
       >
         <div className="d-flex">
           <div className={`${styles["dropdown"]}`}>
-            <Button className={`${styles["dropbtn"]}`}>Sort</Button>
-            <div className={`${styles["dropdown-content"]}`}>
-              <a href="#">Ascending</a>
-              <a href="#">Descending</a>
-            </div>
+            <Button
+              onClick={() => {
+                authCtx.setListUser([...authCtx.listUser.reverse()]);
+                setIsAcs(!isAcs);
+              }}
+              className={`${styles["dropbtn"]}`}
+            >
+              {isAcs ? 'Ascending' : 'Descending'}
+            </Button>
+            {/* <div className={`${styles["dropdown-content"]}`}>
+              <div onClick={()=>{authCtx.setListUser([...authCtx.listUser.reverse()]);}}>Ascending</div>
+              <div onClick={()=>{authCtx.setListUser([...listUser.reverse()]);}}>Descending</div>
+            </div> */}
           </div>
         </div>
 
@@ -160,19 +167,27 @@ const AdminPageContent = () => {
         <thead>
           <tr className={`${styles["bg-head"]}`}>
             <th>#</th>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Owner</th>
-            <th>Status</th>
+            <th>Username</th>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Active</th>
           </tr>
         </thead>
         <tbody>
-          {authCtx.classes.map((data, index) => (
-            <tr className={`${styles["add-hover"]} ${!data.active && styles["inactive"]}}`} key={index} onClick={() => handleChangeActive(data._id.toString())}>
+          {authCtx.listUser.map((data, index) => (
+            <tr
+              className={`${styles["add-hover"]} ${
+                !data.active && styles["inactive"]
+              }}`}
+              key={index}
+              onClick={() => handleChangeActive(data._id.toString())}
+            >
               <td>{index + 1}</td>
-              <td>{data.title}</td>
-              <td>{data.content}</td>
-              <td>{data.owner}</td>
+              <td>{data.username}</td>
+              <td>{data.fullname}</td>
+              <td>{data.email}</td>
+              <td>{data.role}</td>
               <td>{data.active ? "Active" : "Inactive"}</td>
             </tr>
           ))}

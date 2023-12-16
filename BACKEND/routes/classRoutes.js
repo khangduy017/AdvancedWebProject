@@ -11,6 +11,7 @@ router.post('/join-class', authController.protect, classController.joinClass)
 router.post('/already-in-class', authController.protect, classController.alreadyInClass)
 router.post('/get-members', authController.protect, classController.getClassMember)
 router.post('/', authController.protect, classController.getAllClass);
+router.get('/all-class-all-account', authController.protect, classController.getAllClassAllAccount);
 router.post('/update-status', classController.updateClassStatus);
 router.post('/:id', classController.getClassDetail);
 
