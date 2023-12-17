@@ -7,7 +7,7 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from "cdbreact";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import AuthContext from "../../store/auth-context";
 import { useState, useContext, useEffect } from "react";
@@ -18,6 +18,8 @@ const Sidebar = () => {
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
   const headers = { Authorization: `Bearer ${token}` };
+
+  const navigate = useNavigate()
 
   const handleGetAllClasses = () => {
     const data = {

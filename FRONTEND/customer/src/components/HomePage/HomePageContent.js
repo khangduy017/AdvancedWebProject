@@ -24,7 +24,10 @@ const HomePageContent = () => {
 
   const [showFind, setShowFind] = useState(false);
 
-  const handleCloseFind = () => setShowFind(false);
+  const handleCloseFind = () => {
+    setShowFind(false)
+    setInviteCodeInput('')
+  };
   const handleShowFind = () => setShowFind(true);
 
 
@@ -135,19 +138,45 @@ const HomePageContent = () => {
     else setJoinEnable(true)
   }, [inviteCodeInput])
 
+  const [showClassModal, setShowClassModal] = useState(false)
+  const [classInfo, setClassInfo] = useState({})
+
   const handleJoinCode = () => {
     const dataSubmit = {
-      code: inviteCodeInput[0] === '#' ? inviteCodeInput.slice(1) : inviteCodeInput
+      code: inviteCodeInput[0] === '#' ? inviteCodeInput.slice(1) : inviteCodeInput,
+      id: localStorage.getItem('_id')
     }
 
     axios.post(process.env.REACT_APP_API_HOST + 'classes/invite-code', dataSubmit, { headers })
       .then((res) => {
         if (res.data.status === "success") {
-          navigate(`/myclass/${res.data.value._id}/join`)
+          if (res.data.already_in_class) {
+            navigate(`/myclass/${res.data.value._id}`)
+          }
+          else {
+            setClassInfo(res.data.value)
+            handleCloseFind()
+            setShowClassModal(true)
+          }
         }
         else {
-          toast.error(res.data.message, styleError);
+          toast.error(res.data.value, styleError);
         }
+      });
+  }
+
+  const joinClass = () => {
+    const dataSubmit = {
+      classId: classInfo._id,
+      userId: localStorage.getItem('_id')
+    }
+
+    axios.post(process.env.REACT_APP_API_HOST + 'classes/join-class', dataSubmit, { headers })
+      .then((res) => {
+        if (res.data.status === "success") {
+          navigate(`/myclass/${res.data.value}`)
+        }
+        else { }
       });
   }
 
@@ -200,6 +229,44 @@ const HomePageContent = () => {
                 className={`${styles["save-button"]}`}
                 onClick={handleJoinCode}
                 disabled={joinEnable}
+              >
+                Find
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/* class modal */}
+          <Modal
+            className={styles["modal-container"]}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            show={showClassModal}
+            onHide={() => { setShowClassModal(false) }}
+          >
+            <Modal.Header closeButton>
+              <h4 className={styles["modal-heading"]}>Join classroom</h4>
+            </Modal.Header>
+            <Modal.Body>
+              <div
+                style={{ backgroundColor: `${classInfo.background}` }}
+                className={`${styles["banner-container"]} rounded-4 w-100`}
+              >
+                <h2 className={`${styles["classroom-name"]}`}>{classInfo.title}</h2>
+                <p className={`${styles["classroom-note"]}`}>{classInfo.content}</p>
+                <p className={`${styles["classroom-owner"]}`}>{classInfo.owner}</p>
+
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                className={`${styles["close-button"]}`}
+                onClick={() => { setShowClassModal(false) }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className={`${styles["save-button"]}`}
+                onClick={joinClass}
               >
                 Join
               </Button>

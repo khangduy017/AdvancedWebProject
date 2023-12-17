@@ -9,6 +9,7 @@ router.post('/add-structure', authController.protect, gradeController.addStructu
 router.post('/edit-structure', authController.protect, gradeController.editStructure)
 router.post('/update-student-list', authController.protect, gradeController.updateStudentList)
 router.post('/edit-grades', authController.protect, gradeController.editGrades)
+router.post('/get-grade-by-student-id', authController.protect, gradeController.getGradeByStudentId)
 
 
 export default router;
