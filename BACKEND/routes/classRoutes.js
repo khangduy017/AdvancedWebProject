@@ -10,6 +10,7 @@ router.post('/invite-email', authController.protect, classController.getClassByE
 router.post('/create', authController.protect, classController.createClass);
 router.post('/join-class', authController.protect, classController.joinClass)
 router.post('/get-members', authController.protect, classController.getClassMember)
+router.get('/all-class-all-account', authController.protect, classController.getAllClassAllAccount);
 router.post('/update-status', classController.updateClassStatus);
 router.post('/', authController.protect, classController.getAllClass);
 router.post('/:id', classController.getClassDetail);
