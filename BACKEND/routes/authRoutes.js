@@ -36,6 +36,9 @@ router.post('/edit-profile', authController.protect, authController.editProfile)
 router.post('/get-user-by-id', authController.protect, authController.getUserById);
 router.get('/get-user', authController.protect, authController.getUser);
 router.get('/get-all-user', authController.protect, authController.getAllUser);
+router.get('/get-all-student', authController.protect, authController.getAllStudent);
 router.post('/update-status', authController.updateUserStatus);
+router.post('/update-student-id', authController.updateStudentID);
+
 
 export default router;

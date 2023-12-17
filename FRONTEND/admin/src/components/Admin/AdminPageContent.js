@@ -49,62 +49,33 @@ const AdminPageContent = () => {
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setClasses(res.data.value);
+          toast.success("Update status successfully", styleSuccess);
         } else {
         }
       })
       .catch((err) => {});
   };
 
-  //   useEffect(() => {
-  //     if (authCtx.isLoggedIn) {
-  //       handleGetAllClasses();
-  //     }
-  //   }, []);
 
-  // //   const handleCreate = (event) => {
-  // //     // event.preventDefault();
-  // //     const dataSubmit = {
-  // //       user: userData._id,
-  // //       title: titleInput,
-  // //       content: contentInput,
-  // //       topic: topicInput,
-  // //       inviteLink: "",
-  // //       color: color[Math.floor(Math.random() * 10)]
-  // //     }
+    const styleError = {
+      style: {
+        border: "2px solid red",
+        padding: "10px",
+        color: "red",
+        fontWeight: "500",
+      },
+      duration: 4000,
+    };
 
-  // //     axios.post(process.env.REACT_APP_API_HOST + 'classes/create', dataSubmit, { headers }
-  // //     )
-  // //       .then((res) => {
-  // //         if (res.data.status === "success") {
-  // //           toast.success("Create class successfully", styleSuccess);
-  // //           handleGetAllClasses()
-  // //           setShow(false)
-  // //         }
-  // //         else {
-  // //           toast.error(res.data.message, styleError);
-  // //         }
-  // //       });
-  // //   }
-
-  //   const styleError = {
-  //     style: {
-  //       border: "2px solid red",
-  //       padding: "10px",
-  //       color: "red",
-  //       fontWeight: "500",
-  //     },
-  //     duration: 4000,
-  //   };
-
-  //   const styleSuccess = {
-  //     style: {
-  //       border: "2px solid #28a745",
-  //       padding: "5px",
-  //       color: "#28a745",
-  //       fontWeight: "500",
-  //     },
-  //     duration: 4000,
-  //   };
+    const styleSuccess = {
+      style: {
+        border: "2px solid #28a745",
+        padding: "5px",
+        color: "#28a745",
+        fontWeight: "500",
+      },
+      duration: 4000,
+    };
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {

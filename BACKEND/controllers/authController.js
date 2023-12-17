@@ -286,6 +286,14 @@ const getAllUser = catchAsync(async (req, res, next) => {
     });
 });
 
+const getAllStudent = catchAsync(async (req, res, next) => {
+    const studentData = await User.find({role: 'student'});
+    res.status(200).json({
+        status: 'success',
+        value: studentData,
+    });
+});
+
 const getUserById = catchAsync(async (req, res, next) => {
     const userData = await User.findById(req.body._id);
 
@@ -305,6 +313,25 @@ const updateUserStatus = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateStudentID = catchAsync(async (req, res, next) => {
+    const getStudent = await User.findOne({ id: req.body.studentID});
+    if(req.body.studentID!=='' && getStudent && getStudent.id === req.body.studentID && getStudent._id.toString() !== req.body.id){
+        res.status(200).json({
+            status: 'fail',
+            message: "Student ID has been existed",
+        });
+    }
+    
+    else{
+        await User.updateOne({ _id: req.body.id }, { id: req.body.studentID });
+        const _user = await User.find({role: 'student'});
+        res.status(200).json({
+            status: 'success',
+            value: _user,
+        });
+    }
+  });
+  
 export default {
     register,
     getUserById,
@@ -318,5 +345,7 @@ export default {
     editProfile,
     getUser,
     getAllUser,
-    updateUserStatus
+    updateUserStatus,
+    getAllStudent,
+    updateStudentID
 };
