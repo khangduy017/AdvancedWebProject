@@ -3,8 +3,13 @@ import member_image from '../../../assests/img/member_avatar.png'
 import React, { useEffect, useState, useContext } from 'react'
 import AuthContext from "../../../store/auth-context";
 import axios from 'axios'
+import { Outlet, useLocation, useParams, NavLink } from "react-router-dom";
 
-export default function MemberComponent(props) {
+
+export default function MemberComponent() {
+  const { id } = useParams();
+
+
   const [teachers, setTeachers] = useState([])
   const [students, setStudents] = useState([])
 
@@ -12,7 +17,7 @@ export default function MemberComponent(props) {
   const token = authCtx.token;
   const headers = { Authorization: `Bearer ${token}` };
   useEffect(() => {
-    axios.post(process.env.REACT_APP_API_HOST + 'classes/get-members', { id: props.id }, { headers })
+    axios.post(process.env.REACT_APP_API_HOST + 'classes/get-members', { id: id }, { headers })
       .then((res) => {
         if (res.data.status === "success") {
           setTeachers(res.data.teachers)

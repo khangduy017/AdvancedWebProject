@@ -97,7 +97,8 @@ function Login() {
 
   return (
     <div className={`${styles.login} d-flex justify-content-center align-items-center`}>
-      {step === 1 ? <Form onSubmit={submitRole} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
+      {step === 1 ? 
+      <Form onSubmit={submitRole} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
         <h2 className={`${styles['form-title']} display-7 `}>Login</h2>
         <p className={`${styles['form-text']}`}>Enter your credentials to access your account</p>
 
@@ -107,11 +108,10 @@ function Login() {
           <option value='teacher'>Teacher</option>
         </select>
 
-        <Button className={`${styles['submit-button']} p-2 d-flex gap-1 align-items-center justify-content-center mt-5 w-100`} type="submit">
+        <Button type="submit" className={`${styles['submit-button']} p-2 d-flex gap-1 align-items-center justify-content-center mt-5 w-100`} >
           Continue
           {isLoading && <Spinner size="sm" animation="border" />}
         </Button>
-
       </Form>
         :
         <Form onSubmit={submitHandler} className={`${styles['form-size']} shadow rouded p-5 bg-white rounded-3`}>
@@ -140,7 +140,7 @@ function Login() {
             <Link className={styles['forget-password']} to='/forget-password'>Forget password ?</Link>
           </div>
 
-          <Button className={`${styles['submit-button']} p-2 d-flex gap-1 align-items-center justify-content-center mt-3 w-100`} type="submit">
+          <Button type="submit" className={`${styles['submit-button']} p-2 d-flex gap-1 align-items-center justify-content-center mt-3 w-100`}>
             Login
             {isLoading && <Spinner size="sm" animation="border" />}
           </Button>
