@@ -28,6 +28,8 @@ const AdminPageContent = () => {
 
   const [listUser, setListUser] = useState(authCtx.listUser);
 
+  const [searchInput, setSearchInput] = useState("");
+
   const handleGetAllClasses = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "auth/get-all-user", { headers })
@@ -56,6 +58,26 @@ const AdminPageContent = () => {
           authCtx.setListUser(res.data.value);
           setListUser(res.data.value);
           toast.success("Update status successfully", styleSuccess);
+        } else {
+        }
+      })
+      .catch((err) => {});
+  };
+
+  const submitSearch = (event) => {
+    event.preventDefault();
+    const data = {
+      searchInput: searchInput,
+    };
+
+    axios
+      .post(process.env.REACT_APP_API_HOST + "auth/search-user", data, {
+        headers,
+      })
+      .then((res) => {
+        if (res.data.status === "success") {
+          authCtx.setListUser(res.data.value);
+          setListUser(res.data.value);
         } else {
         }
       })
@@ -107,32 +129,58 @@ const AdminPageContent = () => {
             </Button>
           </div>
         </div>
-
-        <div
-          className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
+        <Form
+          className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
+          onSubmit={submitSearch}
         >
-          <FilterIcon />
-          <div className={`${styles["dropdown-content"]}`}>
-            <div
-              onClick={() => {
-                setListUser(
-                  authCtx.listUser.filter((data) => data.active === true)
-                );
+          <Form.Group
+            className="position-relative"
+            controlId="formGridAddress1"
+          >
+            <Form.Control
+              onChange={(event) => {
+                setSearchInput(event.target.value);
               }}
-            >
-              Active account
-            </div>
-            <div
-              onClick={() => {
-                setListUser(
-                  authCtx.listUser.filter((data) => data.active === false)
-                );
-              }}
-            >
-              Inactive account
+              value={searchInput}
+              className={`${styles["form-control-container"]}`}
+            />
+            <SearchIcon
+              className={`${styles["search-icon-customize"]} position-absolute`}
+            />
+          </Form.Group>
+          <div
+            className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
+          >
+            <FilterIcon />
+            <div className={`${styles["dropdown-content"]}`}>
+              <div
+                onClick={() => {
+                  setListUser(authCtx.listUser);
+                }}
+              >
+                All accounts
+              </div>
+              <div
+                onClick={() => {
+                  setListUser(
+                    authCtx.listUser.filter((data) => data.active === true)
+                  );
+                }}
+              >
+                Active account
+              </div>
+              <div
+                onClick={() => {
+                  setListUser(
+                    authCtx.listUser.filter((data) => data.active === false)
+                  );
+                }}
+              >
+                Inactive account
+              </div>
             </div>
           </div>
-        </div>
+        </Form>
       </div>
       <Table striped bordered hover className="my-4 rounded-lg">
         <thead>
@@ -147,19 +195,22 @@ const AdminPageContent = () => {
         </thead>
         <tbody>
           {listUser.map((data, index) => (
-            <tr
-              className={`${styles["add-hover"]} ${
-                !data.active && styles["inactive"]
-              }}`}
-              key={index}
-              onClick={() => handleChangeActive(data._id.toString())}
-            >
+            <tr key={index}>
               <td>{index + 1}</td>
               <td>{data.username}</td>
               <td>{data.fullname}</td>
               <td>{data.email}</td>
               <td>{data.role}</td>
-              <td>{data.active ? "Active" : "Inactive"}</td>
+              <td
+                className={`${styles["spec-col"]}`}
+                onClick={() => handleChangeActive(data._id.toString())}
+              >
+                {data.active ? (
+                  <div className={`${styles["active-button"]}`}>Active</div>
+                ) : (
+                  <div className={`${styles["inactive-button"]}`}>Inactive</div>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

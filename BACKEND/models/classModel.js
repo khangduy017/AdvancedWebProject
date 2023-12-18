@@ -29,6 +29,15 @@ const classSchema = new mongoose.Schema({
   background: String
 });
 
+classSchema.index(
+  {
+      title: 'text',
+      content: 'text',
+      owner: 'text',
+  },
+  { default_language: 'none' }
+);
+
 const Class = mongoose.model('classes', classSchema);
 
 export default Class;

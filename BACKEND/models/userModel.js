@@ -43,6 +43,17 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date,
 });
 
+userSchema.index(
+  {
+      id: 'text',
+      username: 'text',
+      fullname: 'text',
+      email: 'text',
+      role: 'text',
+  },
+  { default_language: 'none' }
+);
+
 userSchema.pre('save', async function (next) {
   // Only run this function if password was actually modified
   if (!this.isModified('password')) return next();

@@ -89,6 +89,7 @@
   .search-icon-customize {
     top: 0.65rem;
     right: 0.8rem;
+    position: absolute;
   }
   
   .search-container {

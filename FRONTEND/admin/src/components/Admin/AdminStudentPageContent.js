@@ -35,6 +35,7 @@ const AdminPageContent = () => {
 
   const [studentIdMongoose, setStudentIdMongoose] = useState("");
 
+  const [searchInput, setSearchInput] = useState("");
   const handleGetAllClasses = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "auth/get-all-student", { headers })
@@ -71,6 +72,31 @@ const AdminPageContent = () => {
       .catch((err) => {});
   };
 
+  const submitStudentID = (event) =>{
+    event.preventDefault();
+    handleChangeStudentID(studentIdMongoose);
+    handleClose();
+  }
+  const submitSearch = (event) => {
+    event.preventDefault();
+    const data = {
+      searchInput: searchInput,
+    };
+
+    axios
+      .post(process.env.REACT_APP_API_HOST + "auth/search-student", data, {
+        headers,
+      })
+      .then((res) => {
+        if (res.data.status === "success") {
+          authCtx.setListStudent(res.data.value);
+          setListStudent(res.data.value);
+        } else {
+        }
+      })
+      .catch((err) => {});
+  };
+
   const styleError = {
     style: {
       border: "2px solid red",
@@ -99,7 +125,7 @@ const AdminPageContent = () => {
 
   return (
     <div className={`${styles["total-container"]} w-75`}>
-      <h3>Manage account</h3>
+      <h3>Manage student</h3>
       <div
         className={`${styles["search-container"]} d-flex mt-4 p-0 align-items-center justify-content-between`}
       >
@@ -117,31 +143,56 @@ const AdminPageContent = () => {
           </div>
         </div>
 
-        <div
-          className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
+        <Form
+          className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
+          onSubmit={submitSearch}
         >
-          <FilterIcon />
-          <div className={`${styles["dropdown-content"]}`}>
-            <div
-              onClick={() => {
-                setListStudent(
-                  authCtx.listStudent.filter((student) => student.id !== "")
-                );
+          <Form.Group
+            className="position-relative"
+            controlId="formGridAddress1"
+          >
+            <Form.Control
+              onChange={(event) => {
+                setSearchInput(event.target.value);
               }}
-            >
-              ID assigned
-            </div>
-            <div
-              onClick={() => {
-                setListStudent(
-                  authCtx.listStudent.filter((student) => student.id === "")
-                );
-              }}
-            >
-              None ID
+              value={searchInput}
+              className={`${styles["form-control-container"]}`}
+            />
+            <SearchIcon className={`${styles["search-icon-customize"]}`} />
+          </Form.Group>
+          <div
+            className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
+          >
+            <FilterIcon />
+            <div className={`${styles["dropdown-content"]}`}>
+              <div
+                onClick={() => {
+                  setListStudent(authCtx.listStudent);
+                }}
+              >
+                All students
+              </div>
+              <div
+                onClick={() => {
+                  setListStudent(
+                    authCtx.listStudent.filter((student) => student.id !== "")
+                  );
+                }}
+              >
+                ID assigned
+              </div>
+              <div
+                onClick={() => {
+                  setListStudent(
+                    authCtx.listStudent.filter((student) => student.id === "")
+                  );
+                }}
+              >
+                None ID
+              </div>
             </div>
           </div>
-        </div>
+        </Form>
       </div>
       <Table striped bordered hover className="my-4 rounded-lg">
         <thead>
@@ -163,6 +214,7 @@ const AdminPageContent = () => {
               key={index}
               onClick={() => {
                 setStudentIdMongoose(data._id.toString());
+                setStudentIDInput(data.id);
                 handleShow();
               }}
             >
@@ -186,7 +238,7 @@ const AdminPageContent = () => {
             <h4 className={styles["modal-heading"]}>Assign Student ID</h4>
           </Modal.Header>
           <Modal.Body>
-            <Form className="form-container">
+            <Form onSubmit={submitStudentID} className="form-container">
               <Form.Group className="mb-3" controlId="formGridAddress1">
                 <Form.Label>Student ID</Form.Label>
                 <Form.Control
@@ -209,10 +261,7 @@ const AdminPageContent = () => {
             </Button>
             <Button
               className={`${styles["save-button"]}`}
-              onClick={() => {
-                handleChangeStudentID(studentIdMongoose);
-                handleClose();
-              }}
+              onClick={submitStudentID}
             >
               Join
             </Button>

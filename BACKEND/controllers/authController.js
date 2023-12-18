@@ -331,6 +331,22 @@ const updateStudentID = catchAsync(async (req, res, next) => {
         });
     }
   });
+
+  const getStudentBySearch = catchAsync(async (req, res) => {
+    const getStudent = await User.find({$text: {$search: req.body.searchInput}, role: 'student'});
+    res.status(200).json({
+      status: 'success',
+      value: getStudent
+    })
+  })
+
+  const getUserBySearch = catchAsync(async (req, res) => {
+    const getStudent = await User.find({$text: {$search: req.body.searchInput}});
+    res.status(200).json({
+      status: 'success',
+      value: getStudent
+    })
+  })
   
 export default {
     register,
@@ -347,5 +363,7 @@ export default {
     getAllUser,
     updateUserStatus,
     getAllStudent,
-    updateStudentID
+    updateStudentID,
+    getStudentBySearch,
+    getUserBySearch
 };

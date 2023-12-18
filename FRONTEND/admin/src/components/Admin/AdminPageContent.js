@@ -27,6 +27,8 @@ const AdminPageContent = () => {
 
   const [classes, setClasses] = useState(authCtx.classes);
 
+  const [searchInput, setSearchInput] = useState("");
+
   const handleGetAllClasses = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "classes/all-class-all-account", {
@@ -83,6 +85,26 @@ const AdminPageContent = () => {
     duration: 4000,
   };
 
+  const submitSearch = (event) => {
+    event.preventDefault();
+    const data = {
+      searchInput: searchInput,
+    };
+
+    axios
+      .post(process.env.REACT_APP_API_HOST + "classes/search-class", data, {
+        headers,
+      })
+      .then((res) => {
+        if (res.data.status === "success") {
+          authCtx.setClasses(res.data.value);
+          setClasses(res.data.value);
+        } else {
+        }
+      })
+      .catch((err) => {});
+  };
+
   useEffect(() => {
     if (authCtx.isLoggedIn) {
       handleGetAllClasses();
@@ -109,31 +131,58 @@ const AdminPageContent = () => {
           </div>
         </div>
 
-        <div
-          className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
+        <Form
+          className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
+          onSubmit={submitSearch}
         >
-          <FilterIcon />
-          <div className={`${styles["dropdown-content"]}`}>
-            <div
-              onClick={() => {
-                setClasses(
-                  authCtx.classes.filter((data) => data.active === true)
-                );
+          <Form.Group
+            className="position-relative"
+            controlId="formGridAddress1"
+          >
+            <Form.Control
+              onChange={(event) => {
+                setSearchInput(event.target.value);
               }}
-            >
-              Active classes
-            </div>
-            <div
-              onClick={() => {
-                setClasses(
-                  authCtx.classes.filter((data) => data.active === false)
-                );
-              }}
-            >
-              Inactive classes
+              value={searchInput}
+              className={`${styles["form-control-container"]}`}
+            />
+            <SearchIcon
+              className={`${styles["search-icon-customize"]} position-absolute`}
+            />
+          </Form.Group>
+          <div
+            className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
+          >
+            <FilterIcon />
+            <div className={`${styles["dropdown-content"]}`}>
+              <div
+                onClick={() => {
+                  setClasses(authCtx.classes);
+                }}
+              >
+                All classes
+              </div>
+              <div
+                onClick={() => {
+                  setClasses(
+                    authCtx.classes.filter((data) => data.active === true)
+                  );
+                }}
+              >
+                Active classes
+              </div>
+              <div
+                onClick={() => {
+                  setClasses(
+                    authCtx.classes.filter((data) => data.active === false)
+                  );
+                }}
+              >
+                Inactive classes
+              </div>
             </div>
           </div>
-        </div>
+        </Form>
       </div>
       <Table striped bordered hover className="my-4 rounded-lg">
         <thead>
@@ -147,18 +196,21 @@ const AdminPageContent = () => {
         </thead>
         <tbody>
           {classes.map((data, index) => (
-            <tr
-              className={`${styles["add-hover"]} ${
-                !data.active && styles["inactive"]
-              }}`}
-              key={index}
-              onClick={() => handleChangeActive(data._id.toString())}
-            >
+            <tr key={index}>
               <td>{index + 1}</td>
               <td>{data.title}</td>
               <td>{data.content}</td>
               <td>{data.owner}</td>
-              <td>{data.active ? "Active" : "Inactive"}</td>
+              <td
+                className={`${styles["spec-col"]}`}
+                onClick={() => handleChangeActive(data._id.toString())}
+              >
+                {data.active ? (
+                  <div className={`${styles["active-button"]}`}>Active</div>
+                ) : (
+                  <div className={`${styles["inactive-button"]}`}>Inactive</div>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

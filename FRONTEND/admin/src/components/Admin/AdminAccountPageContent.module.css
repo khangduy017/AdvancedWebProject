@@ -221,10 +221,38 @@
         background-color: #4c4edb;
       }
 
-      .add-hover{
-        cursor: pointer;
-      }
 
       .inactive{
         background: #e9ecef;
       }
+
+      .active-button{
+        background: #37b24d;
+        padding: 0.25rem;
+        color: white;
+        border-radius: 0.25rem;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+      
+      .active-button:hover{
+        cursor: pointer;
+      }
+      
+      .inactive-button{
+        background: #e03131;
+        padding: 0.25rem;
+        color: white;
+        border-radius: 0.25rem;
+        text-align: center;
+        font-size: 0.9rem; 
+      }
+      
+      .inactive-button:hover{
+        cursor: pointer;
+      }
+
+      .spec-col{
+        width: 6rem;
+      }
+      

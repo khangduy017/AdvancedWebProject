@@ -39,6 +39,7 @@ router.get('/get-all-user', authController.protect, authController.getAllUser);
 router.get('/get-all-student', authController.protect, authController.getAllStudent);
 router.post('/update-status', authController.updateUserStatus);
 router.post('/update-student-id', authController.updateStudentID);
-
+router.post('/search-student', authController.getStudentBySearch);
+router.post('/search-user', authController.getUserBySearch);
 
 export default router;

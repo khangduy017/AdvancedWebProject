@@ -198,6 +198,14 @@ const getClassMember = catchAsync(async (req, res, next) => {
     });
 });
 
+const getClassBySearch = catchAsync(async (req, res) => {
+    const getClass = await Class.find({$text: {$search: req.body.searchInput}});
+    res.status(200).json({
+      status: 'success',
+      value: getClass
+    })
+  })
+
 export default {
     getAllClassAllAccount,
     updateClassStatus,
@@ -209,5 +217,6 @@ export default {
     getClassByCode,
     getClassByEmail,
     getClassMember,
-    getClassById
+    getClassById,
+    getClassBySearch
 };

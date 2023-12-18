@@ -13,6 +13,7 @@ router.post('/get-members', authController.protect, classController.getClassMemb
 router.get('/all-class-all-account', authController.protect, classController.getAllClassAllAccount);
 router.post('/update-status', classController.updateClassStatus);
 router.post('/', authController.protect, classController.getAllClass);
+router.post('/search-class', classController.getClassBySearch);
 router.post('/:id', classController.getClassDetail);
 
 export default router;
