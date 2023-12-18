@@ -186,6 +186,14 @@
         display: inline-block;
       }
       
+      .more-border-custom{
+        border: 1px solid #a5a6f6;
+        height: 2.4rem;
+        width: 2.4rem;
+        border-radius: 0.4rem;
+        padding: 0.45rem;
+      }
+
       .dropdown-content {
         display: none;
         position: absolute;
@@ -195,17 +203,18 @@
         z-index: 1;
       }
       
-      .dropdown-content a {
+      .dropdown-content div {
         color: black;
         padding: 12px 16px;
         text-decoration: none;
         display: block;
       }
       
-      .dropdown-content a:hover {background-color: #f1f1f1}
+      .dropdown-content div:hover {background-color: #f1f1f1}
       
       .dropdown:hover .dropdown-content {
         display: block;
+        cursor: pointer;
       }
       
       .dropdown:hover .dropbtn {

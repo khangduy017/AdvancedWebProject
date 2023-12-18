@@ -25,13 +25,17 @@ const AdminPageContent = () => {
   const userData = authCtx.userData;
   const headers = { Authorization: `Bearer ${token}` };
 
-  const handleGetAllClasses = () => {
+  const [classes, setClasses] = useState(authCtx.classes);
 
+  const handleGetAllClasses = () => {
     axios
-      .get(process.env.REACT_APP_API_HOST + "classes/all-class-all-account", { headers })
+      .get(process.env.REACT_APP_API_HOST + "classes/all-class-all-account", {
+        headers,
+      })
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setClasses(res.data.value);
+          setClasses(res.data.value);
         } else {
         }
       })
@@ -45,10 +49,13 @@ const AdminPageContent = () => {
     };
 
     axios
-      .post(process.env.REACT_APP_API_HOST + "classes/update-status", data, { headers })
+      .post(process.env.REACT_APP_API_HOST + "classes/update-status", data, {
+        headers,
+      })
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setClasses(res.data.value);
+          setClasses(res.data.value);
           toast.success("Update status successfully", styleSuccess);
         } else {
         }
@@ -56,26 +63,25 @@ const AdminPageContent = () => {
       .catch((err) => {});
   };
 
+  const styleError = {
+    style: {
+      border: "2px solid red",
+      padding: "10px",
+      color: "red",
+      fontWeight: "500",
+    },
+    duration: 4000,
+  };
 
-    const styleError = {
-      style: {
-        border: "2px solid red",
-        padding: "10px",
-        color: "red",
-        fontWeight: "500",
-      },
-      duration: 4000,
-    };
-
-    const styleSuccess = {
-      style: {
-        border: "2px solid #28a745",
-        padding: "5px",
-        color: "#28a745",
-        fontWeight: "500",
-      },
-      duration: 4000,
-    };
+  const styleSuccess = {
+    style: {
+      border: "2px solid #28a745",
+      padding: "5px",
+      color: "#28a745",
+      fontWeight: "500",
+    },
+    duration: 4000,
+  };
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
@@ -91,42 +97,43 @@ const AdminPageContent = () => {
       >
         <div className="d-flex">
           <div className={`${styles["dropdown"]}`}>
-          <Button
+            <Button
               onClick={() => {
-                authCtx.setClasses([...authCtx.classes.reverse()]);
+                setClasses([...classes.reverse()]);
                 setIsAcs(!isAcs);
               }}
               className={`${styles["dropbtn"]}`}
             >
-              {isAcs ? 'Ascending' : 'Descending'}
+              {isAcs ? "Ascending" : "Descending"}
             </Button>
           </div>
         </div>
 
-        <Form
-          className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
+        <div
+          className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
         >
-          <Form.Group
-            className="position-relative"
-            controlId="formGridAddress1"
-          >
-            <Form.Control
-              // onChange={(event) => {
-              //   setSearchInput(event.target.value);
-              // }}
-              // value={searchInput}
-              className={`${styles["form-control-container"]}`}
-            />
-            <SearchIcon
-              className={`${styles["search-icon-customize"]} position-absolute`}
-            />
-          </Form.Group>
-          <div
-            className={`${styles["filter-icon-customize"]} d-flex align-items-center justify-content-center`}
-          >
-            <FilterIcon />
+          <FilterIcon />
+          <div className={`${styles["dropdown-content"]}`}>
+            <div
+              onClick={() => {
+                setClasses(
+                  authCtx.classes.filter((data) => data.active === true)
+                );
+              }}
+            >
+              Active classes
+            </div>
+            <div
+              onClick={() => {
+                setClasses(
+                  authCtx.classes.filter((data) => data.active === false)
+                );
+              }}
+            >
+              Inactive classes
+            </div>
           </div>
-        </Form>
+        </div>
       </div>
       <Table striped bordered hover className="my-4 rounded-lg">
         <thead>
@@ -139,8 +146,14 @@ const AdminPageContent = () => {
           </tr>
         </thead>
         <tbody>
-          {authCtx.classes.map((data, index) => (
-            <tr className={`${styles["add-hover"]} ${!data.active && styles["inactive"]}}`} key={index} onClick={() => handleChangeActive(data._id.toString())}>
+          {classes.map((data, index) => (
+            <tr
+              className={`${styles["add-hover"]} ${
+                !data.active && styles["inactive"]
+              }}`}
+              key={index}
+              onClick={() => handleChangeActive(data._id.toString())}
+            >
               <td>{index + 1}</td>
               <td>{data.title}</td>
               <td>{data.content}</td>

@@ -26,12 +26,15 @@ const AdminPageContent = () => {
   const userData = authCtx.userData;
   const headers = { Authorization: `Bearer ${token}` };
 
+  const [listUser, setListUser] = useState(authCtx.listUser);
+
   const handleGetAllClasses = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "auth/get-all-user", { headers })
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setListUser(res.data.value);
+          setListUser(res.data.value);
         } else {
         }
       })
@@ -51,64 +54,33 @@ const AdminPageContent = () => {
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setListUser(res.data.value);
+          setListUser(res.data.value);
           toast.success("Update status successfully", styleSuccess);
         } else {
-          
         }
       })
       .catch((err) => {});
   };
 
-  //   useEffect(() => {
-  //     if (authCtx.isLoggedIn) {
-  //       handleGetAllClasses();
-  //     }
-  //   }, []);
+  const styleError = {
+    style: {
+      border: "2px solid red",
+      padding: "10px",
+      color: "red",
+      fontWeight: "500",
+    },
+    duration: 4000,
+  };
 
-  // //   const handleCreate = (event) => {
-  // //     // event.preventDefault();
-  // //     const dataSubmit = {
-  // //       user: userData._id,
-  // //       title: titleInput,
-  // //       content: contentInput,
-  // //       topic: topicInput,
-  // //       inviteLink: "",
-  // //       color: color[Math.floor(Math.random() * 10)]
-  // //     }
-
-  // //     axios.post(process.env.REACT_APP_API_HOST + 'classes/create', dataSubmit, { headers }
-  // //     )
-  // //       .then((res) => {
-  // //         if (res.data.status === "success") {
-  // //           toast.success("Create class successfully", styleSuccess);
-  // //           handleGetAllClasses()
-  // //           setShow(false)
-  // //         }
-  // //         else {
-  // //           toast.error(res.data.message, styleError);
-  // //         }
-  // //       });
-  // //   }
-
-    const styleError = {
-      style: {
-        border: "2px solid red",
-        padding: "10px",
-        color: "red",
-        fontWeight: "500",
-      },
-      duration: 4000,
-    };
-
-    const styleSuccess = {
-      style: {
-        border: "2px solid #28a745",
-        padding: "5px",
-        color: "#28a745",
-        fontWeight: "500",
-      },
-      duration: 4000,
-    };
+  const styleSuccess = {
+    style: {
+      border: "2px solid #28a745",
+      padding: "5px",
+      color: "#28a745",
+      fontWeight: "500",
+    },
+    duration: 4000,
+  };
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
@@ -126,44 +98,41 @@ const AdminPageContent = () => {
           <div className={`${styles["dropdown"]}`}>
             <Button
               onClick={() => {
-                authCtx.setListUser([...authCtx.listUser.reverse()]);
+                setListUser([...listUser.reverse()]);
                 setIsAcs(!isAcs);
               }}
               className={`${styles["dropbtn"]}`}
             >
-              {isAcs ? 'Ascending' : 'Descending'}
+              {isAcs ? "Ascending" : "Descending"}
             </Button>
-            {/* <div className={`${styles["dropdown-content"]}`}>
-              <div onClick={()=>{authCtx.setListUser([...authCtx.listUser.reverse()]);}}>Ascending</div>
-              <div onClick={()=>{authCtx.setListUser([...listUser.reverse()]);}}>Descending</div>
-            </div> */}
           </div>
         </div>
 
-        <Form
-          className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
+        <div
+          className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
         >
-          <Form.Group
-            className="position-relative"
-            controlId="formGridAddress1"
-          >
-            <Form.Control
-              // onChange={(event) => {
-              //   setSearchInput(event.target.value);
-              // }}
-              // value={searchInput}
-              className={`${styles["form-control-container"]}`}
-            />
-            <SearchIcon
-              className={`${styles["search-icon-customize"]} position-absolute`}
-            />
-          </Form.Group>
-          <div
-            className={`${styles["filter-icon-customize"]} d-flex align-items-center justify-content-center`}
-          >
-            <FilterIcon />
+          <FilterIcon />
+          <div className={`${styles["dropdown-content"]}`}>
+            <div
+              onClick={() => {
+                setListUser(
+                  authCtx.listUser.filter((data) => data.active === true)
+                );
+              }}
+            >
+              Active account
+            </div>
+            <div
+              onClick={() => {
+                setListUser(
+                  authCtx.listUser.filter((data) => data.active === false)
+                );
+              }}
+            >
+              Inactive account
+            </div>
           </div>
-        </Form>
+        </div>
       </div>
       <Table striped bordered hover className="my-4 rounded-lg">
         <thead>
@@ -177,7 +146,7 @@ const AdminPageContent = () => {
           </tr>
         </thead>
         <tbody>
-          {authCtx.listUser.map((data, index) => (
+          {listUser.map((data, index) => (
             <tr
               className={`${styles["add-hover"]} ${
                 !data.active && styles["inactive"]

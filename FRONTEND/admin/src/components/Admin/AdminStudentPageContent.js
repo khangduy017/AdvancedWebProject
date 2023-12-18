@@ -31,6 +31,8 @@ const AdminPageContent = () => {
   const token = authCtx.token;
   const headers = { Authorization: `Bearer ${token}` };
 
+  const [listStudent, setListStudent] = useState(authCtx.listStudent);
+
   const [studentIdMongoose, setStudentIdMongoose] = useState("");
 
   const handleGetAllClasses = () => {
@@ -39,6 +41,7 @@ const AdminPageContent = () => {
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setListStudent(res.data.value);
+          setListStudent(res.data.value);
         } else {
         }
       })
@@ -59,6 +62,7 @@ const AdminPageContent = () => {
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setListStudent(res.data.value);
+          setListStudent(res.data.value);
           toast.success("Update information successfully", styleSuccess);
         } else {
           toast.error(res.data.message, styleError);
@@ -103,7 +107,7 @@ const AdminPageContent = () => {
           <div className={`${styles["dropdown"]}`}>
             <Button
               onClick={() => {
-                authCtx.setListStudent([...authCtx.listStudent.reverse()]);
+                setListStudent([...listStudent.reverse()]);
                 setIsAcs(!isAcs);
               }}
               className={`${styles["dropbtn"]}`}
@@ -113,30 +117,31 @@ const AdminPageContent = () => {
           </div>
         </div>
 
-        <Form
-          className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
+        <div
+          className={`${styles["dropdown"]} ${styles["more-border-custom"]} d-flex justify-content-end`}
         >
-          <Form.Group
-            className="position-relative"
-            controlId="formGridAddress1"
-          >
-            <Form.Control
-              // onChange={(event) => {
-              //   setSearchInput(event.target.value);
-              // }}
-              // value={searchInput}
-              className={`${styles["form-control-container"]}`}
-            />
-            <SearchIcon
-              className={`${styles["search-icon-customize"]} position-absolute`}
-            />
-          </Form.Group>
-          <div
-            className={`${styles["filter-icon-customize"]} d-flex align-items-center justify-content-center`}
-          >
-            <FilterIcon />
+          <FilterIcon />
+          <div className={`${styles["dropdown-content"]}`}>
+            <div
+              onClick={() => {
+                setListStudent(
+                  authCtx.listStudent.filter((student) => student.id !== "")
+                );
+              }}
+            >
+              ID assigned
+            </div>
+            <div
+              onClick={() => {
+                setListStudent(
+                  authCtx.listStudent.filter((student) => student.id === "")
+                );
+              }}
+            >
+              None ID
+            </div>
           </div>
-        </Form>
+        </div>
       </div>
       <Table striped bordered hover className="my-4 rounded-lg">
         <thead>
@@ -150,7 +155,7 @@ const AdminPageContent = () => {
           </tr>
         </thead>
         <tbody>
-          {authCtx.listStudent.map((data, index) => (
+          {listStudent.map((data, index) => (
             <tr
               className={`${styles["add-hover"]} ${
                 !data.active && styles["inactive"]
