@@ -113,7 +113,7 @@
 }
 
 .find-classroom:hover {
-  background: #4c4eb6;
+  background: #4c4eb6 !important;
 }
 
 /* .create-classroom{
@@ -151,14 +151,14 @@
   padding: 0.5rem 1rem;
 }
 
-.save-button:disabled{
+.save-button:disabled {
   background: #5d5fef;
   opacity: 0.7;
-  cursor:none
+  cursor: none;
 }
 
 .save-button:hover {
-  background: #4c4eb6;
+  background: #4c4eb6 !important;
 }
 
 .total-container {
@@ -166,6 +166,43 @@
   margin-top: 6.5rem;
 }
 
-.more-gap{
-    gap: 1.5rem;
-  }
+.more-gap {
+  gap: 1.5rem;
+}
+
+.banner-container {
+  margin: 1rem 0rem;
+  height: 12.5rem;
+  position: relative;
+}
+
+.classroom-banner {
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
+.classroom-name {
+  position: absolute;
+  max-width: 90%;
+  top: 1.5rem;
+  left: 1.5rem;
+  color: white;
+  overflow: hidden;
+}
+
+.classroom-note {
+  position: absolute;
+  top: 4rem;
+  left: 1.5rem;
+  color: white;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.classroom-owner {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 1.5rem;
+  color: white;
+  font-weight: 500;
+}

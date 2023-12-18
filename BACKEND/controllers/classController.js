@@ -104,9 +104,30 @@ const getClassDetail = catchAsync(async (req, res, next) => {
 const getClassByCode = catchAsync(async (req, res, next) => {
     const _class = await Class.findOne({ inviteCode: req.body.code });
 
+    if (!_class) {
+        return res.status(200).json({
+            status: 'failed',
+            value: 'The class does not exist',
+        });
+    }
+
+    const user = await User.findById(req.body.id)
+
     res.status(200).json({
         status: 'success',
         value: _class,
+        already_in_class: user.class.includes(_class._id.toString())
+    });
+});
+
+const getClassById = catchAsync(async (req, res, next) => {
+    const _class = await Class.findById(req.body.id);
+    const user = await User.findById(req.body.user_id)
+
+    res.status(200).json({
+        status: 'success',
+        value: _class,
+        already_in_class: user.class.includes(_class._id.toString())
     });
 });
 
@@ -148,15 +169,6 @@ const joinClass = catchAsync(async (req, res, next) => {
     });
 });
 
-const alreadyInClass = catchAsync(async (req, res, next) => {
-    const _user = await User.findById(req.body.userId);
-
-    res.status(200).json({
-        status: 'success',
-        value: _user.class.includes(req.body.classId),
-    });
-});
-
 const outClass = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
@@ -189,7 +201,6 @@ const getClassMember = catchAsync(async (req, res, next) => {
 export default {
     getAllClassAllAccount,
     updateClassStatus,
-    alreadyInClass,
     getAllClass,
     createClass,
     getClassDetail,
@@ -198,4 +209,5 @@ export default {
     getClassByCode,
     getClassByEmail,
     getClassMember,
+    getClassById
 };

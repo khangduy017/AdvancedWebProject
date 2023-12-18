@@ -27,14 +27,16 @@ const GradeComponent = (props) => {
   const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
-    axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: props.id }, { headers })
-      .then((res) => {
-        if (res.data.status === "success") {
-          setGradeValue(res.data.value)
-          setLoading(false)
-        }
-        else { }
-      });
+    if (localStorage.getItem('role') === 'teacher') {
+      axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: props.id }, { headers })
+        .then((res) => {
+          if (res.data.status === "success") {
+            setGradeValue(res.data.value)
+            setLoading(false)
+          }
+          else { }
+        });
+    }
   }, [])
 
   const styleSuccess = {
@@ -212,9 +214,7 @@ const GradeComponent = (props) => {
 
     for (const item of dataArray) {
       const scaleValue = parseInt(item.scale, 10);
-      if (!isNaN(scaleValue)) {
-        scaleTotal += scaleValue;
-      }
+      scaleTotal += scaleValue;
     }
 
     return scaleTotal;
@@ -522,8 +522,33 @@ const GradeComponent = (props) => {
   }
 
 
+  // Part 2 student
+  const [studentGrade, setStudentGrade] = useState({})
+  const [studentGradeStructure, setStudentGradeStructure] = useState([])
+  useEffect(() => {
+    if (localStorage.getItem('role') === 'student') {
+      const data = {
+        id: localStorage.getItem('_id'),
+        grade_id: props.id
+      }
+
+      axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade-by-student-id', data, { headers })
+        .then((res) => {
+          if (res.data.status === "success") {
+            setStudentGrade(res.data.grade)
+            setStudentGradeStructure(res.data.gradeStructure)
+            console.log(res.data)
+            setLoading(false)
+          }
+          else {
+          }
+        });
+    }
+  }, [])
+
+
   return (
-    <>{
+    localStorage.getItem("role") === "teacher" ? <>{
       loading ?
         <div style={{ marginTop: '10rem' }} className="d-flex justify-content-center">
           <div style={{ width: '3rem', height: '3rem', color: '#5D5FEF' }} className="spinner-border" role="status">
@@ -628,7 +653,7 @@ const GradeComponent = (props) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
             show={showProfileModal}
-            onHide={() => { setShowProfileModal(false);setStudentProfile({}) }}
+            onHide={() => { setShowProfileModal(false); setStudentProfile({}) }}
           >
             <Modal.Header closeButton>
               <h4 className={styles["modal-heading"]}>Profile</h4>
@@ -640,7 +665,7 @@ const GradeComponent = (props) => {
               <Button
                 variant="secondary"
                 className={`${styles["close-button"]}`}
-                onClick={() => { setShowProfileModal(false);setStudentProfile({}) }}
+                onClick={() => { setShowProfileModal(false); setStudentProfile({}) }}
               >
                 Close
               </Button>
@@ -808,7 +833,7 @@ const GradeComponent = (props) => {
                 </div>
 
                 <div className={`${styles['student-item-field']} `}>
-                  <small onClick={()=>{handleShowProfile(value._id)}} style={{ textDecoration: `${value._id.length > 1 ? 'underline' : ''}`, cursor: `${value._id.length > 1 ? 'pointer' : ''}` }}>{value.studentId}</small>
+                  <small onClick={() => { handleShowProfile(value._id) }} style={{ textDecoration: `${value._id.length > 1 ? 'underline' : ''}`, cursor: `${value._id.length > 1 ? 'pointer' : ''}` }}>{value.studentId}</small>
                 </div>
 
                 <div className={`${styles['student-item-field']}`}>
@@ -899,8 +924,59 @@ const GradeComponent = (props) => {
               )}
             </div>}
         </div>
-    }</>
-
+    }</> : <>
+      {loading ?
+        <div style={{ marginTop: '10rem' }} className="d-flex justify-content-center">
+          <div style={{ width: '3rem', height: '3rem', color: '#5D5FEF' }} className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div> :
+        <div>
+          {/* STUDENT PART 1 */}
+          <div className={`d-flex align-items-center justify-content-between mb-3 mt-5`}>
+            <h3 className={`${styles['grade-structure-title']} m-0`}>Grade structure</h3>
+          </div>
+          <div className={`${styles['grade-structure-field']} gap-0 d-flex align-items-center rounded-2`}>
+            <p className={`w-50 mb-0`}>Name</p>
+            <p className={`p-0 mb-0 ml-0`}>Scale (%)</p>
+          </div>
+          <div className="w-100">
+            {studentGradeStructure.map((value, index) => <div
+              key={value.studentId}
+              className={
+                `${styles['student-list-item']} d-flex align-items-center card p-2 mt-2`
+              }
+            >
+              <small style={{ width: '50%', marginLeft: '4rem' }}>{value.name}</small>
+              <small style={{ width: '10%' }}>{value.scale}</small>
+            </div>)}
+          </div>
+          {<div className={`d-flex align-items-center`} style={{ height: '2rem', paddingTop: '2rem' }}>
+            {<p>Total scale: </p>}
+            {<p style={{ fontWeight: '600', color: '#5d5fef' }}>{calculateScaleTotal(studentGradeStructure)}%</p>}
+          </div>}
+          {/* STUDENT PART 2 */}
+          <div style={{ marginTop: '4rem' }} className={`d-flex align-items-center justify-content-between mb-3`}>
+            <h3 className={`${styles['grade-structure-title']} m-0`}>Your grade</h3>
+          </div>
+          <div className={`${styles['grades-field']}  mt-3 gap-0 d-flex align-items-center rounded-2`}>
+            <p className={`mb-0`}>#</p>
+            <p style={{ width: `18%`, fontWeight: 'bold' }} className={`mb-0 ml-0`}>Student ID</p>
+            <div style={{ width: '75%' }} className={`d-flex align-items-center`}>
+              {studentGradeStructure.map((value, index) =>
+                <p style={{ width: `${75 / studentGradeStructure.length + 1}%`, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }} className={`m-0 p-0`}>{value.name}</p>
+              )}
+              <p style={{ width: `${75 / studentGradeStructure.length + 1}%`, fontWeight: 'bold' }} className={`p-0 mb-0`}>Total</p>
+            </div>
+          </div>
+          {Object.keys(studentGrade).length === 0 ? <div className={`${styles['grade-empty']} d-flex align-items-center justify-content-center p-4`}>
+            <p className="p-0 m-0">You haven't added a student ID yet or the teacher hasn't completed the grade sheet</p>
+          </div>
+            : <div>
+              <GradeItem index={0} onShowProfile={handleShowProfile} edit={editGrade} onChangeEdit={onChangeEdit} structure={studentGradeStructure} value={studentGrade} />
+            </div>}
+        </div>}
+    </>
   );
 };
 

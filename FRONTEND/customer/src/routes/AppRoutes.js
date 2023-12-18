@@ -8,15 +8,11 @@ import AuthContext from "../store/auth-context";
 import LoginPage from "../pages/LoginPage";
 import Register from "../components/Auth/Register/register";
 import ForgetPassword from "../components/Auth/ForgetPassword/forgetPassword";
-import { useNavigate } from "react-router-dom";
-import { RingLoader } from "react-spinners";
-import {useState,useEffect  } from "react";
-import { useLocation } from "react-router-dom";
 import JoinClassPage from "../pages/JoinClassPage";
-import AlreadyInClassPage from "../pages/AlreadyInClassPage";
+
 
 const AppRoutes = () => {
-    const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
 
   return (
     <Routes>
@@ -35,7 +31,6 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/myclass/:id" element={<ClassroomPage />} />
         <Route path="/myclass/:id/join" element={<JoinClassPage />} />
-        <Route path="/myclass/:id/already" element={<AlreadyInClassPage />} />
       </Route>
     </Routes>
   );

@@ -23,6 +23,30 @@ const getGrade = catchAsync(async (req, res, next) => {
   });
 });
 
+const getGradeByStudentId = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.body.id)
+  const grade = await Grade.findById(req.body.grade_id)
+
+
+  const gradeStructure = []
+  for(let i of grade.structure){
+    if(i._public) gradeStructure.push(i)
+  }
+
+  let _grade={}
+  for(let i of grade.grades){
+    if(i.studentId === user.id){
+      _grade = i   
+    }
+  }
+
+  res.status(200).json({
+    status: 'success',
+    gradeStructure,
+    grade: _grade
+  });
+});
+
 const addStructure = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
   let scaleSum = Number(req.body.value.scale)
@@ -186,4 +210,4 @@ const editGrades = catchAsync(async (req, res, next) => {
 
 
 
-export default { getGrade, addStructure, editGrades, editStructure, updateStudentList }
+export default { getGrade, addStructure, editGrades, editStructure, updateStudentList,getGradeByStudentId }

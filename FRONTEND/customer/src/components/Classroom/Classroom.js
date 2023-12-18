@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 import axios from "axios";
 import toast from "react-hot-toast";
 import AuthContext from "../../store/auth-context";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import User from "../../assests/img/user.jpg";
@@ -50,7 +50,7 @@ const Classroom = () => {
   const [loading, setLoading] = useState(true)
 
   const [inviteEnable, setInviteEnable] = useState(true);
-  const [currentTab, setCurrentTab] = useState(3);
+  const [currentTab, setCurrentTab] = useState(1);
   const [typing, setTyping] = useState(false);
   const [typingContent, setTypingContent] = useState("");
   const [typingTitle, setTypingTitle] = useState("");
@@ -63,29 +63,31 @@ const Classroom = () => {
   const [classData, setClassData] = useState();
   const [postData, setPostData] = useState([]);
 
-  useEffect(() => {
+  const fecthData = ()=>{
     axios
-      .post(process.env.REACT_APP_API_HOST + "classes/" + id, { headers })
-      .then((res) => {
-        if (res.data.status === "success") {
-          setClassData(res.data.value);
-          setLoading(false);
-        } else {
-        }
-      });
+    .post(process.env.REACT_APP_API_HOST + "classes/" + id, { headers })
+    .then((res) => {
+      if (res.data.status === "success") {
+        setClassData(res.data.value);
+        setLoading(false);
+        setCurrentTab(1)
+        setPostData([]);
+      } else {
+      }
+    });
 
-    axios
-      .get(process.env.REACT_APP_API_HOST + "posts/get-all-posts/" + id, {
-        headers,
-      })
-      .then((res) => {
-        if (res.data.status === "success") {
-          setPostData(res.data.value);
-          setLoading(false);
-        } else {
-        }
-      });
-  }, []);
+  axios
+    .get(process.env.REACT_APP_API_HOST + "posts/get-all-posts/" + id, {
+      headers,
+    })
+    .then((res) => {
+      if (res.data.status === "success") {
+        setPostData(res.data.value);
+        setLoading(false);
+      } else {
+      }
+    });
+  }
 
   const [emailInput, setEmailInput] = useState("");
   const handleSubmitInvite = () => {
@@ -118,10 +120,6 @@ const Classroom = () => {
 
   const handleSwitchTab = (tab) => {
     setCurrentTab(tab);
-    if (tab === 1) {
-    } else if (tab === 2) {
-    } else {
-    }
   };
 
   const handleCopyClick = async () => {
@@ -187,6 +185,13 @@ const Classroom = () => {
         }
       });
   };
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setLoading(true);
+    fecthData(id)
+  }, [location.pathname]);
 
   return (
     <div className={`${styles["classroom-container"]}`}>

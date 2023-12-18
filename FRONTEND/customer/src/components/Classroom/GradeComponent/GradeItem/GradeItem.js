@@ -41,7 +41,12 @@ export default function GradeItem(props) {
     >
       <p className={`mb-0`}>{props.index + 1}</p>
       <p style={{ width: `18%` }} className={`mb-0 ml-0`}>
-        <small onClick={handleShowProfile} style={{ textDecoration: `${props.value._id.length > 0 ? 'underline' : ''}`, cursor: `${props.value._id.length > 0 ? 'pointer' : ''}` }}>
+        <small 
+        onClick={handleShowProfile} 
+        style={{ 
+          textDecoration: `${(props.value._id.length > 0 && localStorage.getItem('role')==='teacher') ? 'underline' : ''}`,
+          cursor: `${(props.value._id.length > 0&& localStorage.getItem('role')==='teacher') ? 'pointer' : ''}` 
+        }}>
           {props.value.studentId}
         </small>
       </p>
