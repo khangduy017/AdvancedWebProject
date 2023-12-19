@@ -37,6 +37,7 @@ const AdminPageContent = () => {
   const [listStudent, setListStudent] = useState(authCtx.listStudent);
 
   const [studentIdMongoose, setStudentIdMongoose] = useState("");
+  const [isVerify, setIsVerify] = useState(true);
 
   const [searchInput, setSearchInput] = useState("");
   const handleGetAllClasses = () => {
@@ -52,9 +53,10 @@ const AdminPageContent = () => {
       .catch((err) => {});
   };
 
-  const handleChangeStudentID = (id) => {
+  const handleChangeStudentID = (id, isVerify) => {
     const data = {
       id: id,
+      isVerify: isVerify,
       studentID: studentIDInput,
       _id: localStorage.getItem("_id"),
     };
@@ -77,7 +79,7 @@ const AdminPageContent = () => {
 
   const submitStudentID = (event) => {
     event.preventDefault();
-    handleChangeStudentID(studentIdMongoose);
+    handleChangeStudentID(studentIdMongoose, isVerify);
     handleClose();
   };
   const submitSearch = (event) => {
@@ -128,8 +130,6 @@ const AdminPageContent = () => {
           const containsStudentId = jsonData.every((row) => row.StudentId !== undefined);
           const containsFullName = jsonData.every((row) => row.FullName !== undefined && row.FullName.length > 0);
 
-          console.log(jsonData)
-
           if (containsStudentId && containsFullName) {
             jsonData = jsonData.map((item) => {
               return { studentId: item.StudentId.toString(), fullname: item.FullName.toString() };
@@ -139,11 +139,9 @@ const AdminPageContent = () => {
               jsonData
             }
 
-
             axios.post(process.env.REACT_APP_API_HOST + 'auth/create-student', data, { headers })
               .then((res) => {
                 if (res.data.status === "success") {
-                  console.log(res.data.value)
                   authCtx.setListStudent(res.data.value)
                   setListStudent(res.data.value)
                   toast.success('Upload data is success!', styleSuccess)
@@ -303,6 +301,7 @@ const AdminPageContent = () => {
               key={index}
               onClick={() => {
                 setStudentIdMongoose(data._id.toString());
+                setIsVerify(data.email !== undefined);
                 setStudentIDInput(data.id);
                 handleShow();
               }}
@@ -316,7 +315,7 @@ const AdminPageContent = () => {
                 className={`${styles["spec-col"]}`}
                 // onClick={() => handleChangeActive(data._id.toString())}
               >
-                {data.email !== "" ? (
+                {data.email !== undefined ? (
                   <div className={`${styles["active-button"]}`}>Verified</div>
                 ) : (
                   <div className={`${styles["inactive-button"]}`}>

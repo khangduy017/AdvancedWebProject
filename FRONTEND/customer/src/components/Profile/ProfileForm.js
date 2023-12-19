@@ -192,13 +192,13 @@ const ProfileForm = (props) => {
               />
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPassword">
-              <Form.Label>Student ID</Form.Label>
+              <Form.Label>ID (For student only)</Form.Label>
               <Form.Control
                 onChange={(event) => {
                   setStudentId(event.target.value);
                 }}
                 value={studentId}
-                readOnly={props.mode === "General"}
+                readOnly={props.mode === "General" || authCtx.userData.role === "teacher"}
                 className="form-control-container"
               />
             </Form.Group>
