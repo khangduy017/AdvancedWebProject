@@ -176,7 +176,7 @@
   
     .dropbtn {
         height: 2.5rem;
-        width: 7rem;
+        width: 8rem;
         background: #5d5fef;
         color: white;
         border: none;
@@ -229,4 +229,49 @@
 
       .inactive{
         background: #e9ecef;
+      }
+
+      .active-button{
+        background: #37b24d;
+        padding: 0.25rem;
+        color: white;
+        border-radius: 0.25rem;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+      
+      .active-button:hover{
+        cursor: pointer;
+      }
+      
+      .inactive-button{
+        background: #e03131;
+        padding: 0.25rem;
+        color: white;
+        border-radius: 0.25rem;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+      
+      .inactive-button:hover{
+        cursor: pointer;
+      }
+      
+      .spec-col{
+        width: 7rem;
+      }
+
+      .import-student{
+        width: 10.5rem;
+        background: white;
+        color: #5d5fef;
+        border: 1px solid #5d5fef;
+        height: 2.5rem;
+        font-weight: 500;
+      }
+
+      .import-student:hover{
+        cursor: pointer;
+        background: #eaeaf5 !important;
+        color: #5d5fef;
       }

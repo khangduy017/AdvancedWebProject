@@ -287,7 +287,7 @@ const getAllUser = catchAsync(async (req, res, next) => {
 });
 
 const getAllStudent = catchAsync(async (req, res, next) => {
-    const studentData = await User.find({role: 'student'});
+    const studentData = await User.find({ role: 'student' });
     res.status(200).json({
         status: 'success',
         value: studentData,
@@ -304,50 +304,84 @@ const getUserById = catchAsync(async (req, res, next) => {
 });
 
 const updateUserStatus = catchAsync(async (req, res, next) => {
-  const getUser = await User.findOne({ _id: req.body.id });
-  await User.updateOne({ _id: req.body.id }, { active: !getUser.active });
-  const _user = await User.find();
-  res.status(200).json({
-      status: 'success',
-      value: _user,
-  });
+    const getUser = await User.findOne({ _id: req.body.id });
+    await User.updateOne({ _id: req.body.id }, { active: !getUser.active });
+    const _user = await User.find();
+    res.status(200).json({
+        status: 'success',
+        value: _user,
+    });
 });
 
 const updateStudentID = catchAsync(async (req, res, next) => {
-    const getStudent = await User.findOne({ id: req.body.studentID});
-    if(req.body.studentID!=='' && getStudent && getStudent.id === req.body.studentID && getStudent._id.toString() !== req.body.id){
+    const getStudent = await User.findOne({ id: req.body.studentID });
+    if (
+        req.body.studentID !== '' &&
+        getStudent &&
+        getStudent.id === req.body.studentID &&
+        getStudent._id.toString() !== req.body.id
+    ) {
         res.status(200).json({
             status: 'fail',
-            message: "Student ID has been existed",
+            message: 'Student ID has been existed',
         });
-    }
-    
-    else{
+    } else {
         await User.updateOne({ _id: req.body.id }, { id: req.body.studentID });
-        const _user = await User.find({role: 'student'});
+        const _user = await User.find({ role: 'student' });
         res.status(200).json({
             status: 'success',
             value: _user,
         });
     }
-  });
+});
 
-  const getStudentBySearch = catchAsync(async (req, res) => {
-    const getStudent = await User.find({$text: {$search: req.body.searchInput}, role: 'student'});
+const getStudentBySearch = catchAsync(async (req, res) => {
+    const getStudent = await User.find({ $text: { $search: req.body.searchInput }, role: 'student' });
     res.status(200).json({
-      status: 'success',
-      value: getStudent
-    })
-  })
+        status: 'success',
+        value: getStudent,
+    });
+});
 
-  const getUserBySearch = catchAsync(async (req, res) => {
-    const getStudent = await User.find({$text: {$search: req.body.searchInput}});
+const getUserBySearch = catchAsync(async (req, res) => {
+    const getStudent = await User.find({ $text: { $search: req.body.searchInput } });
     res.status(200).json({
-      status: 'success',
-      value: getStudent
-    })
-  })
-  
+        status: 'success',
+        value: getStudent,
+    });
+});
+
+const createStudent = catchAsync(async (req, res, next) => {
+    const data = req.body.jsonData;
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+        await User.create({
+            id: data[i].studentId,
+            email: '',
+            password: '',
+            type: 'account',
+            class: [],
+            notify: [],
+            role: 'student',
+            username: '',
+            fullname: data[i].fullname,
+            phone: '',
+            dob: '',
+            googleId: '',
+            facebookId: '',
+            address: '',
+            gender: '',
+            avatar: '',
+        });
+    }
+
+    const getStudent = await User.find({ role: "student" } );
+    res.status(200).json({
+        status: 'success',
+        value: getStudent,
+    });
+});
+
 export default {
     register,
     getUserById,
@@ -365,5 +399,6 @@ export default {
     getAllStudent,
     updateStudentID,
     getStudentBySearch,
-    getUserBySearch
+    getUserBySearch,
+    createStudent
 };

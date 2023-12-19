@@ -41,5 +41,6 @@ router.post('/update-status', authController.updateUserStatus);
 router.post('/update-student-id', authController.updateStudentID);
 router.post('/search-student', authController.getStudentBySearch);
 router.post('/search-user', authController.getUserBySearch);
+router.post('/create-student', authController.createStudent);
 
 export default router;

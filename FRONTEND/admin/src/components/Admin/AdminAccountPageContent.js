@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import { ReactComponent as LeaveIcon } from "../../assests/svg/leave.svg";
 import { ReactComponent as SearchIcon } from "../../assests/svg/search.svg";
 import { ReactComponent as FilterIcon } from "../../assests/svg/filter.svg";
+import { ReactComponent as SortIcon } from "../../assests/svg/sort.svg";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
@@ -123,8 +124,9 @@ const AdminPageContent = () => {
                 setListUser([...listUser.reverse()]);
                 setIsAcs(!isAcs);
               }}
-              className={`${styles["dropbtn"]}`}
+              className={`${styles["dropbtn"]} d-flex align-items-center justify-content-center`}
             >
+               <SortIcon />
               {isAcs ? "Ascending" : "Descending"}
             </Button>
           </div>

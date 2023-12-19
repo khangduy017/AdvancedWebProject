@@ -1,11 +1,13 @@
 .sidebar-container{
     border-right: 1px solid #b8b8c2;
-    top: 4.1rem;
-    height: 100vh;
+    /* margin-top: 4rem; */
+    top: 4rem;
+    height: 92vh;
     position: fixed;
     left: 0;
     font-size: 1.1rem;
     width: 17rem;
+    z-index: 10;
 }
 
 .active-custom{
