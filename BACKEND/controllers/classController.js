@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import Class from '../models/classModel.js';
 import User from '../models/userModel.js';
-import Grade from '../models/GradeModel.js';
+import Grade from '../models/GradeModel.js'
 import catchAsync from '../utils/catchAsync.js';
 import sendMail from '../utils/mailer.js';
 

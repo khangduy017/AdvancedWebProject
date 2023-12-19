@@ -1,3 +1,7 @@
+.review-detail-container{
+
+}
+
 
 .content-container{
   border: 1px solid #b9b9d3;
@@ -5,4 +9,146 @@
   /* color: rgba(0,0,0,.549); */
   font-size: 0.8rem;
   margin-top: 1.3rem;
+}
+
+.finalized-container{
+  margin-top: 1.3rem;
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.overall{
+  border-radius: 0.5rem;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #5D5FEF;
+}
+
+.overall input{
+  border: none !important;
+  outline: none;
+}
+
+.overall input:focus{
+  border: none !important;
+  outline: none;
+}
+
+.more-margin-bottom img{
+  width: 2rem;
+  height: 2rem;
+}
+
+.grade-structure-title{
+  text-align: start;
+}
+
+.grade-structure-done-button{
+  height: 2.5rem;
+  font-weight: 600;
+  background: #12b886 !important;
+  border: none;
+}
+
+.grade-structure-done-button:hover{
+  background: #099268 !important;
+}
+
+.horizontal-cmt{
+  border-top: 1px solid #b9b9d3;
+  padding-top: 1rem;
+}
+
+.cmt-img{
+  border-radius: 50%;
+  width: auto;
+  height: 2.2rem;
+  margin-right: 0.5rem;
+}
+
+.cmt-title-creator{
+  font-size: 0.85rem;
+  color: #212529;
+  margin: 0;
+}
+
+.cmt-title-content{
+  font-size: 0.85rem;
+}
+
+
+.button-send{
+  font-size: 0.8rem;
+  background: #5D5FEF !important; 
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1.2rem 0.3rem 1.2rem;
+  border: none;
+  margin: 0;
+  height: 2.2rem;
+}
+
+.button-send:hover{
+  background: #494bdb !important;
+  color: white;
+  border: none;
+}
+
+.form-cmt{
+  box-sizing: border-box;
+  height: 2.2rem;
+}
+
+.more-w{
+  width: 90%;
+}
+
+.review-item{
+  font-weight: 600;
+  font-size: 1rem;
+  color: #5D5FEF;
+}
+
+.review-item span{
+  font-weight: 400;
+  font-size: 1rem;
+  color: #2C2C66;
+}
+
+
+.modal-container {
+  font-size: 0.8rem;
+}
+
+.modal-heading {
+  color: #2c2c66;
+  font-size: 1.4rem;
+}
+
+.close-button {
+  font-size: 0.8rem;
+  border: none;
+  padding: 0.5rem 1rem;
+}
+
+.save-button {
+  font-size: 0.8rem;
+  background-color: #5d5fef !important;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+}
+
+.save-button:disabled{
+  background: #5d5fef !important;
+  opacity: 0.7;
+  cursor:none
+}
+
+.save-button:hover {
+  background-color: #4c4eb6 !important;
 }

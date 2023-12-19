@@ -16,6 +16,10 @@
   gap: 0.5rem;
 }
 
+.dropdown-custom-1::after {
+  display:none;
+}
+
 .login{
   margin-top: 0;
   background: white;
@@ -98,3 +102,26 @@ h4{
   font-weight: 600;
   padding-bottom: 0.45rem;
 }
+
+.notification-item{
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  margin-bottom: 0.6rem;
+  position: relative;
+}
+
+.notification-item:hover{
+  background-color: #EEEEFF;
+}
+
+.notification-item img{
+  width: 1.6rem;
+  margin-right: 0.6rem;
+}
+
+/* .notification-item svg{
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+} */
