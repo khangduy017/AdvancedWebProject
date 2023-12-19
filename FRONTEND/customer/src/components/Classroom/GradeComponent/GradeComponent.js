@@ -15,8 +15,12 @@ import { saveAs } from 'file-saver';
 import GradeItem from "./GradeItem/GradeItem";
 import Dropdown from 'react-bootstrap/Dropdown';
 import StudentProfile from "./StudentProfile/StudentProfile";
+import { Outlet, useLocation, useParams,NavLink } from "react-router-dom";
 
-const GradeComponent = (props) => {
+
+const GradeComponent = () => {
+  const { grade_id } = useParams();
+
 
   // GENERAL
   const [loading, setLoading] = useState(true)
@@ -27,8 +31,9 @@ const GradeComponent = (props) => {
   const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
+    console.log(grade_id)
     if (localStorage.getItem('role') === 'teacher') {
-      axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: props.id }, { headers })
+      axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: grade_id }, { headers })
         .then((res) => {
           if (res.data.status === "success") {
             setGradeValue(res.data.value)
@@ -95,7 +100,7 @@ const GradeComponent = (props) => {
 
   const handleAddGradeItem = () => {
     const data = {
-      id: props.id,
+      id: grade_id,
       value: {
         '_id': randomId(),
         'name': nameGrade,
@@ -187,7 +192,7 @@ const GradeComponent = (props) => {
 
   const handleEditDone = () => {
     const data = {
-      id: props.id,
+      id: grade_id,
       value: gradeStructureClone
     }
 
@@ -286,7 +291,7 @@ const GradeComponent = (props) => {
 
 
             const data = {
-              id: props.id,
+              id: grade_id,
               value: jsonData
             }
 
@@ -347,7 +352,7 @@ const GradeComponent = (props) => {
 
   const handleEditGradeDone = () => {
     const data = {
-      id: props.id,
+      id: grade_id,
       value: gradesClone
     }
 
@@ -473,7 +478,7 @@ const GradeComponent = (props) => {
             setGrades(grades)
 
             const data = {
-              id: props.id,
+              id: grade_id,
               value: grades
             }
 
@@ -529,7 +534,7 @@ const GradeComponent = (props) => {
     if (localStorage.getItem('role') === 'student') {
       const data = {
         id: localStorage.getItem('_id'),
-        grade_id: props.id
+        grade_id: grade_id
       }
 
       axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade-by-student-id', data, { headers })
@@ -710,7 +715,7 @@ const GradeComponent = (props) => {
           <div className={`${styles['grade-structure-field']} gap-0 d-flex align-items-center rounded-2`}>
             <p className={`w-50 mb-0`}>Name</p>
             <p className={`p-0 mb-0 ml-0`}>Scale (%)</p>
-            <p className={`p-0 mb-0`}>Public</p>
+            <p className={`p-0 mb-0`}>Finalize</p>
           </div>
           <div className="w-100">
             {!gradeStructure.length > 0 ? <div className={`${styles['grade-empty']} d-flex align-items-center justify-content-center p-4`}>
