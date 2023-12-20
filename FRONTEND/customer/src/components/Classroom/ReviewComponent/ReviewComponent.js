@@ -122,7 +122,8 @@ export default function ReviewComponent() {
       composition: gradeComposition,
       current_grade: studentGrade.grade[gradeComposition],
       expected_grade: expectedGradeInputRef.current.value,
-      reason: typingContent
+      reason: typingContent,
+      user_id: authCtx.userData.id
     }
 
     axios.post(process.env.REACT_APP_API_HOST + 'review/create', data, { headers })

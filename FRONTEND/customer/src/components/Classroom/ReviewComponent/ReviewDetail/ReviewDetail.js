@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './ReviewDetail.module.css'
 import Form from "react-bootstrap/Form";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate,useLocation } from "react-router-dom";
 import AuthContext from "../../../../store/auth-context";
 import { useEffect, useState, useContext } from "react";
 import axios from 'axios';
@@ -22,6 +22,30 @@ export default function ReviewDetail() {
   const [reviewData, setReviewData] = useState({})
   const [comments, setComments] = useState([])
   const [loading, setLoading] = useState(true)
+
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.pathname)
+    if(!loading){
+      setLoading(true)
+      const data = {
+        _id: review_id
+      }
+  
+      axios.post(process.env.REACT_APP_API_HOST + 'review/get-review', data, { headers })
+        .then((res) => {
+          if (res.data.status === "success") {
+            setReviewData(res.data.review)
+            setComments(res.data.comments)
+            setLoading(false)
+          }
+          else {
+          }
+        });
+    }
+  }, [location.pathname]);
+
 
   useEffect(() => {
     const data = {
@@ -53,7 +77,10 @@ export default function ReviewDetail() {
     const data = {
       _id: localStorage.getItem('_id'),
       content: typingCmt,
-      review_id
+      review_id,
+      grade_id,
+      class_id: id,
+      fromName: localStorage.getItem('role') === 'teacher' ? authCtx.userData.username : authCtx.userData.id
     }
 
     setTypingCmt('')
@@ -107,7 +134,9 @@ export default function ReviewDetail() {
       review_id,
       final_grade: finalReview,
       final_decision_by: authCtx.userData.username,
-      grade_id
+      grade_id,
+      class_id: id,
+      fromName: authCtx.userData.username
     }
 
     axios.post(process.env.REACT_APP_API_HOST + 'review/mark-final-decision', data, { headers })

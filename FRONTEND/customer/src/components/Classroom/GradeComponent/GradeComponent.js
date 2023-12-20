@@ -15,11 +15,12 @@ import { saveAs } from 'file-saver';
 import GradeItem from "./GradeItem/GradeItem";
 import Dropdown from 'react-bootstrap/Dropdown';
 import StudentProfile from "./StudentProfile/StudentProfile";
-import { Outlet, useLocation, useParams,NavLink } from "react-router-dom";
+import { Outlet, useLocation, useParams, NavLink } from "react-router-dom";
 
 
 const GradeComponent = () => {
   const { grade_id } = useParams();
+  const {id} = useParams()
 
 
   // GENERAL
@@ -63,7 +64,6 @@ const GradeComponent = () => {
     },
     duration: 4000,
   };
-
 
   // PART 1: GRADE STRUCTURE
   const [gradeStructure, setGradeStructure] = useState([]);
@@ -177,9 +177,17 @@ const GradeComponent = () => {
     setGradeStructureClone(updatedData)
   }
 
+  const [publicEdit, setPublicEdit] = useState([])
+
   const editPublicGrade = (_id, value) => {
     const updatedData = gradeStructureClone.map(item => {
       if (item._id === _id) {
+        if (value) setPublicEdit(prev => [...prev, item.name])
+        else {
+          if (publicEdit.includes(item.name)) {
+            setPublicEdit(publicEdit.filter(i => i !== item.name))
+          }
+        }
         return {
           ...item,
           _public: value,
@@ -191,9 +199,13 @@ const GradeComponent = () => {
   }
 
   const handleEditDone = () => {
+    console.log(authCtx.userData)
     const data = {
       id: grade_id,
-      value: gradeStructureClone
+      value: gradeStructureClone,
+      publicList: publicEdit,
+      class_id:id,
+      username: authCtx.userData.username
     }
 
     axios.post(process.env.REACT_APP_API_HOST + 'grade/edit-structure', data, { headers })
@@ -202,6 +214,7 @@ const GradeComponent = () => {
           setGradeStructure(res.data.value.structure)
           setGrades(res.data.value.grades)
           setEditGradeStructure(false)
+          setPublicEdit([])
           toast.success('Edit successfully!', styleSuccess);
         }
         else {

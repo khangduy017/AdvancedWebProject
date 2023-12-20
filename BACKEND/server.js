@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import app from "./app.js";
+import io from './socket.js';
 
 dotenv.config({ path: './config.env' });
 
@@ -15,6 +16,17 @@ mongoose
 const server = app.listen(port, async () => {
     console.log(`App is running on port ${port}...`);
 });
+
+export let basket = {};
+
+// init socket
+io.init(server);
+io.getIO().on('connection', (socket) => {
+    socket.on('register', (value) => {
+        basket[value] = socket.id;
+    })
+})
+
 
 process.on('unhandledRejection', (err) => {
     console.log('Unhandled Rejection. Shutting down...');

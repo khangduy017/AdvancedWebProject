@@ -5,6 +5,9 @@ import Grade from '../models/GradeModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import Review from '../models/reviewModel.js';
 import ReviewComment from '../models/reviewCommentModel.js';
+import io from "../socket.js"
+import { basket } from "../server.js";
+import Notification from '../models/notificationModel.js';
 
 const createReview = catchAsync(async (req, res, next) => {
   const currentDate = new Date();
@@ -35,6 +38,22 @@ const createReview = catchAsync(async (req, res, next) => {
   })
 
   const reviews = await Review.find({ user_id: req.body._id, class: req.body.class_id })
+
+  //socket 
+  const socket = io.getIO();
+  const _class = await Class.findById(req.body.class_id)
+
+  for (let i of _class.teacher) {
+    const notification = await Notification.create({
+      user_id: i.toString(),
+      time: formattedDate,
+      class: _class.title,
+      direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${review._id}`,
+      fromName: req.body.user_id,
+      content: ` has a grade review request for ${req.body.composition} `
+    })
+    socket.to(basket[i.toString()]).emit("notification", notification)
+  }
 
   res.status(200).json({
     status: 'success',
@@ -93,6 +112,31 @@ const sendComment = catchAsync(async (req, res, next) => {
     review_id: req.body.review_id
   })
 
+  //socket 
+  const socket = io.getIO();
+  const _class = await Class.findById(req.body.class_id)
+  const review = await Review.findById(req.body.review_id)
+
+  let notificationData = {
+    time: formattedDate,
+    class: _class.title,
+    direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${req.body.review_id}`,
+    fromName: req.body.fromName,
+    content: ` has commented on the grade review request for ${review.composition}`
+  }
+
+  if (user.role === 'teacher') {
+    notificationData = { ...notificationData, user_id: review.user_id }
+    const notification = await Notification.create(notificationData)
+    socket.to(basket[review.user_id]).emit("notification", notification)
+  } else {
+    for (let i of _class.teacher) {
+      notificationData = { ...notificationData, user_id: i.toString() }
+      const notification = await Notification.create(notificationData)
+      socket.to(basket[i.toString()]).emit("notification", notification)
+    }
+  }
+
   const comments = await ReviewComment.find({ review_id: req.body.review_id })
 
   res.status(200).json({
@@ -102,6 +146,18 @@ const sendComment = catchAsync(async (req, res, next) => {
 });
 
 const markFinalDecision = catchAsync(async (req, res, next) => {
+  const currentDate = new Date();
+
+  const hours = currentDate.getHours().toString().padStart(2, '0');
+  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+
+  const day = currentDate.getDate().toString().padStart(2, '0');
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Lưu ý: Tháng bắt đầu từ 0
+  const year = currentDate.getFullYear();
+
+  const formattedDate = `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+
   let finalGrade = parseFloat(req.body.final_grade);
 
   if (!isNaN(finalGrade) && finalGrade >= 0 && finalGrade <= 10) {
@@ -112,14 +168,29 @@ const markFinalDecision = catchAsync(async (req, res, next) => {
 
     let grade = await Grade.findById(req.body.grade_id)
     let _grade = []
-    for(let i of grade.grades){
-      if(review.student_id === i.studentId){
-        i={...i,grade: {...i.grade,[review.composition]:review.final_grade}}
+    for (let i of grade.grades) {
+      if (review.student_id === i.studentId) {
+        i = { ...i, grade: { ...i.grade, [review.composition]: review.final_grade } }
       }
       _grade.push(i)
     }
     grade.grades = _grade
     await grade.save()
+
+    //socket 
+    const socket = io.getIO();
+    const _class = await Class.findById(req.body.class_id)
+
+    const notification = await Notification.create({
+      user_id: review.user_id,
+      time: formattedDate,
+      class: _class.title,
+      direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${req.body.review_id}`,
+      fromName: req.body.fromName,
+      content: ` has created a final decision for your grade review request (${review.composition})`
+    })
+
+    socket.to(basket[review.user_id]).emit("notification", notification)
 
     return res.status(200).json({
       status: 'success',

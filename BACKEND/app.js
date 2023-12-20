@@ -10,6 +10,7 @@ import gradeRouter from './routes/gradeRoutes.js'
 import classRouter from './routes/classRoutes.js'
 import postRouter from './routes/postRoutes.js'
 import reviewRouter from './routes/reviewRoutes.js'
+import notificationRouter from './routes/notificationRoutes.js'
 import google from './config/passport-setup.js'
 import facebook from './config/passport-setup.js'
 
@@ -41,6 +42,7 @@ app.use('/webAdvanced/api/v1/classes', classRouter)
 app.use('/webAdvanced/api/v1/posts', postRouter)
 app.use('/webAdvanced/api/v1/grade', gradeRouter)
 app.use('/webAdvanced/api/v1/review',reviewRouter)
+app.use('/webAdvanced/api/v1/notification',notificationRouter)
 app.use(globalErrorhandler);
 
 export default app;

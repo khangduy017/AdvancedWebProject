@@ -3,6 +3,10 @@ import Class from "../models/classModel.js";
 import User from "../models/userModel.js"
 import Grade from "../models/GradeModel.js";
 import catchAsync from '../utils/catchAsync.js'
+import io from "../socket.js"
+import { basket } from "../server.js";
+import socket from "../socket.js";
+import Notification from "../models/notificationModel.js";
 
 const getGrade = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
@@ -29,14 +33,14 @@ const getGradeByStudentId = catchAsync(async (req, res, next) => {
 
 
   const gradeStructure = []
-  for(let i of grade.structure){
-    if(i._public) gradeStructure.push(i)
+  for (let i of grade.structure) {
+    if (i._public) gradeStructure.push(i)
   }
 
-  let _grade={}
-  for(let i of grade.grades){
-    if(i.studentId === user.id){
-      _grade = i   
+  let _grade = {}
+  for (let i of grade.grades) {
+    if (i.studentId === user.id) {
+      _grade = i
     }
   }
 
@@ -109,15 +113,34 @@ const editStructure = catchAsync(async (req, res, next) => {
     });
   }
 
-  // let newGrade = []
-  // let nameList = Array.from(nameSet)
-  // for (let item of grade.grades) {
-  //   let gradeObject = {}
-  //   for (let n of nameList) {
-  //     gradeObject[n] = item.grade[n] || '0'
-  //   }
-  //   newGrade.push({ ...item, grade: gradeObject })
-  // }
+  if (req.body.publicList.length > 0) {
+    const socket = io.getIO();
+    const _class = await Class.findById(req.body.class_id)
+
+    const currentDate = new Date();
+
+    const hours = currentDate.getHours().toString().padStart(2, '0');
+    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+    const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Lưu ý: Tháng bắt đầu từ 0
+    const year = currentDate.getFullYear();
+
+    const formattedDate = `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+
+    for (let i of _class.student) {
+      const notification = await Notification.create({
+        user_id: i.toString(),
+        time: formattedDate,
+        class: _class.title,
+        direction: `/myclass/${req.body.class_id}/grade/${req.body.id}`,
+        fromName: req.body.username,
+        content: ` has completed the score columns for ${req.body.publicList}`
+      })
+      socket.to(basket[i.toString()]).emit("notification", notification)
+    }
+  }
 
   let newGrade = grade.grades.map(item => ({
     ...item,
@@ -127,6 +150,8 @@ const editStructure = catchAsync(async (req, res, next) => {
   grade.structure = req.body.value
   grade.grades = newGrade
   grade.save()
+
+
 
   res.status(200).json({
     status: 'success',
@@ -210,4 +235,4 @@ const editGrades = catchAsync(async (req, res, next) => {
 
 
 
-export default { getGrade, addStructure, editGrades, editStructure, updateStudentList,getGradeByStudentId }
+export default { getGrade, addStructure, editGrades, editStructure, updateStudentList, getGradeByStudentId }

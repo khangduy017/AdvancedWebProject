@@ -381,7 +381,7 @@ const HomePageContent = () => {
         {authCtx.classes.map((data, index) => (
           <div
             onClick={() => {
-              navigate(`/myclass/${data._id}`);
+              navigate(`/myclass/${data._id}/`);
             }}
             className={`${styles["class-content-container"]} mt-4 rounded-3`}
             key={index}
