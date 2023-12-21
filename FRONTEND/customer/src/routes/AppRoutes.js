@@ -38,8 +38,10 @@ const AppRoutes = () => {
           <Route index element={<PostComponent />} />
           <Route path='members' element={<MemberComponent />} />
           <Route path='grade/:grade_id' element={<GradeComponent />} />
+          <Route path='grade/:grade_id/:time' element={<GradeComponent />} />
           <Route path='review/:grade_id' element={<ReviewComponent />} />
           <Route path='review/:grade_id/:review_id' element={<ReviewDetail />} />
+          <Route path='review/:grade_id/:review_id/:time' element={<ReviewDetail />} />
         </Route>
         <Route path="/myclass/:id/join" element={<JoinClassPage />} />
       </Route>

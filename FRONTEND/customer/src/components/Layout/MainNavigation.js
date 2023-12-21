@@ -48,22 +48,25 @@ const MainNavigation = () => {
     navigate("/login");
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const [notifications, setNotifications] = useState([])
   useEffect(() => {
-    const data = {
-      _id: localStorage.getItem('_id')
-    }
-    console.log(data)
+    if (isOpen) {
+      const data = {
+        _id: localStorage.getItem('_id')
+      }
 
-    axios.post(process.env.REACT_APP_API_HOST + 'notification/get-all', data, { headers })
-      .then((res) => {
-        if (res.data.status === "success") {
-          setNotifications(res.data.value)
-        }
-        else {
-        }
-      });
-  }, [])
+      axios.post(process.env.REACT_APP_API_HOST + 'notification/get-all', data, { headers })
+        .then((res) => {
+          if (res.data.status === "success") {
+            setNotifications(res.data.value)
+          }
+          else {
+          }
+        });
+    }
+  }, [isOpen])
 
   // socket 
   const socket = io(process.env.REACT_APP_ipAddress)
@@ -74,13 +77,14 @@ const MainNavigation = () => {
     socket.emit("register", localStorage.getItem('_id'))
   }, [])
 
-  const [isOpen, setIsOpen] = useState(false);
 
-  const handleItemClick = (index) => {
+  const handleItemClick = (value) => {
+    if (!value.seen) {
+      socket.emit("seen", value._id)
+    }
+    navigate(value.direction);
     setIsOpen(false);
   };
-
-
 
   return (
     <Navbar
@@ -120,19 +124,18 @@ const MainNavigation = () => {
         </Dropdown.Toggle>
         <Dropdown.Menu
           className="drop-down-menu"
-          style={{ maxHeight: '28rem', overflowY: 'scroll', padding: '1rem 0.5rem 0.5rem 0.5rem', width: '24rem', backgroundColor: '#ffffff', border: '1px solid #b8b8c2', zIndex: '100' }}
+          style={{ maxHeight: '28rem', overflowY: 'scroll', padding: '0.5rem 0rem', width: '24rem', backgroundColor: '#ffffff', border: '1px solid #b8b8c2', zIndex: '100' }}
         >
           {
             notifications.length > 0 ? notifications.map((value, index) =>
-              <div className="notification-item w-100 rounded-2" eventKey={index}
+              <div style={{ backgroundColor: `${!value.seen ? '#f6f6ff' : '#ffffff'}` }} className="notification-item w-100" eventKey={index}
                 onClick={() => {
-                  handleItemClick(index);
-                  navigate(value.direction);
+                  handleItemClick(value)
                 }}
               >
-                {/* <svg xmlns="http://www.w3.org/2000/svg" height="6" width="6" viewBox="0 0 512 512">
-              <path fill="#5D5FEF" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
-            </svg> */}
+                {!value.seen && <svg xmlns="http://www.w3.org/2000/svg" height="9" width="9" viewBox="0 0 512 512">
+                  <path fill="#5D5FEF" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+                </svg>}
                 <img src={member_image} alt='' />
                 <div className="w-100">
                   <div style={{ color: '#2C2C66', fontSize: '1rem' }} className="d-flex justify-content-between mb-1">

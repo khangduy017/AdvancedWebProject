@@ -22,17 +22,35 @@ const GradeComponent = () => {
   const { grade_id } = useParams();
   const {id} = useParams()
 
-
+  
+  
   // GENERAL
   const [loading, setLoading] = useState(true)
   const [gradeValue, setGradeValue] = useState([])
-
+  
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
   const headers = { Authorization: `Bearer ${token}` };
 
+  const location = useLocation();
+
   useEffect(() => {
-    console.log(grade_id)
+    if(!loading){
+      setLoading(true)
+  
+      axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: grade_id }, { headers })
+        .then((res) => {
+          if (res.data.status === "success") {
+            setGradeValue(res.data.value)
+            setLoading(false)
+          }
+          else {
+          }
+        });
+    }
+  }, [location.pathname]);
+  
+  useEffect(() => {
     if (localStorage.getItem('role') === 'teacher') {
       axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: grade_id }, { headers })
         .then((res) => {

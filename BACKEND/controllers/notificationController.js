@@ -15,4 +15,12 @@ const getAll = catchAsync(async (req, res, next) => {
   });
 });
 
-export default { getAll }
+const seen = catchAsync(async (req, res, next) => {
+  await Notification.updateOne({ _id: req.body._id }, { seen: true });
+
+  res.status(200).json({
+    status: 'success',
+  });
+});
+
+export default { getAll,seen }

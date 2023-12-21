@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import app from "./app.js";
 import io from './socket.js';
+import Notification from './models/notificationModel.js';
 
 dotenv.config({ path: './config.env' });
 
@@ -24,6 +25,9 @@ io.init(server);
 io.getIO().on('connection', (socket) => {
     socket.on('register', (value) => {
         basket[value] = socket.id;
+    })
+    socket.on('seen', async (value) => {
+        await Notification.updateOne({ _id: value }, { seen: true });
     })
 })
 
