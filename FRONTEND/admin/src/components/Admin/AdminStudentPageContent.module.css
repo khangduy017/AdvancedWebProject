@@ -263,15 +263,31 @@
 
       .import-student{
         width: 10.5rem;
-        background: white;
-        color: #5d5fef;
-        border: 1px solid #5d5fef;
+        background: #5d5fef;
+        color: white;
         height: 2.5rem;
         font-weight: 500;
       }
 
       .import-student:hover{
         cursor: pointer;
-        background: #eaeaf5 !important;
-        color: #5d5fef;
+        background: #4c4edb !important;
+        color: white;
       }
+
+      .add-student{
+        width: 3rem;
+        background: white !important;
+        box-shadow: none !important;
+        border: 1.5px solid #5d5fef;
+        color: #5d5fef;
+        height: 2.5rem;
+        font-weight: 500;
+      }
+
+      .add-student:hover{
+        cursor: pointer;
+        background: #e0e0e9 !important;
+      }
+
+

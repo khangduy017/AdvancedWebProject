@@ -5,6 +5,7 @@ import { ReactComponent as SearchIcon } from "../../assests/svg/search.svg";
 import { ReactComponent as FilterIcon } from "../../assests/svg/filter.svg";
 import { ReactComponent as ImportIcon } from "../../assests/svg/import.svg";
 import { ReactComponent as SortIcon } from "../../assests/svg/sort.svg";
+import { ReactComponent as AddIcon } from "../../assests/svg/plus.svg";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ import axios from "axios";
 import AuthContext from "../../store/auth-context";
 import toast from "react-hot-toast";
 import Table from "react-bootstrap/Table";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 
 const AdminPageContent = () => {
   const navigate = useNavigate();
@@ -24,12 +25,20 @@ const AdminPageContent = () => {
 
   const [isAcs, setIsAcs] = useState(true);
   const authCtx = useContext(AuthContext);
+
   const [studentIDInput, setStudentIDInput] = useState("");
 
+  const [addStudentIDInput, setAddStudentIDInput] = useState("");
+  const [addFullnameInput, setAddFullnameInput] = useState("");
+
   const [show, setShow] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleCloseAdd = () => setShowAdd(false);
+  const handleShowAdd = () => setShowAdd(true);
 
   const token = authCtx.token;
   const headers = { Authorization: `Bearer ${token}` };
@@ -82,6 +91,7 @@ const AdminPageContent = () => {
     handleChangeStudentID(studentIdMongoose, isVerify);
     handleClose();
   };
+
   const submitSearch = (event) => {
     event.preventDefault();
     const data = {
@@ -120,51 +130,100 @@ const AdminPageContent = () => {
       reader.onload = (e) => {
         try {
           const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
+          const workbook = XLSX.read(data, { type: "array" });
 
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
 
           let jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-          const containsStudentId = jsonData.every((row) => row.StudentId !== undefined);
-          const containsFullName = jsonData.every((row) => row.FullName !== undefined && row.FullName.length > 0);
+          const containsStudentId = jsonData.every(
+            (row) => row.StudentId !== undefined
+          );
+          const containsFullName = jsonData.every(
+            (row) => row.FullName !== undefined && row.FullName.length > 0
+          );
 
           if (containsStudentId && containsFullName) {
             jsonData = jsonData.map((item) => {
-              return { studentId: item.StudentId.toString(), fullname: item.FullName.toString() };
+              return {
+                studentId: item.StudentId.toString(),
+                fullname: item.FullName.toString(),
+              };
             });
 
             const data = {
-              jsonData
-            }
+              jsonData,
+              isFile: true,
+            };
 
-            axios.post(process.env.REACT_APP_API_HOST + 'auth/create-student', data, { headers })
+            axios
+              .post(
+                process.env.REACT_APP_API_HOST + "auth/create-student",
+                data,
+                { headers }
+              )
               .then((res) => {
                 if (res.data.status === "success") {
-                  authCtx.setListStudent(res.data.value)
-                  setListStudent(res.data.value)
-                  toast.success('Upload data is success!', styleSuccess)
-                }
-                else {
+                  authCtx.setListStudent(res.data.value);
+                  setListStudent(res.data.value);
+                  toast.success(
+                    "Upload data is success (Not include duplicate and null values)",
+                    styleSuccess
+                  );
+                } else {
                   toast.error(res.data.value, styleError);
                 }
               });
-
           } else {
-            toast.error('The uploaded file is not in the correct format (StudentId, FullName)', styleError)
+            toast.error(
+              "The uploaded file is not in the correct format (StudentId, FullName)",
+              styleError
+            );
           }
 
           if (fileInputRef.current) {
             fileInputRef.current.value = null;
           }
         } catch (error) {
-          console.error('Lỗi khi chuyển đổi file Excel:', error);
+          console.error("Lỗi khi chuyển đổi file Excel:", error);
         }
       };
 
       reader.readAsArrayBuffer(file);
     }
+  };
+
+  const submitAddStudentID = (event) => {
+    event.preventDefault();
+
+    const jsonData = [
+      {
+        studentId: addStudentIDInput,
+        fullname: addFullnameInput,
+      },
+    ];
+
+    const data = {
+      jsonData,
+      isFile: false,
+    };
+
+    axios
+      .post(process.env.REACT_APP_API_HOST + "auth/create-student", data, {
+        headers,
+      })
+      .then((res) => {
+        if (res.data.status === "success") {
+          authCtx.setListStudent(res.data.value);
+          setListStudent(res.data.value);
+          toast.success("Update information successfully", styleSuccess);
+        } else {
+          toast.error(res.data.message, styleError);
+        }
+      });
+
+    handleCloseAdd();
   };
 
   const styleError = {
@@ -220,12 +279,20 @@ const AdminPageContent = () => {
               <ImportIcon />
               <div>Import student</div>
               <input
-                  type="file"
-                  accept=".xlsx, .xls"
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                  onChange={handleUploadStudentList}
-                />
+                type="file"
+                accept=".xlsx, .xls"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleUploadStudentList}
+              />
+            </Button>
+          </div>
+          <div>
+            <Button
+              onClick={handleShowAdd}
+              className={`${styles["add-student"]} d-flex align-items-center justify-content-center`}
+            >
+              <AddIcon />
             </Button>
           </div>
         </div>
@@ -244,6 +311,7 @@ const AdminPageContent = () => {
               }}
               value={searchInput}
               className={`${styles["form-control-container"]}`}
+              placeholder="Search for students...."
             />
             <SearchIcon className={`${styles["search-icon-customize"]}`} />
           </Form.Group>
@@ -348,23 +416,77 @@ const AdminPageContent = () => {
                   className="form-control-container"
                 />
               </Form.Group>
+              <div className="d-flex w-100 mt-4 justify-content-end">
+                <Button
+                  variant="secondary"
+                  className={`${styles["close-button"]}`}
+                  onClick={handleClose}
+                >
+                  Close
+                </Button>
+                <Button
+                  className={`${styles["save-button"]}`}
+                  onClick={submitStudentID}
+                >
+                  Join
+                </Button>
+              </div>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              className={`${styles["close-button"]}`}
-              onClick={handleClose}
-            >
-              Close
-            </Button>
-            <Button
-              className={`${styles["save-button"]}`}
-              onClick={submitStudentID}
-            >
-              Join
-            </Button>
-          </Modal.Footer>
+        </Modal>
+
+        <Modal
+          className={styles["modal-container"]}
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          show={showAdd}
+          onHide={handleCloseAdd}
+        >
+          <Modal.Header closeButton>
+            <h4 className={styles["modal-heading"]}>Add student</h4>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={submitAddStudentID} className="form-container">
+              <Form.Group className="mb-3" controlId="formGridAddress1">
+                <Form.Label>Student ID</Form.Label>
+                <Form.Control
+                  required
+                  onChange={(event) => {
+                    setAddStudentIDInput(event.target.value);
+                  }}
+                  value={addStudentIDInput}
+                  className="form-control-container"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formGridAddress1">
+                <Form.Label>Fullname</Form.Label>
+                <Form.Control
+                  required
+                  onChange={(event) => {
+                    setAddFullnameInput(event.target.value);
+                  }}
+                  value={addFullnameInput}
+                  className="form-control-container"
+                />
+              </Form.Group>
+              <div className="d-flex w-100 mt-4 justify-content-end">
+                <Button
+                  variant="secondary"
+                  className={`${styles["close-button"]}`}
+                  onClick={handleCloseAdd}
+                >
+                  Close
+                </Button>
+                <Button
+                  type="submit"
+                  className={`${styles["save-button"]}`}
+                  onClick={submitAddStudentID}
+                >
+                  Add
+                </Button>
+              </div>
+            </Form>
+          </Modal.Body>
         </Modal>
       </Table>
     </div>

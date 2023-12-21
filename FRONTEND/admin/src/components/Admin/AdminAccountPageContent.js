@@ -145,6 +145,7 @@ const AdminPageContent = () => {
               }}
               value={searchInput}
               className={`${styles["form-control-container"]}`}
+              placeholder="Search for users...."
             />
             <SearchIcon
               className={`${styles["search-icon-customize"]} position-absolute`}
