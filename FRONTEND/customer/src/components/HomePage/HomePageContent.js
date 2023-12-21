@@ -4,7 +4,8 @@ import { ReactComponent as LeaveIcon } from "../../assests/svg/leave.svg";
 import { ReactComponent as FolderIcon } from "../../assests/svg/folder.svg";
 import { ReactComponent as SearchIcon } from "../../assests/svg/search.svg";
 import { ReactComponent as FilterIcon } from "../../assests/svg/filter.svg";
-import { ReactComponent as PlusIcon } from "../../assests/svg/plus.svg";
+import { ReactComponent as JoinIcon } from "../../assests/svg/join.svg";
+import { ReactComponent as CreateIcon } from "../../assests/svg/create.svg";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
@@ -25,24 +26,23 @@ const HomePageContent = () => {
   const [showFind, setShowFind] = useState(false);
 
   const handleCloseFind = () => {
-    setShowFind(false)
-    setInviteCodeInput('')
+    setShowFind(false);
+    setInviteCodeInput("");
   };
   const handleShowFind = () => setShowFind(true);
-
 
   const [searchInput, setSearchInput] = useState("");
 
   const [idInput, setIdInput] = useState("");
-  const [titleInput, setTitleInput] = useState('')
-  const [contentInput, setContentInput] = useState('')
-  const [topicInput, setTopicInput] = useState('')
+  const [titleInput, setTitleInput] = useState("");
+  const [contentInput, setContentInput] = useState("");
+  const [topicInput, setTopicInput] = useState("");
 
-  const [inviteCodeInput, setInviteCodeInput] = useState('')
+  const [inviteCodeInput, setInviteCodeInput] = useState("");
 
-  const [createEnable, setCreateEnable] = useState(true)
-  const [joinEnable, setJoinEnable] = useState(true)
-  const [loading, setLoading] = useState(true)
+  const [createEnable, setCreateEnable] = useState(true);
+  const [joinEnable, setJoinEnable] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const authCtx = useContext(AuthContext);
 
@@ -52,23 +52,20 @@ const HomePageContent = () => {
 
   const handleGetAllClasses = () => {
     const data = {
-      _id: localStorage.getItem('_id')
-    }
+      _id: localStorage.getItem("_id"),
+    };
 
-    axios.post(process.env.REACT_APP_API_HOST + "classes", data, { headers })
-      .then(res => {
-        if (res.data.status === 'success') {
-          authCtx.setClasses(res.data.value)
+    axios
+      .post(process.env.REACT_APP_API_HOST + "classes", data, { headers })
+      .then((res) => {
+        if (res.data.status === "success") {
+          authCtx.setClasses(res.data.value);
+        } else {
         }
-        else {
-
-        }
-        setLoading(false)
+        setLoading(false);
       })
-      .catch(err => {
-
-      })
-  }
+      .catch((err) => {});
+  };
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
@@ -76,8 +73,18 @@ const HomePageContent = () => {
     }
   }, []);
 
-  const color = ['#1C7ED6', '#0CA678', '#F08C00', '#F03E3E', '#5D5FEF',
-    '#BE4BDB', '#E64980', '#E8590C', '#74B816', '#15AABF']
+  const color = [
+    "#1C7ED6",
+    "#0CA678",
+    "#F08C00",
+    "#F03E3E",
+    "#5D5FEF",
+    "#BE4BDB",
+    "#E64980",
+    "#E8590C",
+    "#74B816",
+    "#15AABF",
+  ];
 
   const handleCreate = (event) => {
     // event.preventDefault();
@@ -87,26 +94,26 @@ const HomePageContent = () => {
       content: contentInput,
       topic: topicInput,
       inviteLink: "",
-      color: color[Math.floor(Math.random() * 10)]
-    }
+      color: color[Math.floor(Math.random() * 10)],
+    };
 
-    axios.post(process.env.REACT_APP_API_HOST + 'classes/create', dataSubmit, { headers }
-    )
+    axios
+      .post(process.env.REACT_APP_API_HOST + "classes/create", dataSubmit, {
+        headers,
+      })
       .then((res) => {
         if (res.data.status === "success") {
           toast.success("Create class successfully", styleSuccess);
-          handleGetAllClasses()
-          setShow(false)
-          setTitleInput('')
-          setContentInput('')
-          setTopicInput('')
-        }
-        else {
+          handleGetAllClasses();
+          setShow(false);
+          setTitleInput("");
+          setContentInput("");
+          setTopicInput("");
+        } else {
           toast.error(res.data.message, styleError);
         }
       });
-  }
-
+  };
 
   const styleError = {
     style: {
@@ -129,56 +136,63 @@ const HomePageContent = () => {
   };
 
   useEffect(() => {
-    if (titleInput.length > 0) setCreateEnable(false)
-    else setCreateEnable(true)
+    if (titleInput.length > 0) setCreateEnable(false);
+    else setCreateEnable(true);
   }, [titleInput]);
 
   useEffect(() => {
-    if (inviteCodeInput.length > 0) setJoinEnable(false)
-    else setJoinEnable(true)
-  }, [inviteCodeInput])
+    if (inviteCodeInput.length > 0) setJoinEnable(false);
+    else setJoinEnable(true);
+  }, [inviteCodeInput]);
 
-  const [showClassModal, setShowClassModal] = useState(false)
-  const [classInfo, setClassInfo] = useState({})
+  const [showClassModal, setShowClassModal] = useState(false);
+  const [classInfo, setClassInfo] = useState({});
 
   const handleJoinCode = () => {
     const dataSubmit = {
-      code: inviteCodeInput[0] === '#' ? inviteCodeInput.slice(1) : inviteCodeInput,
-      id: localStorage.getItem('_id')
-    }
+      code:
+        inviteCodeInput[0] === "#" ? inviteCodeInput.slice(1) : inviteCodeInput,
+      id: localStorage.getItem("_id"),
+    };
 
-    axios.post(process.env.REACT_APP_API_HOST + 'classes/invite-code', dataSubmit, { headers })
+    axios
+      .post(
+        process.env.REACT_APP_API_HOST + "classes/invite-code",
+        dataSubmit,
+        { headers }
+      )
       .then((res) => {
         if (res.data.status === "success") {
           if (res.data.already_in_class) {
-            navigate(`/myclass/${res.data.value._id}`)
+            navigate(`/myclass/${res.data.value._id}`);
+          } else {
+            setClassInfo(res.data.value);
+            handleCloseFind();
+            setShowClassModal(true);
           }
-          else {
-            setClassInfo(res.data.value)
-            handleCloseFind()
-            setShowClassModal(true)
-          }
-        }
-        else {
+        } else {
           toast.error(res.data.value, styleError);
         }
       });
-  }
+  };
 
   const joinClass = () => {
     const dataSubmit = {
       classId: classInfo._id,
-      userId: localStorage.getItem('_id')
-    }
+      userId: localStorage.getItem("_id"),
+    };
 
-    axios.post(process.env.REACT_APP_API_HOST + 'classes/join-class', dataSubmit, { headers })
+    axios
+      .post(process.env.REACT_APP_API_HOST + "classes/join-class", dataSubmit, {
+        headers,
+      })
       .then((res) => {
         if (res.data.status === "success") {
-          navigate(`/myclass/${res.data.value}`)
+          navigate(`/myclass/${res.data.value}`);
+        } else {
         }
-        else { }
       });
-  }
+  };
 
   return (
     <div className={`${styles["total-container"]} w-75`}>
@@ -188,10 +202,11 @@ const HomePageContent = () => {
         <div className="d-flex">
           <Button
             onClick={handleShowFind}
-            className={`${styles["find-classroom"]}`}
+            className={`${styles["find-classroom"]} d-flex align-items-center justify-content-center`}
             type="submit"
           >
-            Join classroom
+            <JoinIcon />
+            <div>Join class</div>
           </Button>
           <Modal
             className={styles["modal-container"]}
@@ -201,7 +216,7 @@ const HomePageContent = () => {
             onHide={handleCloseFind}
           >
             <Modal.Header closeButton>
-              <h4 className={styles["modal-heading"]}>Join classroom</h4>
+              <h4 className={styles["modal-heading"]}>Join class</h4>
             </Modal.Header>
             <Modal.Body>
               <Form className="form-container">
@@ -240,27 +255,36 @@ const HomePageContent = () => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
             show={showClassModal}
-            onHide={() => { setShowClassModal(false) }}
+            onHide={() => {
+              setShowClassModal(false);
+            }}
           >
             <Modal.Header closeButton>
-              <h4 className={styles["modal-heading"]}>Join classroom</h4>
+              <h4 className={styles["modal-heading"]}>Join class</h4>
             </Modal.Header>
             <Modal.Body>
               <div
                 style={{ backgroundColor: `${classInfo.background}` }}
                 className={`${styles["banner-container"]} rounded-4 w-100`}
               >
-                <h2 className={`${styles["classroom-name"]}`}>{classInfo.title}</h2>
-                <p className={`${styles["classroom-note"]}`}>{classInfo.content}</p>
-                <p className={`${styles["classroom-owner"]}`}>{classInfo.owner}</p>
-
+                <h2 className={`${styles["classroom-name"]}`}>
+                  {classInfo.title}
+                </h2>
+                <p className={`${styles["classroom-note"]}`}>
+                  {classInfo.content}
+                </p>
+                <p className={`${styles["classroom-owner"]}`}>
+                  {classInfo.owner}
+                </p>
               </div>
             </Modal.Body>
             <Modal.Footer>
               <Button
                 variant="secondary"
                 className={`${styles["close-button"]}`}
-                onClick={() => { setShowClassModal(false) }}
+                onClick={() => {
+                  setShowClassModal(false);
+                }}
               >
                 Cancel
               </Button>
@@ -277,10 +301,11 @@ const HomePageContent = () => {
             <>
               <Button
                 onClick={handleShow}
-                className={`${styles["find-classroom"]}`}
+                className={`${styles["find-classroom"]} d-flex align-items-center justify-content-center`}
                 type="submit"
               >
-                Create classroom
+                <CreateIcon />
+                <div>Create class</div>
               </Button>
               <Modal
                 className={styles["modal-container"]}
@@ -290,7 +315,7 @@ const HomePageContent = () => {
                 onHide={handleClose}
               >
                 <Modal.Header closeButton>
-                  <h4 className={styles["modal-heading"]}>Create classroom</h4>
+                  <h4 className={styles["modal-heading"]}>Create class</h4>
                 </Modal.Header>
                 <Modal.Body>
                   <Form className="form-container">
@@ -360,23 +385,36 @@ const HomePageContent = () => {
               }}
               value={searchInput}
               className={`${styles["form-control-container"]}`}
+              placeholder="Search for classes..."
             />
             <SearchIcon
               className={`${styles["search-icon-customize"]} position-absolute`}
             />
           </Form.Group>
-          <div
-            className={`${styles["filter-icon-customize"]} d-flex align-items-center justify-content-center`}
+
+          <Button
+            // onClick={handleShow}
+            className={`${styles["find-classroom"]} d-flex align-items-center justify-content-center`}
+            type="submit"
           >
-            <FilterIcon />
-          </div>
+            <div>Search</div>
+          </Button>
         </Form>
       </div>
-      {loading && !authCtx.classes.length > 0 && <div style={{ marginTop: '10rem' }} class="d-flex justify-content-center">
-        <div style={{ width: '3rem', height: '3rem', color: '#5D5FEF' }} class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
+      {loading && !authCtx.classes.length > 0 && (
+        <div
+          style={{ marginTop: "10rem" }}
+          class="d-flex justify-content-center"
+        >
+          <div
+            style={{ width: "3rem", height: "3rem", color: "#5D5FEF" }}
+            class="spinner-border"
+            role="status"
+          >
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
-      </div>}
+      )}
       <div className={`${styles["more-gap"]} d-flex my-2 flex-wrap`}>
         {authCtx.classes.map((data, index) => (
           <div
