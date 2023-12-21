@@ -100,7 +100,7 @@ const login = catchAsync(async (req, res, next) => {
         return next(new AppError('Enter your email and password', 401));
     }
 
-    const user = await User.findOne({ email: email, role: role }).select('+password');
+    const user = await User.findOne({ email: email, role: role, active: true }).select('+password');
 
     if (!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Email or password is incorrect', 401));
@@ -272,14 +272,14 @@ const editProfile = catchAsync(async (req, res, next) => {
 const getUser = catchAsync(async (req, res, next) => {
     const userData = await User.findById(req.user._id);
 
-    res.status(200).json({
+    res.status(200).json({  
         status: 'success',
         data: userData,
     });
 });
 
 const getAllUser = catchAsync(async (req, res, next) => {
-    const userData = await User.find();
+    const userData = await User.find({ role: { $ne: "admin" } });
 
     res.status(200).json({
         status: 'success',
@@ -385,13 +385,38 @@ const createStudent = catchAsync(async (req, res, next) => {
     const studentNoneAccount = await Student.find();
     const studentAll = [...studentAccount, ...studentNoneAccount];
 
-    for (let i = 0; i < data.length; i++) {
-        const found = studentAll.some(el => el.id === data[i].studentId);
-        if (!found){
-            await Student.create({
-                id: data[i].studentId,
-                fullname: data[i].fullname,
-            });
+    if(req.body.isFile){
+        for (let i = 0; i < data.length; i++) {
+            const found = studentAll.some(el => el.id === data[i].studentId);
+            if (!found && data[i].studentId !== '' && data[i].fullname!==''){
+                await Student.create({
+                    id: data[i].studentId,
+                    fullname: data[i].fullname,
+                });
+            }
+        }
+    }
+    else{
+        for (let i = 0; i < data.length; i++) {
+            const found = studentAll.some(el => el.id === data[i].studentId);
+            if (found){
+                res.status(200).json({
+                    status: 'fail',
+                    message: 'Student ID has been existed',
+                });
+            }
+            else if(data[i].studentId === '' && data[i].fullname===''){
+                res.status(200).json({
+                    status: 'fail',
+                    message: 'Student information is empty',
+                });
+            }
+            else{
+                await Student.create({
+                    id: data[i].studentId,
+                    fullname: data[i].fullname,
+                });
+            }
         }
     }
 
