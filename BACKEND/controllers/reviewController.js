@@ -48,7 +48,7 @@ const createReview = catchAsync(async (req, res, next) => {
       user_id: i.toString(),
       time: formattedDate,
       class: _class.title,
-      direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${review._id}`,
+      direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${review._id}/${hours}${minutes}${seconds}${day}${month}${year}`,
       fromName: req.body.user_id,
       content: ` has a grade review request for ${req.body.composition} `
     })
@@ -91,24 +91,14 @@ const getReviewInClass = catchAsync(async (req, res, next) => {
 });
 
 const sendComment = catchAsync(async (req, res, next) => {
-  const currentDate = new Date();
 
-  const hours = currentDate.getHours().toString().padStart(2, '0');
-  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
-
-  const day = currentDate.getDate().toString().padStart(2, '0');
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Lưu ý: Tháng bắt đầu từ 0
-  const year = currentDate.getFullYear();
-
-  const formattedDate = `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
 
   const user = await User.findById(req.body._id)
 
   const comment = await ReviewComment.create({
     name: user.username,
     content: req.body.content,
-    time: formattedDate,
+    time: req.body.time,
     review_id: req.body.review_id
   })
 
@@ -118,9 +108,9 @@ const sendComment = catchAsync(async (req, res, next) => {
   const review = await Review.findById(req.body.review_id)
 
   let notificationData = {
-    time: formattedDate,
+    time: req.body.time,
     class: _class.title,
-    direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${req.body.review_id}`,
+    direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${req.body.review_id}/${req.body.time_url}`,
     fromName: req.body.fromName,
     content: ` has commented on the grade review request for ${review.composition}`
   }
@@ -185,7 +175,7 @@ const markFinalDecision = catchAsync(async (req, res, next) => {
       user_id: review.user_id,
       time: formattedDate,
       class: _class.title,
-      direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${req.body.review_id}`,
+      direction: `/myclass/${req.body.class_id}/review/${req.body.grade_id}/${req.body.review_id}/${hours}${minutes}${seconds}${day}${month}${year}`,
       fromName: req.body.fromName,
       content: ` has created a final decision for your grade review request (${review.composition})`
     })

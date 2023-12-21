@@ -134,7 +134,7 @@ const editStructure = catchAsync(async (req, res, next) => {
         user_id: i.toString(),
         time: formattedDate,
         class: _class.title,
-        direction: `/myclass/${req.body.class_id}/grade/${req.body.id}`,
+        direction: `/myclass/${req.body.class_id}/grade/${req.body.id}/${hours}${minutes}${seconds}${day}${month}${year}`,
         fromName: req.body.username,
         content: ` has completed the score columns for ${req.body.publicList}`
       })

@@ -106,13 +106,14 @@ h4{
 .notification-item{
   display: flex;
   align-items: center;
-  padding: 0.4rem 0.8rem;
-  margin-bottom: 0.6rem;
+  padding: 0.7rem 0.8rem;
+  position: relative;
+  padding-right: 1.8rem;
   position: relative;
 }
 
 .notification-item:hover{
-  background-color: #EEEEFF;
+  background-color: #e8e8fe !important;
 }
 
 .notification-item img{
@@ -120,11 +121,12 @@ h4{
   margin-right: 0.6rem;
 }
 
-/* .notification-item svg{
+.notification-item svg{
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-} */
+  top: 50%;
+  right: 0.5rem;
+  transform: translate(0%,-50%);
+}
 
 .dropdown-item{
   width: 50%;

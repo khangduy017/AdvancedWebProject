@@ -74,13 +74,34 @@ export default function ReviewDetail() {
   const handleSendComment = (e) => {
     e.preventDefault()
 
+    const currentDate = new Date();
+
+    const hours = currentDate.getHours().toString().padStart(2, '0');
+    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+    const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+  
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Lưu ý: Tháng bắt đầu từ 0
+    const year = currentDate.getFullYear();
+  
+    const formattedDate = `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+
+    let commnentData = {
+      name: authCtx.userData.username,
+      content: typingCmt,
+      time: formattedDate,
+    }
+    setComments(prev=>[...prev,commnentData])
+
     const data = {
       _id: localStorage.getItem('_id'),
       content: typingCmt,
       review_id,
       grade_id,
       class_id: id,
-      fromName: localStorage.getItem('role') === 'teacher' ? authCtx.userData.username : authCtx.userData.id
+      fromName: localStorage.getItem('role') === 'teacher' ? authCtx.userData.username : authCtx.userData.id,
+      time: formattedDate,
+      time_url: `${hours}${minutes}${seconds}${day}${month}${year}`
     }
 
     setTypingCmt('')
