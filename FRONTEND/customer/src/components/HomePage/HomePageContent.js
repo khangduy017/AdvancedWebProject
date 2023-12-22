@@ -87,7 +87,7 @@ const HomePageContent = () => {
   ];
 
   const handleCreate = (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     const dataSubmit = {
       user: userData._id,
       title: titleInput,
@@ -148,7 +148,8 @@ const HomePageContent = () => {
   const [showClassModal, setShowClassModal] = useState(false);
   const [classInfo, setClassInfo] = useState({});
 
-  const handleJoinCode = () => {
+  const handleJoinCode = (event) => {
+    event.preventDefault();
     const dataSubmit = {
       code:
         inviteCodeInput[0] === "#" ? inviteCodeInput.slice(1) : inviteCodeInput,
@@ -194,6 +195,26 @@ const HomePageContent = () => {
       });
   };
 
+  const submitSearch = (event) => {
+    event.preventDefault();
+    const data = {
+      searchInput: searchInput,
+    };
+
+    axios
+      .post(process.env.REACT_APP_API_HOST + "classes/search-class-customer", data, {
+        headers,
+      })
+      .then((res) => {
+        if (res.data.status === "success") {
+          authCtx.setClasses(res.data.value);
+          console.log(res.data.value);
+        } else {
+        }
+      })
+      .catch((err) => {});
+  };
+
   return (
     <div className={`${styles["total-container"]} w-75`}>
       <div
@@ -219,7 +240,7 @@ const HomePageContent = () => {
               <h4 className={styles["modal-heading"]}>Join class</h4>
             </Modal.Header>
             <Modal.Body>
-              <Form className="form-container">
+              <Form className="form-container" onSubmit={handleJoinCode}>
                 <Form.Group className="mb-3" controlId="formGridAddress1">
                   <Form.Label>Invite code</Form.Label>
                   <Form.Control
@@ -230,24 +251,24 @@ const HomePageContent = () => {
                     className="form-control-container"
                   />
                 </Form.Group>
+                <div className="mt-4 d-flex justify-content-end align-items-center">
+                  <Button
+                    variant="secondary"
+                    className={`${styles["close-button"]}`}
+                    onClick={handleCloseFind}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    className={`${styles["save-button"]}`}
+                    onClick={handleJoinCode}
+                    disabled={joinEnable}
+                  >
+                    Find
+                  </Button>
+                </div>
               </Form>
             </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                className={`${styles["close-button"]}`}
-                onClick={handleCloseFind}
-              >
-                Close
-              </Button>
-              <Button
-                className={`${styles["save-button"]}`}
-                onClick={handleJoinCode}
-                disabled={joinEnable}
-              >
-                Find
-              </Button>
-            </Modal.Footer>
           </Modal>
           {/* class modal */}
           <Modal
@@ -318,7 +339,7 @@ const HomePageContent = () => {
                   <h4 className={styles["modal-heading"]}>Create class</h4>
                 </Modal.Header>
                 <Modal.Body>
-                  <Form className="form-container">
+                  <Form className="form-container" onSubmit={handleCreate}>
                     <Form.Group className="mb-3" controlId="formGridAddress1">
                       <Form.Label>Title</Form.Label>
                       <Form.Control
@@ -349,24 +370,25 @@ const HomePageContent = () => {
                         className="form-control-container"
                       />
                     </Form.Group>
+                    <div className="mt-4 d-flex justify-content-end align-items-center">
+                      <Button
+                        variant="secondary"
+                        className={`${styles["close-button"]}`}
+                        onClick={handleClose}
+                      >
+                        Close
+                      </Button>
+                      <Button
+                        className={`${styles["save-button"]}`}
+                        onClick={handleCreate}
+                        disabled={createEnable}
+                        type="submit"
+                      >
+                        Create
+                      </Button>
+                    </div>
                   </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    variant="secondary"
-                    className={`${styles["close-button"]}`}
-                    onClick={handleClose}
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    className={`${styles["save-button"]}`}
-                    onClick={handleCreate}
-                    disabled={createEnable}
-                  >
-                    Create
-                  </Button>
-                </Modal.Footer>
               </Modal>
             </>
           )}
@@ -374,6 +396,7 @@ const HomePageContent = () => {
 
         <Form
           className={`${styles["form-container"]} d-flex align-items-center justify-content-between`}
+          submit={submitSearch}
         >
           <Form.Group
             className="position-relative"
@@ -393,7 +416,7 @@ const HomePageContent = () => {
           </Form.Group>
 
           <Button
-            // onClick={handleShow}
+            onClick={submitSearch}
             className={`${styles["find-classroom"]} d-flex align-items-center justify-content-center`}
             type="submit"
           >
@@ -440,17 +463,24 @@ const HomePageContent = () => {
             </div>
             <div className={`${styles["class-mid-container"]} rounded-top-3`}>
               <h5 className={`${styles["class-assignment-title"]} px-3 pt-3`}>
-                Assignment
+                Recent topic posted
               </h5>
-              <div className={`${styles["class-instructor"]} px-3 pb-1`}>
-                Infinite Scroll
-              </div>
-              <div className={`${styles["class-instructor"]} px-3 pb-1`}>
-                Midterm Project Authentication
-              </div>
-              <div className={`${styles["class-instructor"]} px-3 pb-1`}>
-                Final Project Classroom
-              </div>
+              {data.recentTitleTopic.map((el, index) => (
+                <div
+                  className={`${styles["class-instructor"]} px-3 pb-1`}
+                  key={index}
+                >
+                  {el.title}
+                </div>
+              ))}
+
+              {data.recentTitleTopic.length === 0 && (
+                <div
+                  className={`${styles["class-instructor"]} px-3 pb-1`}
+                >
+                  Nothing
+                </div>
+              )}
             </div>
             <div
               className={`${styles["class-footer-container"]} d-flex justify-content-end align-items-center px-4`}

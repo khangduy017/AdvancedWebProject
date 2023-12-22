@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 import Class from '../models/classModel.js';
 import User from '../models/userModel.js';
-import Grade from '../models/GradeModel.js'
+import Grade from '../models/GradeModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import sendMail from '../utils/mailer.js';
+import Post from '../models/postModel.js';
 
 const getAllClass = catchAsync(async (req, res, next) => {
     const _class = await Class.aggregate([
@@ -36,6 +37,18 @@ const getAllClass = catchAsync(async (req, res, next) => {
             },
         },
     ]);
+
+    for (let i = 0; i < _class.length; i++) {
+        let getRecentTitlePost = await Post.find({ classId: _class[i]._id.toString() });
+        if (getRecentTitlePost.length !== 0) {
+            if (getRecentTitlePost.length > 4)
+                getRecentTitlePost = getRecentTitlePost.slice(getRecentTitlePost.length - 4);
+            _class[i].recentTitleTopic = [...getRecentTitlePost];
+        } else {
+            _class[i].recentTitleTopic = [];
+        }
+    }
+ 
     res.status(200).json({
         status: 'success',
         value: _class,
@@ -111,23 +124,23 @@ const getClassByCode = catchAsync(async (req, res, next) => {
         });
     }
 
-    const user = await User.findById(req.body.id)
+    const user = await User.findById(req.body.id);
 
     res.status(200).json({
         status: 'success',
         value: _class,
-        already_in_class: user.class.includes(_class._id.toString())
+        already_in_class: user.class.includes(_class._id.toString()),
     });
 });
 
 const getClassById = catchAsync(async (req, res, next) => {
     const _class = await Class.findById(req.body.id);
-    const user = await User.findById(req.body.user_id)
+    const user = await User.findById(req.body.user_id);
 
     res.status(200).json({
         status: 'success',
         value: _class,
-        already_in_class: user.class.includes(_class._id.toString())
+        already_in_class: user.class.includes(_class._id.toString()),
     });
 });
 
@@ -199,12 +212,34 @@ const getClassMember = catchAsync(async (req, res, next) => {
 });
 
 const getClassBySearch = catchAsync(async (req, res) => {
-    const getClass = await Class.find({$text: {$search: req.body.searchInput}});
+    const getClass = await Class.find({ $text: { $search: req.body.searchInput } });
     res.status(200).json({
-      status: 'success',
-      value: getClass
-    })
-  })
+        status: 'success',
+        value: getClass,
+    });
+});
+
+const getClassBySearchCustomer = catchAsync(async (req, res) => {
+    const _class = await Class.find({ $text: { $search: req.body.searchInput } });
+    let getClass = [];
+
+    for (let i = 0; i < _class.length; i++) {
+        getClass.push(_class[i].toObject())
+        let getRecentTitlePost = await Post.find({ classId: getClass[i]._id.toString() });
+        if (getRecentTitlePost.length !== 0) {
+            if (getRecentTitlePost.length > 4)
+                getRecentTitlePost = getRecentTitlePost.slice(getRecentTitlePost.length - 4);
+                getClass[i].recentTitleTopic = [...getRecentTitlePost];
+        } else {
+            getClass[i].recentTitleTopic = [];
+        }
+    }
+
+    res.status(200).json({
+        status: 'success',
+        value: getClass,
+    });
+});
 
 export default {
     getAllClassAllAccount,
@@ -218,5 +253,6 @@ export default {
     getClassByEmail,
     getClassMember,
     getClassById,
-    getClassBySearch
+    getClassBySearch,
+    getClassBySearchCustomer
 };

@@ -77,7 +77,7 @@ const AdminPageContent = () => {
       })
       .then((res) => {
         if (res.data.status === "success") {
-          authCtx.setListUser(res.data.value);
+          authCtx.setListUser(res.data.value) ;
           setListUser(res.data.value);
         } else {
         }
