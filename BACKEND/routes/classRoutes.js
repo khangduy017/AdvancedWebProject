@@ -14,6 +14,7 @@ router.get('/all-class-all-account', authController.protect, classController.get
 router.post('/update-status', classController.updateClassStatus);
 router.post('/', authController.protect, classController.getAllClass);
 router.post('/search-class', classController.getClassBySearch);
+router.post('/search-class-customer', classController.getClassBySearchCustomer);
 router.post('/:id', classController.getClassDetail);
 
 export default router;
