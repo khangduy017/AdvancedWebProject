@@ -64,7 +64,7 @@ const HomePageContent = () => {
         }
         setLoading(false);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   useEffect(() => {
@@ -212,7 +212,7 @@ const HomePageContent = () => {
         } else {
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   return (
@@ -235,7 +235,7 @@ const HomePageContent = () => {
             centered
             show={showFind}
             onHide={handleCloseFind}
-            
+
           >
             <Modal.Header closeButton>
               <h4 className={styles["modal-heading"]}>Join class</h4>
@@ -270,23 +270,7 @@ const HomePageContent = () => {
                 </div>
               </Form>
             </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                className={`${styles["close-button"]}`}
-                onClick={handleCloseFind}
-              >
-                Close
-              </Button>
-              <Button
-                className={`${styles["save-button"]}`}
-                onClick={handleJoinCode}
-                disabled={joinEnable}
-                type="submit"
-              >
-                Find
-              </Button>
-            </Modal.Footer>
+            
           </Modal>
           {/* class modal */}
           <Modal
@@ -359,7 +343,7 @@ const HomePageContent = () => {
                 </Modal.Header>
                 <Modal.Body>
                   <Form onSubmit={handleCreate} className="form-container">
-                    <Form.Group  className="mb-3" controlId="formGridAddress1">
+                    <Form.Group className="mb-3" controlId="formGridAddress1">
                       <Form.Label>Title</Form.Label>
                       <Form.Control
                         onChange={(event) => {
@@ -408,23 +392,6 @@ const HomePageContent = () => {
                     </div>
                   </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    variant="secondary"
-                    className={`${styles["close-button"]}`}
-                    onClick={handleClose}
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    className={`${styles["save-button"]}`}
-                    onClick={handleCreate}
-                    disabled={createEnable}
-                    type="submit"
-                  >
-                    Create
-                  </Button>
-                </Modal.Footer>
               </Modal>
             </>
           )}
@@ -438,6 +405,9 @@ const HomePageContent = () => {
             className="position-relative"
             controlId="formGridAddress1"
           >
+            <SearchIcon
+              className={`${styles["search-icon-customize"]} position-absolute`}
+            />
             <Form.Control
               onChange={(event) => {
                 setSearchInput(event.target.value);
@@ -446,9 +416,7 @@ const HomePageContent = () => {
               className={`${styles["form-control-container"]}`}
               placeholder="Search for classes..."
             />
-            <SearchIcon
-              className={`${styles["search-icon-customize"]} position-absolute`}
-            />
+
           </Form.Group>
 
           <Button

@@ -82,11 +82,12 @@
   margin: 0;
   border: 1px solid #6d6ff4;
   height: 40px;
+  padding-left: 2.3rem !important;
 }
 
 .search-icon-customize {
-  top: 0.65rem;
-  right: 0.8rem;
+  top: 0.75rem;
+  left: 0.7rem;
 }
 
 .search-container {
