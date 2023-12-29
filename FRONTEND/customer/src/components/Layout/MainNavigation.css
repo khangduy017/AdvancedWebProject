@@ -126,6 +126,12 @@ h4 {
   background-color: #e8e8fe !important;
 }
 
+.notification-up {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .notification-item img {
   width: 1.6rem;
   margin-right: 0.6rem;

@@ -35,18 +35,20 @@ const GradeComponent = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (!loading) {
-      setLoading(true)
+    if (localStorage.getItem('role') === 'teacher') {
+      if (!loading) {
+        setLoading(true)
 
-      axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: grade_id }, { headers })
-        .then((res) => {
-          if (res.data.status === "success") {
-            setGradeValue(res.data.value)
-            setLoading(false)
-          }
-          else {
-          }
-        });
+        axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: grade_id }, { headers })
+          .then((res) => {
+            if (res.data.status === "success") {
+              setGradeValue(res.data.value)
+              setLoading(false)
+            }
+            else {
+            }
+          });
+      }
     }
   }, [location.pathname]);
 
@@ -88,7 +90,9 @@ const GradeComponent = () => {
   const [gradeStructureClone, setGradeStructureClone] = useState([])
 
   useEffect(() => {
-    if (gradeValue.structure) setGradeStructure(gradeValue.structure)
+    if (gradeValue.structure) {
+      setGradeStructure(gradeValue.structure)
+    }
   }, [gradeValue])
 
   const dragEnded = (param) => {
@@ -561,29 +565,40 @@ const GradeComponent = () => {
   // Part 2 student
   const [studentGrade, setStudentGrade] = useState({})
   const [studentGradeStructure, setStudentGradeStructure] = useState([])
-  useEffect(() => {
-    if (localStorage.getItem('role') === 'student') {
-      const data = {
-        id: localStorage.getItem('_id'),
-        grade_id: grade_id
-      }
 
-      axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade-by-student-id', data, { headers })
-        .then((res) => {
-          if (res.data.status === "success") {
-            setStudentGrade(res.data.grade)
-            setStudentGradeStructure(res.data.gradeStructure)
-            console.log(res.data)
-            setLoading(false)
-          }
-          else {
-          }
-        });
+  const loadStudentData = () => {
+    const data = {
+      id: localStorage.getItem('_id'),
+      grade_id: grade_id
     }
+
+    axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade-by-student-id', data, { headers })
+      .then((res) => {
+        if (res.data.status === "success") {
+          setStudentGrade(res.data.grade)
+          setStudentGradeStructure(res.data.gradeStructure)
+          setLoading(false)
+        }
+        else {
+        }
+
+      });
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('role') === 'student' && !loading) {
+      setLoading(true)
+      loadStudentData()
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    loadStudentData()
   }, [])
 
+
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !addEnable) {
       handleAddGradeItem();
     }
   };
@@ -601,58 +616,58 @@ const GradeComponent = () => {
         <div className={`${styles["grade-container"]}`}>
           {/* add new structure modal */}
           <Modal
-  className={styles["modal-container"]}
-  aria-labelledby="contained-modal-title-vcenter"
-  centered
-  show={show}
-  onHide={handleClose}
->
-  <Modal.Header closeButton>
-    <h4 className={styles["modal-heading"]}>Add Grade</h4>
-  </Modal.Header>
-  <Modal.Body>
-    <div onKeyDown={(e) => handleKeyDown(e)}>
-      <Form className="form-container">
-        <Form.Group className="mb-3" controlId="formGridAddress1">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            onChange={(event) => {
-              setNameGrade(event.target.value);
-            }}
-            value={nameGrade}
-            className="form-control-container"
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formGridAddress1">
-          <Form.Label>Scale (%)</Form.Label>
-          <Form.Control
-            onChange={(event) => {
-              setScaleGrade(event.target.value);
-            }}
-            value={scaleGrade}
-            className="form-control-container"
-          />
-        </Form.Group>
-      </Form>
-    </div>
-  </Modal.Body>
-  <Modal.Footer>
-    <Button
-      variant="secondary"
-      className={`${styles["close-button"]}`}
-      onClick={handleClose}
-    >
-      Close
-    </Button>
-    <Button
-      className={`${styles["save-button"]}`}
-      onClick={handleAddGradeItem}
-      disabled={addEnable}
-    >
-      Add
-    </Button>
-  </Modal.Footer>
-</Modal>;
+            className={styles["modal-container"]}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            show={show}
+            onHide={handleClose}
+          >
+            <Modal.Header closeButton>
+              <h4 className={styles["modal-heading"]}>Add Grade</h4>
+            </Modal.Header>
+            <Modal.Body>
+              <div onKeyDown={(e) => handleKeyDown(e)}>
+                <Form className="form-container">
+                  <Form.Group className="mb-3" controlId="formGridAddress1">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      onChange={(event) => {
+                        setNameGrade(event.target.value);
+                      }}
+                      value={nameGrade}
+                      className="form-control-container"
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formGridAddress1">
+                    <Form.Label>Scale (%)</Form.Label>
+                    <Form.Control
+                      onChange={(event) => {
+                        setScaleGrade(event.target.value);
+                      }}
+                      value={scaleGrade}
+                      className="form-control-container"
+                    />
+                  </Form.Group>
+                </Form>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                className={`${styles["close-button"]}`}
+                onClick={handleClose}
+              >
+                Close
+              </Button>
+              <Button
+                className={`${styles["save-button"]}`}
+                onClick={handleAddGradeItem}
+                disabled={addEnable}
+              >
+                Add
+              </Button>
+            </Modal.Footer>
+          </Modal>;
 
           {/* download file modal */}
           <Modal

@@ -91,7 +91,7 @@ const Sidebar = () => {
             {authCtx.classes.map((data, index) => (
               <NavLink
                 key={index}
-                to={`/myclass/${data._id}`}
+                to={`/myclass/${data._id}/`}
                 style={({ isActive }) => ({
                   color: isActive ? "#5D5FEF" : "#A5A6F6",
                   fontWeight: isActive ? "700" : "",

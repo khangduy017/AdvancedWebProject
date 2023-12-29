@@ -27,7 +27,7 @@ const JoinClass = () => {
         if (res.data.status === "success") {
           setClassInfo(res.data.value)
           setLoading(false)
-          if(res.data.already_in_class) navigate(`/myclass/${res.data.value._id}`, { replace: true })
+          if (res.data.already_in_class) navigate(`/myclass/${res.data.value._id}/`, { replace: true })
         }
         else {
         }
@@ -43,7 +43,7 @@ const JoinClass = () => {
     axios.post(process.env.REACT_APP_API_HOST + 'classes/join-class', dataSubmit, { headers })
       .then((res) => {
         if (res.data.status === "success") {
-          navigate(`/myclass/${res.data.value}`)
+          navigate(`/myclass/${res.data.value}/`)
         }
         else { }
       });
@@ -67,24 +67,24 @@ const JoinClass = () => {
             <p className={`${styles["classroom-owner"]}`}>{classInfor.owner}</p>
 
           </div>
-            <div className="mt-4">
-              <p>Do you want to join the class?</p>
-              <div className="d-flex align-items-center justify-content-center">
-                <Button
-                  variant="secondary"
-                  className={`${styles["close-button"]}`}
-                  onClick={() => {navigate('/')}}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className={`${styles["save-button"]}`}
-                  onClick={joinClass}
-                >
-                  Join
-                </Button>
-              </div>
-            </div> 
+          <div className="mt-4">
+            <p>Do you want to join the class?</p>
+            <div className="d-flex align-items-center justify-content-center">
+              <Button
+                variant="secondary"
+                className={`${styles["close-button"]}`}
+                onClick={() => { navigate('/') }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className={`${styles["save-button"]}`}
+                onClick={joinClass}
+              >
+                Join
+              </Button>
+            </div>
+          </div>
         </>}
     </div>
   );

@@ -189,7 +189,7 @@ const HomePageContent = () => {
       })
       .then((res) => {
         if (res.data.status === "success") {
-          navigate(`/myclass/${res.data.value}`);
+          navigate(`/myclass/${res.data.value}/`);
         } else {
         }
       });
@@ -270,7 +270,7 @@ const HomePageContent = () => {
                 </div>
               </Form>
             </Modal.Body>
-            
+
           </Modal>
           {/* class modal */}
           <Modal
