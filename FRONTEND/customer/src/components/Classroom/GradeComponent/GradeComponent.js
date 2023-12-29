@@ -20,14 +20,14 @@ import { Outlet, useLocation, useParams, NavLink } from "react-router-dom";
 
 const GradeComponent = () => {
   const { grade_id } = useParams();
-  const {id} = useParams()
+  const { id } = useParams()
 
-  
-  
+
+
   // GENERAL
   const [loading, setLoading] = useState(true)
   const [gradeValue, setGradeValue] = useState([])
-  
+
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
   const headers = { Authorization: `Bearer ${token}` };
@@ -35,9 +35,9 @@ const GradeComponent = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if(!loading){
+    if (!loading) {
       setLoading(true)
-  
+
       axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: grade_id }, { headers })
         .then((res) => {
           if (res.data.status === "success") {
@@ -49,7 +49,7 @@ const GradeComponent = () => {
         });
     }
   }, [location.pathname]);
-  
+
   useEffect(() => {
     if (localStorage.getItem('role') === 'teacher') {
       axios.post(process.env.REACT_APP_API_HOST + 'grade/get-grade', { id: grade_id }, { headers })
@@ -222,7 +222,7 @@ const GradeComponent = () => {
       id: grade_id,
       value: gradeStructureClone,
       publicList: publicEdit,
-      class_id:id,
+      class_id: id,
       username: authCtx.userData.username
     }
 
@@ -582,6 +582,12 @@ const GradeComponent = () => {
     }
   }, [])
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleAddGradeItem();
+    }
+  };
+
 
   return (
     localStorage.getItem("role") === "teacher" ? <>{
@@ -595,56 +601,59 @@ const GradeComponent = () => {
         <div className={`${styles["grade-container"]}`}>
           {/* add new structure modal */}
           <Modal
-            className={styles["modal-container"]}
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show}
-            onHide={handleClose}
-          >
-            <Modal.Header closeButton>
-              <h4 className={styles["modal-heading"]}>Add Grade</h4>
-            </Modal.Header>
-            <Modal.Body>
-              <Form className="form-container">
-                <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    onChange={(event) => {
-                      setNameGrade(event.target.value);
-                    }}
-                    value={nameGrade}
-                    className="form-control-container"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>Scale (%)</Form.Label>
-                  <Form.Control
-                    onChange={(event) => {
-                      setScaleGrade(event.target.value);
-                    }}
-                    value={scaleGrade}
-                    className="form-control-container"
-                  />
-                </Form.Group>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                className={`${styles["close-button"]}`}
-                onClick={handleClose}
-              >
-                Close
-              </Button>
-              <Button
-                className={`${styles["save-button"]}`}
-                onClick={handleAddGradeItem}
-                disabled={addEnable}
-              >
-                Add
-              </Button>
-            </Modal.Footer>
-          </Modal>
+  className={styles["modal-container"]}
+  aria-labelledby="contained-modal-title-vcenter"
+  centered
+  show={show}
+  onHide={handleClose}
+>
+  <Modal.Header closeButton>
+    <h4 className={styles["modal-heading"]}>Add Grade</h4>
+  </Modal.Header>
+  <Modal.Body>
+    <div onKeyDown={(e) => handleKeyDown(e)}>
+      <Form className="form-container">
+        <Form.Group className="mb-3" controlId="formGridAddress1">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            onChange={(event) => {
+              setNameGrade(event.target.value);
+            }}
+            value={nameGrade}
+            className="form-control-container"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formGridAddress1">
+          <Form.Label>Scale (%)</Form.Label>
+          <Form.Control
+            onChange={(event) => {
+              setScaleGrade(event.target.value);
+            }}
+            value={scaleGrade}
+            className="form-control-container"
+          />
+        </Form.Group>
+      </Form>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button
+      variant="secondary"
+      className={`${styles["close-button"]}`}
+      onClick={handleClose}
+    >
+      Close
+    </Button>
+    <Button
+      className={`${styles["save-button"]}`}
+      onClick={handleAddGradeItem}
+      disabled={addEnable}
+    >
+      Add
+    </Button>
+  </Modal.Footer>
+</Modal>;
+
           {/* download file modal */}
           <Modal
             className={styles["modal-container"]}

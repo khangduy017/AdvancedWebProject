@@ -4,6 +4,8 @@ import User from '../models/userModel.js';
 import Grade from '../models/GradeModel.js'
 import catchAsync from '../utils/catchAsync.js';
 import sendMail from '../utils/mailer.js';
+import Validator from '../utils/validator.js';
+import REGEX from '../constants/regex.js';
 
 const getAllClass = catchAsync(async (req, res, next) => {
     const _class = await Class.aggregate([
@@ -142,6 +144,13 @@ const updateClassStatus = catchAsync(async (req, res, next) => {
 });
 
 const getClassByEmail = catchAsync(async (req, res, next) => {
+    if (!Validator.isMatching(req.body.email, REGEX.EMAIL)) {
+        return res.status(200).json({
+            status: 'failed',
+            value: 'Invalid email address'
+        });
+    }
+
     await sendMail(req.body.email, 'Invite link', 'Link: ' + req.body.link);
 
     res.status(200).json({
@@ -199,12 +208,12 @@ const getClassMember = catchAsync(async (req, res, next) => {
 });
 
 const getClassBySearch = catchAsync(async (req, res) => {
-    const getClass = await Class.find({$text: {$search: req.body.searchInput}});
+    const getClass = await Class.find({ $text: { $search: req.body.searchInput } });
     res.status(200).json({
-      status: 'success',
-      value: getClass
+        status: 'success',
+        value: getClass
     })
-  })
+})
 
 export default {
     getAllClassAllAccount,

@@ -80,7 +80,7 @@ const HomePageContent = () => {
     '#BE4BDB', '#E64980', '#E8590C', '#74B816', '#15AABF']
 
   const handleCreate = (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     const dataSubmit = {
       user: userData._id,
       title: titleInput,
@@ -141,7 +141,8 @@ const HomePageContent = () => {
   const [showClassModal, setShowClassModal] = useState(false)
   const [classInfo, setClassInfo] = useState({})
 
-  const handleJoinCode = () => {
+  const handleJoinCode = (e) => {
+    e.preventDefault()
     const dataSubmit = {
       code: inviteCodeInput[0] === '#' ? inviteCodeInput.slice(1) : inviteCodeInput,
       id: localStorage.getItem('_id')
@@ -199,12 +200,13 @@ const HomePageContent = () => {
             centered
             show={showFind}
             onHide={handleCloseFind}
+            
           >
             <Modal.Header closeButton>
               <h4 className={styles["modal-heading"]}>Join classroom</h4>
             </Modal.Header>
             <Modal.Body>
-              <Form className="form-container">
+              <Form onSubmit={handleJoinCode} className="form-container">
                 <Form.Group className="mb-3" controlId="formGridAddress1">
                   <Form.Label>Invite code</Form.Label>
                   <Form.Control
@@ -229,6 +231,7 @@ const HomePageContent = () => {
                 className={`${styles["save-button"]}`}
                 onClick={handleJoinCode}
                 disabled={joinEnable}
+                type="submit"
               >
                 Find
               </Button>
@@ -267,6 +270,7 @@ const HomePageContent = () => {
               <Button
                 className={`${styles["save-button"]}`}
                 onClick={joinClass}
+                type="submit"
               >
                 Join
               </Button>
@@ -293,8 +297,8 @@ const HomePageContent = () => {
                   <h4 className={styles["modal-heading"]}>Create classroom</h4>
                 </Modal.Header>
                 <Modal.Body>
-                  <Form className="form-container">
-                    <Form.Group className="mb-3" controlId="formGridAddress1">
+                  <Form onSubmit={handleCreate} className="form-container">
+                    <Form.Group  className="mb-3" controlId="formGridAddress1">
                       <Form.Label>Title</Form.Label>
                       <Form.Control
                         onChange={(event) => {
@@ -338,6 +342,7 @@ const HomePageContent = () => {
                     className={`${styles["save-button"]}`}
                     onClick={handleCreate}
                     disabled={createEnable}
+                    type="submit"
                   >
                     Create
                   </Button>
@@ -402,7 +407,7 @@ const HomePageContent = () => {
             </div>
             <div className={`${styles["class-mid-container"]} rounded-top-3`}>
               <h5 className={`${styles["class-assignment-title"]} px-3 pt-3`}>
-                Assignment
+                Posts
               </h5>
               <div className={`${styles["class-instructor"]} px-3 pb-1`}>
                 Infinite Scroll

@@ -68,11 +68,14 @@ const MainNavigation = () => {
     }
   }, [isOpen])
 
+  const [newNotify, setNewNotify] = useState(false)
+
   // socket 
   const socket = io(process.env.REACT_APP_ipAddress)
   useEffect(() => {
     socket.on("notification", (data) => {
       setNotifications(prev => [data, ...prev])
+      setNewNotify(true)
     });
     socket.emit("register", localStorage.getItem('_id'))
   }, [])
@@ -82,6 +85,7 @@ const MainNavigation = () => {
     if (!value.seen) {
       socket.emit("seen", value._id)
     }
+    setNewNotify(false)
     navigate(value.direction);
     setIsOpen(false);
   };
@@ -121,6 +125,9 @@ const MainNavigation = () => {
           <svg xmlns="http://www.w3.org/2000/svg" height="22" width="20" viewBox="0 0 448 512">
             <path fill="#5d5fef" d="M224 0c-17.7 0-32 14.3-32 32V51.2C119 66 64 130.6 64 208v18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416H416c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8V208c0-77.4-55-142-128-156.8V32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z" />
           </svg>
+          {newNotify && <svg xmlns="http://www.w3.org/2000/svg" height="11" width="11" viewBox="0 0 512 512">
+            <path fill="#F03E3E" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+          </svg>}
         </Dropdown.Toggle>
         <Dropdown.Menu
           className="drop-down-menu"
@@ -149,7 +156,7 @@ const MainNavigation = () => {
                 </div>
               </div>
             ) :
-              <p className="p-2" style={{ fontStyle: 'italic', color: '#2C2C66', textAlign: 'center' }}>
+              <p className=" m-0 p-0 p-2" style={{ fontStyle: 'italic', color: '#2C2C66', textAlign: 'center' }}>
                 There have been no notifications yet
               </p>
           }

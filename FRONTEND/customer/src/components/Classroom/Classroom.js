@@ -62,7 +62,8 @@ const Classroom = () => {
   }
 
   const [emailInput, setEmailInput] = useState("");
-  const handleSubmitInvite = () => {
+  const handleSubmitInvite = (e) => {
+    e.preventDefault()
     const dataSubmit = {
       email: emailInput,
       link: linkInvite,
@@ -79,8 +80,7 @@ const Classroom = () => {
           handleClose();
           toast.success('Invite successfully!', styleSuccess);
         } else {
-          toast.error('Invite failed!', styleError);
-
+          toast.error(res.data.value, styleError);
         }
       });
   };
@@ -161,7 +161,7 @@ const Classroom = () => {
             Copy
           </Button>
 
-          <Form className="form-container">
+          <Form onSubmit={handleSubmitInvite} className="form-container">
             <Form.Group className="mb-3" controlId="formGridAddress1">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -186,6 +186,7 @@ const Classroom = () => {
             className={`${styles["save-button"]}`}
             onClick={handleSubmitInvite}
             disabled={inviteEnable}
+            type="submit"
           >
             Invite
           </Button>
