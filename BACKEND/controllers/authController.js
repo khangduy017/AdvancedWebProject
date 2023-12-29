@@ -387,7 +387,7 @@ const createStudent = catchAsync(async (req, res, next) => {
 
     if(req.body.isFile){
         for (let i = 0; i < data.length; i++) {
-            const found = studentAll.some(el => el.id === data[i].studentId);
+            const found = studentAll.some(el => el.id!=='' && el.id === data[i].studentId);
             if (!found && data[i].studentId !== '' && data[i].fullname!==''){
                 await Student.create({
                     id: data[i].studentId,
@@ -398,17 +398,17 @@ const createStudent = catchAsync(async (req, res, next) => {
     }
     else{
         for (let i = 0; i < data.length; i++) {
-            const found = studentAll.some(el => el.id === data[i].studentId);
-            if (found){
-                res.status(200).json({
-                    status: 'fail',
-                    message: 'Student ID has been existed',
-                });
-            }
-            else if(data[i].studentId === '' && data[i].fullname===''){
+            const found = studentAll.some(el => el.id!=='' && el.id === data[i].studentId);
+            if(data[i].studentId === '' && data[i].fullname===''){
                 res.status(200).json({
                     status: 'fail',
                     message: 'Student information is empty',
+                });
+            }
+            else if (found){
+                res.status(200).json({
+                    status: 'fail',
+                    message: 'Student ID has been existed',
                 });
             }
             else{

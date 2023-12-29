@@ -428,7 +428,7 @@ const AdminPageContent = () => {
                   className={`${styles["save-button"]}`}
                   onClick={submitStudentID}
                 >
-                  Join
+                  Assign
                 </Button>
               </div>
             </Form>
