@@ -308,7 +308,7 @@ const getUserById = catchAsync(async (req, res, next) => {
 const updateUserStatus = catchAsync(async (req, res, next) => {
     const getUser = await User.findOne({ _id: req.body.id });
     await User.updateOne({ _id: req.body.id }, { active: !getUser.active });
-    const _user = await User.find();
+    const _user = await User.find({ role: { $ne: "admin" } });
     res.status(200).json({
         status: 'success',
         value: _user,
