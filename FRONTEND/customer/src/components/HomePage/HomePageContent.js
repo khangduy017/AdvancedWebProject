@@ -197,8 +197,10 @@ const HomePageContent = () => {
 
   const submitSearch = (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = {
       searchInput: searchInput,
+      _id: localStorage.getItem("_id"),
     };
 
     axios
@@ -208,9 +210,9 @@ const HomePageContent = () => {
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setClasses(res.data.value);
-          console.log(res.data.value);
         } else {
         }
+        setLoading(false);
       })
       .catch((err) => { });
   };
@@ -431,15 +433,22 @@ const HomePageContent = () => {
       {loading && !authCtx.classes.length > 0 && (
         <div
           style={{ marginTop: "10rem" }}
-          class="d-flex justify-content-center"
+          className="d-flex justify-content-center"
         >
           <div
             style={{ width: "3rem", height: "3rem", color: "#5D5FEF" }}
-            class="spinner-border"
+            className="spinner-border"
             role="status"
           >
-            <span class="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Loading...</span>
           </div>
+        </div>
+      )}
+      {authCtx.classes.length === 0 && (
+        <div
+          class="d-flex justify-content-start"
+        >
+          <h3>No results</h3>
         </div>
       )}
       <div className={`${styles["more-gap"]} d-flex my-2 flex-wrap`}>

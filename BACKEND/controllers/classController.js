@@ -50,7 +50,7 @@ const getAllClass = catchAsync(async (req, res, next) => {
             _class[i].recentTitleTopic = [];
         }
     }
- 
+
     res.status(200).json({
         status: 'success',
         value: _class,
@@ -160,7 +160,7 @@ const getClassByEmail = catchAsync(async (req, res, next) => {
     if (!Validator.isMatching(req.body.email, REGEX.EMAIL)) {
         return res.status(200).json({
             status: 'failed',
-            value: 'Invalid email address'
+            value: 'Invalid email address',
         });
     }
 
@@ -229,24 +229,77 @@ const getClassBySearch = catchAsync(async (req, res) => {
 });
 
 const getClassBySearchCustomer = catchAsync(async (req, res) => {
-    const _class = await Class.find({ $text: { $search: req.body.searchInput } });
-    let getClass = [];
+    // const _class = await Class.find({ $text: { $search: req.body.searchInput } });
+    // let getClass = [];
 
+    // for (let i = 0; i < _class.length; i++) {
+    //     getClass.push(_class[i].toObject())
+    //     let getRecentTitlePost = await Post.find({ classId: getClass[i]._id.toString() });
+    //     if (getRecentTitlePost.length !== 0) {
+    //         if (getRecentTitlePost.length > 4)
+    //             getRecentTitlePost = getRecentTitlePost.slice(getRecentTitlePost.length - 4);
+    //             getClass[i].recentTitleTopic = [...getRecentTitlePost];
+    //     } else {
+    //         getClass[i].recentTitleTopic = [];
+    //     }
+    // }
+
+    // res.status(200).json({
+    //     status: 'success',
+    //     value: getClass,
+    // });
+
+    const getClass = await Class.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'student',
+                foreignField: '_id',
+                as: 'student',
+            },
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'teacher',
+                foreignField: '_id',
+                as: 'teacher',
+            },
+        },
+        {
+            $match: {
+                $or: [
+                    {
+                        'student._id': new mongoose.Types.ObjectId(req.body._id),
+                    },
+                    {
+                        'teacher._id': new mongoose.Types.ObjectId(req.body._id),
+                    },
+                ],
+            },
+        },
+    ]);
+
+    let _class = [];
+    if (req.body.searchInput === '') {
+        _class = [...getClass]
+    } else {
+        _class = getClass.filter((el) => el.title.toLowerCase() === req.body.searchInput.toLowerCase());
+    }
     for (let i = 0; i < _class.length; i++) {
-        getClass.push(_class[i].toObject())
-        let getRecentTitlePost = await Post.find({ classId: getClass[i]._id.toString() });
+        let getRecentTitlePost = await Post.find({ classId: _class[i]._id.toString() });
         if (getRecentTitlePost.length !== 0) {
             if (getRecentTitlePost.length > 4)
                 getRecentTitlePost = getRecentTitlePost.slice(getRecentTitlePost.length - 4);
-                getClass[i].recentTitleTopic = [...getRecentTitlePost];
+            _class[i].recentTitleTopic = [...getRecentTitlePost];
         } else {
-            getClass[i].recentTitleTopic = [];
+            _class[i].recentTitleTopic = [];
         }
     }
 
     res.status(200).json({
         status: 'success',
-        value: getClass,
+        value: _class,
     });
 });
 
@@ -263,5 +316,5 @@ export default {
     getClassMember,
     getClassById,
     getClassBySearch,
-    getClassBySearchCustomer
+    getClassBySearchCustomer,
 };

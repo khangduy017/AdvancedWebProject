@@ -69,7 +69,7 @@ const Sidebar = () => {
             >
               <CDBSidebarMenuItem icon="list">All classes</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink
+            {/* <NavLink
               to="/deadline"
               style={({ isActive }) => ({
                 color: isActive ? "#5D5FEF" : "#A5A6F6",
@@ -77,7 +77,7 @@ const Sidebar = () => {
               })}
             >
               <CDBSidebarMenuItem icon="clock">Deadline</CDBSidebarMenuItem>
-            </NavLink>
+            </NavLink> */}
             <NavLink
               to="/profile"
               style={({ isActive }) => ({

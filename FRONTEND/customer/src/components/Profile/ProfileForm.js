@@ -33,7 +33,7 @@ const ProfileForm = (props) => {
 
   const token = authCtx.token;
   const userData = authCtx.userData;
-  
+  console.log(userData);
   const headers = { Authorization: `Bearer ${token}` };
   useEffect(() => {
     if (authCtx.isLoggedIn) {
@@ -82,18 +82,14 @@ const ProfileForm = (props) => {
       address: address,
     };
 
-    if(username===''){
-      toast.error('Username must not be empty', styleError);
-    }
-
-    else if(email===''){
-      toast.error('Email must not be empty', styleError);
-    }
-
-    else{
+    if (username === "") {
+      toast.error("Username must not be empty", styleError);
+    } else if (email === "") {
+      toast.error("Email must not be empty", styleError);
+    } else {
       axios
         .post(
-          process.env.REACT_APP_API_HOST + 'auth/edit-profile',
+          process.env.REACT_APP_API_HOST + "auth/edit-profile",
           dataSubmit,
           { headers }
         )
@@ -101,8 +97,7 @@ const ProfileForm = (props) => {
           if (res.data.status === "success") {
             authCtx.setUserDataContext(res.data.data);
             toast.success("Update information successfully", styleSuccess);
-          }
-          else{
+          } else {
             toast.error(res.data.message, styleError);
           }
         });
@@ -118,22 +113,18 @@ const ProfileForm = (props) => {
       passwordConfirm: passwordConfirm,
     };
 
-    if(password==='' || passwordCurrent==='' || passwordConfirm===''){
-      toast.error('Password must not be empty', styleError);
-    }
-    else if(password<8 || passwordConfirm.length<8){
-      toast.error('Password is too short', styleError);
-    }
-    else if(password!==passwordConfirm){
-      toast.error('Password confirm is incorrect', styleError);
-    }
-    else if (password===passwordCurrent){
-      toast.error('New password must be different', styleError);
-    }
-    else{
+    if (password === "" || passwordCurrent === "" || passwordConfirm === "") {
+      toast.error("Password must not be empty", styleError);
+    } else if (password < 8 || passwordConfirm.length < 8) {
+      toast.error("Password is too short", styleError);
+    } else if (password !== passwordConfirm) {
+      toast.error("Password confirm is incorrect", styleError);
+    } else if (password === passwordCurrent) {
+      toast.error("New password must be different", styleError);
+    } else {
       axios
         .post(
-          process.env.REACT_APP_API_HOST + 'auth/change-password',
+          process.env.REACT_APP_API_HOST + "auth/change-password",
           dataSubmit,
           { headers }
         )
@@ -144,8 +135,7 @@ const ProfileForm = (props) => {
             );
             authCtx.login(res.data.token, expirationTime.toISOString());
             toast.success("Update password successfully", styleSuccess);
-          }
-          else{
+          } else {
             toast.error(res.data.message, styleError);
           }
         });
@@ -198,7 +188,10 @@ const ProfileForm = (props) => {
                   setStudentId(event.target.value);
                 }}
                 value={studentId}
-                readOnly={props.mode === "General" || authCtx.userData.role === "teacher"}
+                readOnly={
+                  props.mode === "General" ||
+                  authCtx.userData.role === "teacher"
+                }
                 className="form-control-container"
               />
             </Form.Group>
@@ -291,6 +284,7 @@ const ProfileForm = (props) => {
               type="password"
               value={passwordCurrent}
               className="form-control-container"
+              readOnly={userData.type !== "account"}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formGridAddress1">
@@ -302,6 +296,7 @@ const ProfileForm = (props) => {
               type="password"
               value={password}
               className="form-control-container"
+              readOnly={userData.type !== "account"}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formGridAddress1">
@@ -313,17 +308,20 @@ const ProfileForm = (props) => {
               type="password"
               value={passwordConfirm}
               className="form-control-container"
+              readOnly={userData.type !== "account"}
             />
           </Form.Group>
-          <div className="multi-button-container">
-            <Button
-              onClick={changePasswordHandler}
-              className="edit-profile-update"
-              type="submit"
-            >
-              Update
-            </Button>
-          </div>
+          {userData.type === "account" && (
+            <div className="multi-button-container">
+              <Button
+                onClick={changePasswordHandler}
+                className="edit-profile-update"
+                type="submit"
+              >
+                Update
+              </Button>
+            </div>
+          )}
         </Form>
       )}
     </div>
