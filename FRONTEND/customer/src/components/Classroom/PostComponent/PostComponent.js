@@ -7,6 +7,8 @@ import axios from "axios";
 import AuthContext from "../../../store/auth-context";
 import { useParams } from "react-router-dom";
 import User from "../../../assests/img/user.jpg";
+import toast from "react-hot-toast";
+import { Toast } from "react-bootstrap";
 
 
 export default function PostComponent() {
@@ -25,6 +27,34 @@ export default function PostComponent() {
 
   const [postData, setPostData] = useState([]);
 
+  let toastId
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0">
+          <div
+            style={{ width: "1.6rem", height: "1.6rem", color: "#5D5FEF", marginRight: "1rem" }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>Loading...</p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  }
+  const dismissToast = () => {
+    toast.dismiss(toastId)
+  }
+
   useEffect(() => {
     axios
       .get(process.env.REACT_APP_API_HOST + "posts/get-all-posts/" + id, {
@@ -40,6 +70,7 @@ export default function PostComponent() {
   }, [])
 
   const handleSubmitCreatePost = () => {
+    loadingToast()
     const dataSubmit = {
       username: authCtx.userData.username,
       classId: id,
@@ -52,6 +83,7 @@ export default function PostComponent() {
         headers,
       })
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           setPostData(res.data.value);
           setTyping(!typing);

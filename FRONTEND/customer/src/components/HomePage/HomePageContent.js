@@ -14,6 +14,7 @@ import SidebarMenu from "react-bootstrap-sidebar-menu";
 import axios from "axios";
 import AuthContext from "../../store/auth-context";
 import toast from "react-hot-toast";
+import { Toast } from "react-bootstrap";
 
 const HomePageContent = () => {
   const navigate = useNavigate();
@@ -43,6 +44,35 @@ const HomePageContent = () => {
   const [createEnable, setCreateEnable] = useState(true);
   const [joinEnable, setJoinEnable] = useState(true);
   const [loading, setLoading] = useState(true);
+
+  let toastId
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0">
+          <div
+            style={{ width: "1.6rem", height: "1.6rem", color: "#5D5FEF", marginRight: "1rem" }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>Loading...</p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  }
+  const dismissToast = () => {
+    toast.dismiss(toastId)
+  }
+
 
   const authCtx = useContext(AuthContext);
 
@@ -87,6 +117,7 @@ const HomePageContent = () => {
   ];
 
   const handleCreate = (event) => {
+    loadingToast()
     event.preventDefault();
     const dataSubmit = {
       user: userData._id,
@@ -102,6 +133,7 @@ const HomePageContent = () => {
         headers,
       })
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           toast.success("Create class successfully", styleSuccess);
           handleGetAllClasses();
@@ -149,6 +181,7 @@ const HomePageContent = () => {
   const [classInfo, setClassInfo] = useState({});
 
   const handleJoinCode = (e) => {
+    loadingToast()
     e.preventDefault()
     const dataSubmit = {
       code:
@@ -163,9 +196,10 @@ const HomePageContent = () => {
         { headers }
       )
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           if (res.data.already_in_class) {
-            navigate(`/myclass/${res.data.value._id}`);
+            navigate(`/myclass/${res.data.value._id}/`);
           } else {
             setClassInfo(res.data.value);
             handleCloseFind();
@@ -178,6 +212,7 @@ const HomePageContent = () => {
   };
 
   const joinClass = () => {
+    loadingToast()
     const dataSubmit = {
       classId: classInfo._id,
       userId: localStorage.getItem("_id"),
@@ -188,6 +223,7 @@ const HomePageContent = () => {
         headers,
       })
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           navigate(`/myclass/${res.data.value}/`);
         } else {
@@ -214,6 +250,7 @@ const HomePageContent = () => {
       })
       .catch((err) => { });
   };
+
 
   return (
     <div className={`${styles["total-container"]} w-75`}>

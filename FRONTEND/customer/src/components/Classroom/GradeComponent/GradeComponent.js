@@ -85,6 +85,34 @@ const GradeComponent = () => {
     duration: 4000,
   };
 
+  let toastId
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0">
+          <div
+            style={{ width: "1.6rem", height: "1.6rem", color: "#5D5FEF", marginRight: "1rem" }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>Loading...</p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  }
+  const dismissToast = () => {
+    toast.dismiss(toastId)
+  }
+
   // PART 1: GRADE STRUCTURE
   const [gradeStructure, setGradeStructure] = useState([]);
   const [gradeStructureClone, setGradeStructureClone] = useState([])
@@ -130,9 +158,10 @@ const GradeComponent = () => {
         '_public': false
       }
     }
-
+    loadingToast()
     axios.post(process.env.REACT_APP_API_HOST + 'grade/add-structure', data, { headers })
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           setGradeStructure(res.data.value.structure)
           setGrades(res.data.value.grades)
@@ -221,7 +250,7 @@ const GradeComponent = () => {
   }
 
   const handleEditDone = () => {
-    console.log(authCtx.userData)
+
     const data = {
       id: grade_id,
       value: gradeStructureClone,
@@ -229,9 +258,10 @@ const GradeComponent = () => {
       class_id: id,
       username: authCtx.userData.username
     }
-
+    loadingToast()
     axios.post(process.env.REACT_APP_API_HOST + 'grade/edit-structure', data, { headers })
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           setGradeStructure(res.data.value.structure)
           setGrades(res.data.value.grades)
@@ -390,9 +420,10 @@ const GradeComponent = () => {
       id: grade_id,
       value: gradesClone
     }
-
+    loadingToast()
     axios.post(process.env.REACT_APP_API_HOST + 'grade/edit-grades', data, { headers })
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           setGrades(res.data.value)
           setEditGrade(!editGrade)

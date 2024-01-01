@@ -34,6 +34,34 @@ export default function ReviewComponent() {
 
   const navigate = useNavigate()
 
+  let toastId
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0">
+          <div
+            style={{ width: "1.6rem", height: "1.6rem", color: "#5D5FEF", marginRight: "1rem" }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>Loading...</p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  }
+  const dismissToast = () => {
+    toast.dismiss(toastId)
+  }
+
   const styleSuccess = {
     style: {
       border: "2px solid #28a745",

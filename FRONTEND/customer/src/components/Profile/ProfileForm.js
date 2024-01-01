@@ -68,6 +68,34 @@ const ProfileForm = (props) => {
     duration: 4000,
   };
 
+  let toastId
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0">
+          <div
+            style={{ width: "1.6rem", height: "1.6rem", color: "#5D5FEF", marginRight: "1rem" }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>Loading...</p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  }
+  const dismissToast = () => {
+    toast.dismiss(toastId)
+  }
+
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -91,6 +119,7 @@ const ProfileForm = (props) => {
     }
 
     else{
+    loadingToast()
       axios
         .post(
           process.env.REACT_APP_API_HOST + 'auth/edit-profile',
@@ -98,6 +127,7 @@ const ProfileForm = (props) => {
           { headers }
         )
         .then((res) => {
+          dismissToast()
           if (res.data.status === "success") {
             authCtx.setUserDataContext(res.data.data);
             toast.success("Update information successfully", styleSuccess);
@@ -131,6 +161,7 @@ const ProfileForm = (props) => {
       toast.error('New password must be different', styleError);
     }
     else{
+      loadingToast()
       axios
         .post(
           process.env.REACT_APP_API_HOST + 'auth/change-password',
@@ -138,6 +169,7 @@ const ProfileForm = (props) => {
           { headers }
         )
         .then((res) => {
+          dismissToast()
           if (res.data.status === "success") {
             const expirationTime = new Date(
               new Date().getTime() + +res.data.expiresTime
