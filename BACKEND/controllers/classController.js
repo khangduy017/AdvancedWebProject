@@ -221,7 +221,13 @@ const getClassMember = catchAsync(async (req, res, next) => {
 });
 
 const getClassBySearch = catchAsync(async (req, res) => {
-    const getClass = await Class.find({ $text: { $search: req.body.searchInput } });
+    let getClass = [];
+    if(req.body.searchInput === ''){
+         getClass = await Class.find();
+    }
+    else{
+        getClass = await Class.find({ $text: { $search: req.body.searchInput } });
+    }
     res.status(200).json({
         status: 'success',
         value: getClass,

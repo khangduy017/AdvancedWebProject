@@ -49,7 +49,10 @@ const AdminPageContent = () => {
   const [isVerify, setIsVerify] = useState(true);
 
   const [searchInput, setSearchInput] = useState("");
-  const handleGetAllClasses = () => {
+
+  const [loading, setLoading] = useState(true);
+
+  const handleGetAllStudents = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "auth/get-all-student", { headers })
       .then((res) => {
@@ -58,6 +61,7 @@ const AdminPageContent = () => {
           setListStudent(res.data.value);
         } else {
         }
+        setLoading(false);
       })
       .catch((err) => {});
   };
@@ -94,6 +98,7 @@ const AdminPageContent = () => {
 
   const submitSearch = (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = {
       searchInput: searchInput,
     };
@@ -108,6 +113,7 @@ const AdminPageContent = () => {
           setListStudent(res.data.value);
         } else {
         }
+        setLoading(false);
       })
       .catch((err) => {});
   };
@@ -122,6 +128,7 @@ const AdminPageContent = () => {
 
   const handleUploadStudentList = (event) => {
     event.preventDefault();
+    setLoading(true);
     const file = event.target.files[0];
 
     if (file) {
@@ -191,6 +198,7 @@ const AdminPageContent = () => {
       };
 
       reader.readAsArrayBuffer(file);
+      setLoading(false);
     }
   };
 
@@ -248,7 +256,7 @@ const AdminPageContent = () => {
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
-      handleGetAllClasses();
+      handleGetAllStudents();
     }
   }, []);
 
@@ -349,146 +357,162 @@ const AdminPageContent = () => {
           </div>
         </Form>
       </div>
-      <Table striped bordered hover className="my-4 rounded-lg">
-        <thead>
-          <tr className={`${styles["bg-head"]}`}>
-            <th>#</th>
-            <th>Student ID</th>
-            <th>Fullname</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Account</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listStudent.map((data, index) => (
-            <tr
-              className={`${styles["add-hover"]} ${
-                !data.active && styles["inactive"]
-              }}`}
-              key={index}
-              onClick={() => {
-                setStudentIdMongoose(data._id.toString());
-                setIsVerify(data.email !== undefined);
-                setStudentIDInput(data.id);
-                handleShow();
-              }}
-            >
-              <td>{index + 1}</td>
-              <td>{data.id}</td>
-              <td>{data.fullname}</td>
-              <td>{data.username}</td>
-              <td>{data.email}</td>
-              <td
-                className={`${styles["spec-col"]}`}
-                // onClick={() => handleChangeActive(data._id.toString())}
-              >
-                {data.email !== undefined ? (
-                  <div className={`${styles["active-button"]}`}>Verified</div>
-                ) : (
-                  <div className={`${styles["inactive-button"]}`}>
-                    Unverified{" "}
-                  </div>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-        <Modal
-          className={styles["modal-container"]}
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          show={show}
-          onHide={handleClose}
-        >
-          <Modal.Header closeButton>
-            <h4 className={styles["modal-heading"]}>Assign Student ID</h4>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={submitStudentID} className="form-container">
-              <Form.Group className="mb-3" controlId="formGridAddress1">
-                <Form.Label>Student ID</Form.Label>
-                <Form.Control
-                  onChange={(event) => {
-                    setStudentIDInput(event.target.value);
-                  }}
-                  value={studentIDInput}
-                  className="form-control-container"
-                />
-              </Form.Group>
-              <div className="d-flex w-100 mt-4 justify-content-end">
-                <Button
-                  variant="secondary"
-                  className={`${styles["close-button"]}`}
-                  onClick={handleClose}
-                >
-                  Close
-                </Button>
-                <Button
-                  className={`${styles["save-button"]}`}
-                  onClick={submitStudentID}
-                >
-                  Assign
-                </Button>
-              </div>
-            </Form>
-          </Modal.Body>
-        </Modal>
 
-        <Modal
-          className={styles["modal-container"]}
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          show={showAdd}
-          onHide={handleCloseAdd}
+      {loading ? (
+        <div
+          style={{ marginTop: "10rem" }}
+          className="d-flex justify-content-center"
         >
-          <Modal.Header closeButton>
-            <h4 className={styles["modal-heading"]}>Add student</h4>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={submitAddStudentID} className="form-container">
-              <Form.Group className="mb-3" controlId="formGridAddress1">
-                <Form.Label>Student ID</Form.Label>
-                <Form.Control
-                  required
-                  onChange={(event) => {
-                    setAddStudentIDInput(event.target.value);
-                  }}
-                  value={addStudentIDInput}
-                  className="form-control-container"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formGridAddress1">
-                <Form.Label>Fullname</Form.Label>
-                <Form.Control
-                  required
-                  onChange={(event) => {
-                    setAddFullnameInput(event.target.value);
-                  }}
-                  value={addFullnameInput}
-                  className="form-control-container"
-                />
-              </Form.Group>
-              <div className="d-flex w-100 mt-4 justify-content-end">
-                <Button
-                  variant="secondary"
-                  className={`${styles["close-button"]}`}
-                  onClick={handleCloseAdd}
+          <div
+            style={{ width: "3rem", height: "3rem", color: "#5D5FEF" }}
+            className="spinner-border"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : (
+        <Table striped bordered hover className="my-4 rounded-lg">
+          <thead>
+            <tr className={`${styles["bg-head"]}`}>
+              <th>#</th>
+              <th>Student ID</th>
+              <th>Fullname</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Account</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listStudent.map((data, index) => (
+              <tr
+                className={`${styles["add-hover"]} ${
+                  !data.active && styles["inactive"]
+                }}`}
+                key={index}
+                onClick={() => {
+                  setStudentIdMongoose(data._id.toString());
+                  setIsVerify(data.email !== undefined);
+                  setStudentIDInput(data.id);
+                  handleShow();
+                }}
+              >
+                <td>{index + 1}</td>
+                <td>{data.id}</td>
+                <td>{data.fullname}</td>
+                <td>{data.username}</td>
+                <td>{data.email}</td>
+                <td
+                  className={`${styles["spec-col"]}`}
+                  // onClick={() => handleChangeActive(data._id.toString())}
                 >
-                  Close
-                </Button>
-                <Button
-                  type="submit"
-                  className={`${styles["save-button"]}`}
-                  onClick={submitAddStudentID}
-                >
-                  Add
-                </Button>
-              </div>
-            </Form>
-          </Modal.Body>
-        </Modal>
-      </Table>
+                  {data.email !== undefined ? (
+                    <div className={`${styles["active-button"]}`}>Verified</div>
+                  ) : (
+                    <div className={`${styles["inactive-button"]}`}>
+                      Unverified{" "}
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <Modal
+            className={styles["modal-container"]}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            show={show}
+            onHide={handleClose}
+          >
+            <Modal.Header closeButton>
+              <h4 className={styles["modal-heading"]}>Assign Student ID</h4>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={submitStudentID} className="form-container">
+                <Form.Group className="mb-3" controlId="formGridAddress1">
+                  <Form.Label>Student ID</Form.Label>
+                  <Form.Control
+                    onChange={(event) => {
+                      setStudentIDInput(event.target.value);
+                    }}
+                    value={studentIDInput}
+                    className="form-control-container"
+                  />
+                </Form.Group>
+                <div className="d-flex w-100 mt-4 justify-content-end">
+                  <Button
+                    variant="secondary"
+                    className={`${styles["close-button"]}`}
+                    onClick={handleClose}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    className={`${styles["save-button"]}`}
+                    onClick={submitStudentID}
+                  >
+                    Assign
+                  </Button>
+                </div>
+              </Form>
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            className={styles["modal-container"]}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            show={showAdd}
+            onHide={handleCloseAdd}
+          >
+            <Modal.Header closeButton>
+              <h4 className={styles["modal-heading"]}>Add student</h4>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={submitAddStudentID} className="form-container">
+                <Form.Group className="mb-3" controlId="formGridAddress1">
+                  <Form.Label>Student ID</Form.Label>
+                  <Form.Control
+                    required
+                    onChange={(event) => {
+                      setAddStudentIDInput(event.target.value);
+                    }}
+                    value={addStudentIDInput}
+                    className="form-control-container"
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formGridAddress1">
+                  <Form.Label>Fullname</Form.Label>
+                  <Form.Control
+                    required
+                    onChange={(event) => {
+                      setAddFullnameInput(event.target.value);
+                    }}
+                    value={addFullnameInput}
+                    className="form-control-container"
+                  />
+                </Form.Group>
+                <div className="d-flex w-100 mt-4 justify-content-end">
+                  <Button
+                    variant="secondary"
+                    className={`${styles["close-button"]}`}
+                    onClick={handleCloseAdd}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    type="submit"
+                    className={`${styles["save-button"]}`}
+                    onClick={submitAddStudentID}
+                  >
+                    Add
+                  </Button>
+                </div>
+              </Form>
+            </Modal.Body>
+          </Modal>
+        </Table>
+      )}
     </div>
   );
 };
