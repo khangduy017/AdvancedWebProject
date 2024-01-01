@@ -272,14 +272,14 @@ const editProfile = catchAsync(async (req, res, next) => {
 const getUser = catchAsync(async (req, res, next) => {
     const userData = await User.findById(req.user._id);
 
-    res.status(200).json({  
+    res.status(200).json({
         status: 'success',
         data: userData,
     });
 });
 
 const getAllUser = catchAsync(async (req, res, next) => {
-    const userData = await User.find({ role: { $ne: "admin" } });
+    const userData = await User.find({ role: { $ne: 'admin' } });
 
     res.status(200).json({
         status: 'success',
@@ -308,7 +308,7 @@ const getUserById = catchAsync(async (req, res, next) => {
 const updateUserStatus = catchAsync(async (req, res, next) => {
     const getUser = await User.findOne({ _id: req.body.id });
     await User.updateOne({ _id: req.body.id }, { active: !getUser.active });
-    const _user = await User.find({ role: { $ne: "admin" } });
+    const _user = await User.find({ role: { $ne: 'admin' } });
     res.status(200).json({
         status: 'success',
         value: _user,
@@ -316,7 +316,7 @@ const updateUserStatus = catchAsync(async (req, res, next) => {
 });
 
 const updateStudentID = catchAsync(async (req, res, next) => {
-    if(req.body.isVerify){
+    if (req.body.isVerify) {
         const getStudent = await User.findOne({ id: req.body.studentID });
         if (
             req.body.studentID !== '' &&
@@ -337,8 +337,7 @@ const updateStudentID = catchAsync(async (req, res, next) => {
                 value: [...studentAccount, ...studentNoneAccount],
             });
         }
-    }
-    else{
+    } else {
         const getStudent = await Student.findOne({ id: req.body.studentID });
         if (
             req.body.studentID !== '' &&
@@ -363,8 +362,15 @@ const updateStudentID = catchAsync(async (req, res, next) => {
 });
 
 const getStudentBySearch = catchAsync(async (req, res) => {
-    const getStudentAccount = await User.find({ $text: { $search: req.body.searchInput }, role: 'student' });
-    const getStudentNoneAccount = await Student.find({ $text: { $search: req.body.searchInput } });
+    let getStudentAccount = [];
+    let getStudentNoneAccount = [];
+    if (req.body.searchInput === '') {
+        getStudentAccount = await User.find({ role: 'student' });
+        getStudentNoneAccount = await Student.find();
+    } else {
+        getStudentAccount = await User.find({ $text: { $search: req.body.searchInput }, role: 'student' });
+        getStudentNoneAccount = await Student.find({ $text: { $search: req.body.searchInput } });
+    }
     res.status(200).json({
         status: 'success',
         value: [...getStudentAccount, ...getStudentNoneAccount],
@@ -372,7 +378,12 @@ const getStudentBySearch = catchAsync(async (req, res) => {
 });
 
 const getUserBySearch = catchAsync(async (req, res) => {
-    const getStudent = await User.find({ $text: { $search: req.body.searchInput } });
+    let getStudent = [];
+    if (req.body.searchInput === '') {
+        getStudent = await User.find({ role: { $ne: 'admin' } });
+    } else {
+        getStudent = await User.find({ $text: { $search: req.body.searchInput }, role: { $ne: 'admin' } });
+    }
     res.status(200).json({
         status: 'success',
         value: getStudent,
@@ -385,33 +396,30 @@ const createStudent = catchAsync(async (req, res, next) => {
     const studentNoneAccount = await Student.find();
     const studentAll = [...studentAccount, ...studentNoneAccount];
 
-    if(req.body.isFile){
+    if (req.body.isFile) {
         for (let i = 0; i < data.length; i++) {
-            const found = studentAll.some(el => el.id!=='' && el.id === data[i].studentId);
-            if (!found && data[i].studentId !== '' && data[i].fullname!==''){
+            const found = studentAll.some((el) => el.id !== '' && el.id === data[i].studentId);
+            if (!found && data[i].studentId !== '' && data[i].fullname !== '') {
                 await Student.create({
                     id: data[i].studentId,
                     fullname: data[i].fullname,
                 });
             }
         }
-    }
-    else{
+    } else {
         for (let i = 0; i < data.length; i++) {
-            const found = studentAll.some(el => el.id!=='' && el.id === data[i].studentId);
-            if(data[i].studentId === '' && data[i].fullname===''){
+            const found = studentAll.some((el) => el.id !== '' && el.id === data[i].studentId);
+            if (data[i].studentId === '' && data[i].fullname === '') {
                 res.status(200).json({
                     status: 'fail',
                     message: 'Student information is empty',
                 });
-            }
-            else if (found){
+            } else if (found) {
                 res.status(200).json({
                     status: 'fail',
                     message: 'Student ID has been existed',
                 });
-            }
-            else{
+            } else {
                 await Student.create({
                     id: data[i].studentId,
                     fullname: data[i].fullname,

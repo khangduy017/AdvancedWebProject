@@ -31,7 +31,9 @@ const AdminPageContent = () => {
 
   const [searchInput, setSearchInput] = useState("");
 
-  const handleGetAllClasses = () => {
+  const [loading, setLoading] = useState(true);
+
+  const handleGetAllUsers = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "auth/get-all-user", { headers })
       .then((res) => {
@@ -40,6 +42,7 @@ const AdminPageContent = () => {
           setListUser(res.data.value);
         } else {
         }
+        setLoading(false);
       })
       .catch((err) => {});
   };
@@ -67,6 +70,7 @@ const AdminPageContent = () => {
 
   const submitSearch = (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = {
       searchInput: searchInput,
     };
@@ -77,10 +81,11 @@ const AdminPageContent = () => {
       })
       .then((res) => {
         if (res.data.status === "success") {
-          authCtx.setListUser(res.data.value) ;
+          authCtx.setListUser(res.data.value);
           setListUser(res.data.value);
         } else {
         }
+        setLoading(false);
       })
       .catch((err) => {});
   };
@@ -107,7 +112,7 @@ const AdminPageContent = () => {
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
-      handleGetAllClasses();
+      handleGetAllUsers();
     }
   }, []);
 
@@ -126,7 +131,7 @@ const AdminPageContent = () => {
               }}
               className={`${styles["dropbtn"]} d-flex align-items-center justify-content-center`}
             >
-               <SortIcon />
+              <SortIcon />
               {isAcs ? "Ascending" : "Descending"}
             </Button>
           </div>
@@ -185,39 +190,56 @@ const AdminPageContent = () => {
           </div>
         </Form>
       </div>
-      <Table striped bordered hover className="my-4 rounded-lg">
-        <thead>
-          <tr className={`${styles["bg-head"]}`}>
-            <th>#</th>
-            <th>Username</th>
-            <th>Fullname</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Active</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listUser.map((data, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{data.username}</td>
-              <td>{data.fullname}</td>
-              <td>{data.email}</td>
-              <td>{data.role}</td>
-              <td
-                className={`${styles["spec-col"]}`}
-                onClick={() => handleChangeActive(data._id.toString())}
-              >
-                {data.active ? (
-                  <div className={`${styles["active-button"]}`}>Active</div>
-                ) : (
-                  <div className={`${styles["inactive-button"]}`}>Inactive</div>
-                )}
-              </td>
+      {loading ? (
+        <div
+          style={{ marginTop: "10rem" }}
+          className="d-flex justify-content-center"
+        >
+          <div
+            style={{ width: "3rem", height: "3rem", color: "#5D5FEF" }}
+            className="spinner-border"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : (
+        <Table striped bordered hover className="my-4 rounded-lg">
+          <thead>
+            <tr className={`${styles["bg-head"]}`}>
+              <th>#</th>
+              <th>Username</th>
+              <th>Fullname</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Active</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {listUser.map((data, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{data.username}</td>
+                <td>{data.fullname}</td>
+                <td>{data.email}</td>
+                <td>{data.role}</td>
+                <td
+                  className={`${styles["spec-col"]}`}
+                  onClick={() => handleChangeActive(data._id.toString())}
+                >
+                  {data.active ? (
+                    <div className={`${styles["active-button"]}`}>Active</div>
+                  ) : (
+                    <div className={`${styles["inactive-button"]}`}>
+                      Inactive
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </div>
   );
 };

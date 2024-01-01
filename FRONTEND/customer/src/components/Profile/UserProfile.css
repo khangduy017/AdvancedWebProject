@@ -69,7 +69,7 @@ h3{
 }
 
 .edit-profile-option:hover{
-    background: #494bdb;
+    background: #494bdb !important;
     color: white;
     border: none;
 }

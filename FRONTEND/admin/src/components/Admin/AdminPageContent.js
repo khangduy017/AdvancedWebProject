@@ -30,6 +30,8 @@ const AdminPageContent = () => {
 
   const [searchInput, setSearchInput] = useState("");
 
+  const [loading, setLoading] = useState(true);
+
   const handleGetAllClasses = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "classes/all-class-all-account", {
@@ -41,6 +43,7 @@ const AdminPageContent = () => {
           setClasses(res.data.value);
         } else {
         }
+        setLoading(false);
       })
       .catch((err) => {});
   };
@@ -88,6 +91,7 @@ const AdminPageContent = () => {
 
   const submitSearch = (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = {
       searchInput: searchInput,
     };
@@ -102,6 +106,7 @@ const AdminPageContent = () => {
           setClasses(res.data.value);
         } else {
         }
+        setLoading(false);
       })
       .catch((err) => {});
   };
@@ -187,37 +192,54 @@ const AdminPageContent = () => {
           </div>
         </Form>
       </div>
-      <Table striped bordered hover className="my-4 rounded-lg">
-        <thead>
-          <tr className={`${styles["bg-head"]}`}>
-            <th>#</th>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Owner</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {classes.map((data, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{data.title}</td>
-              <td>{data.content}</td>
-              <td>{data.owner}</td>
-              <td
-                className={`${styles["spec-col"]}`}
-                onClick={() => handleChangeActive(data._id.toString())}
-              >
-                {data.active ? (
-                  <div className={`${styles["active-button"]}`}>Active</div>
-                ) : (
-                  <div className={`${styles["inactive-button"]}`}>Inactive</div>
-                )}
-              </td>
+      {loading ? (
+        <div
+          style={{ marginTop: "10rem" }}
+          className="d-flex justify-content-center"
+        >
+          <div
+            style={{ width: "3rem", height: "3rem", color: "#5D5FEF" }}
+            className="spinner-border"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : (
+        <Table striped bordered hover className="my-4 rounded-lg">
+          <thead>
+            <tr className={`${styles["bg-head"]}`}>
+              <th>#</th>
+              <th>Title</th>
+              <th>Content</th>
+              <th>Owner</th>
+              <th>Status</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {classes.map((data, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{data.title}</td>
+                <td>{data.content}</td>
+                <td>{data.owner}</td>
+                <td
+                  className={`${styles["spec-col"]}`}
+                  onClick={() => handleChangeActive(data._id.toString())}
+                >
+                  {data.active ? (
+                    <div className={`${styles["active-button"]}`}>Active</div>
+                  ) : (
+                    <div className={`${styles["inactive-button"]}`}>
+                      Inactive
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </div>
   );
 };
