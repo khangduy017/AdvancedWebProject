@@ -14,6 +14,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import member_image from '../../assests/img/member_avatar.png'
 import User from "../../assests/img/user.jpg";
+
 import { ReactComponent as LogoutIcon } from "../../assests/svg/logout.svg";
 import io from "socket.io-client";
 import toast, { Toaster } from "react-hot-toast";
@@ -33,6 +34,16 @@ const MainNavigation = () => {
   const token = authCtx.token;
   const headers = { Authorization: `Bearer ${token}` };
 
+  const styleSuccess = {
+    style: {
+      border: "2px solid #28a745",
+      padding: "5px",
+      color: "#28a745",
+      fontWeight: "500",
+    },
+    duration: 2500,
+  };
+
   useEffect(() => {
     if (authCtx.isLoggedIn) {
       const headers = { Authorization: `Bearer ${token}` };
@@ -47,6 +58,7 @@ const MainNavigation = () => {
   const logoutHandler = () => {
     authCtx.logout();
     navigate("/login");
+    toast.success("Logout successfully!", styleSuccess);
   };
 
   const [isOpen, setIsOpen] = useState(false);

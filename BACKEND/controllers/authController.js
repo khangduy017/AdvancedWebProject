@@ -110,16 +110,13 @@ const login = catchAsync(async (req, res, next) => {
 });
 
 const loginGoogle = catchAsync(async (req, res, next) => {
-    const token = signToken(req.user._id);
-    const data = {
-        status: 'success',
-        token,
-        expiresTime,
-        data: { user: req.user },
-    };
+    if (req.user.status && req.user.status === 'exist') {
+        return res.redirect(`${process.env.APP_URL}/login?status=failed&role=${req.user.role}`);
+    }
 
+    const token = signToken(req.user._id);
     res.redirect(
-        `${process.env.APP_URL}/login?success&token=` +
+        `${process.env.APP_URL}/login?status=success&token=` +
         token +
         '&expiresTime=' +
         expiresTime +
@@ -153,7 +150,7 @@ const forgetPassword = catchAsync(async (req, res, next) => {
 
         const founded_user = await User.findOne({ email: data.email });
 
-        if (!founded_user) return next(new AppError('The email does not exist', 400));
+        if (!founded_user | founded_user.type != 'account') return next(new AppError('The email does not exist', 400));
 
         verifyCode = Math.floor(100000 + Math.random() * 900000);
         await sendMail(
