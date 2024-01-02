@@ -26,6 +26,7 @@ const MainNavigation = () => {
 
   const navigate = useNavigate();
   const isLoggedIn = authCtx.isLoggedIn;
+  const [loading, setLoading] = useState(true)
 
   const userData = authCtx.userData;
 
@@ -62,6 +63,7 @@ const MainNavigation = () => {
           headers,
         })
         .then((res) => {
+          setLoading(false)
           if (res.data.status === "success") {
             setNotifications(res.data.value);
           } else {
@@ -79,7 +81,6 @@ const MainNavigation = () => {
       toast((t) => (
         <div className="notification-up w-100 p-0"
           onClick={() => {
-            console.log(t)
             handleItemClick(data)
             toast.dismiss(t.id)
           }}
@@ -91,6 +92,10 @@ const MainNavigation = () => {
             <div style={{ color: '#2C2C66', fontSize: '1rem' }} className="d-flex justify-content-between mb-1">
               <small style={{ fontWeight: 'bold', width: '18rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{data.class}</small>
             </div>
+            <p className="p-0 m-0" style={{ color: '#333333', fontSize: '0.8rem', fontStyle: 'italic' }}>
+              <span style={{ fontWeight: 'bold' }}>{data.fromName}</span>
+              {data.content}
+            </p>
           </div>
         </div>
       ), {
@@ -100,15 +105,14 @@ const MainNavigation = () => {
           width: "25rem",
           border: "2px solid #fcc419",
           padding: "5px",
-        }}
-      );
+        }
+      });
 
-      console.log('notification')
       setNotifications(prev => [data, ...prev])
       setNewNotify(true)
     });
-    socket.emit("register", localStorage.getItem("_id"));
-  }, []);
+    socket.emit("register", localStorage.getItem('_id'))
+  }, [])
 
   const handleItemClick = (value) => {
     if (!value.seen) {
@@ -156,7 +160,7 @@ const MainNavigation = () => {
             <div className="role">Hello,</div>
             <div className="username">{userData.username}</div>
           </div>
-          <img src={User} className="img-container" />
+          <img src={User} className="img-container" alt="" />
         </div>
         <Dropdown drop="down" style={{ zIndex: "11" }} show={isOpen}>
           <Dropdown.Toggle
@@ -190,91 +194,112 @@ const MainNavigation = () => {
               </svg>
             )}
           </Dropdown.Toggle>
-          <Dropdown.Menu
-            className="drop-down-menu"
+          {loading ? <Dropdown.Menu
+            className="drop-down-menu-loading"
             style={{
-              maxHeight: "28rem",
-              overflowY: "scroll",
-              padding: "0.5rem 0rem",
-              width: "24rem",
+              width:"24rem",
+              padding: "1rem 0rem",
               backgroundColor: "#ffffff",
               border: "1px solid #b8b8c2",
               zIndex: "100",
-            }}
-          >
-            {notifications.length > 0 ? (
-              notifications.map((value, index) => (
-                <div
-                  style={{
-                    backgroundColor: `${!value.seen ? "#f6f6ff" : "#ffffff"}`,
-                  }}
-                  className="notification-item w-100"
-                  eventKey={index}
-                  onClick={() => {
-                    handleItemClick(value);
-                  }}
-                >
-                  {!value.seen && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="9"
-                      width="9"
-                      viewBox="0 0 512 512"
-                    >
-                      <path
-                        fill="#5D5FEF"
-                        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z"
-                      />
-                    </svg>
-                  )}
-                  <img src={member_image} alt="" />
-                  <div className="w-100">
-                    <div
-                      style={{ color: "#2C2C66", fontSize: "1rem" }}
-                      className="d-flex justify-content-between mb-1"
-                    >
-                      <small
+            }}>
+            <div
+              className="d-flex justify-content-center"
+            >
+              <div
+                style={{ width: "2.4rem", height: "2.4rem", color: "#5D5FEF" }}
+                className="spinner-border"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </Dropdown.Menu> :
+            <Dropdown.Menu
+              className="drop-down-menu"
+              style={{
+                maxHeight: "28rem",
+                overflowY: "scroll",
+                padding: "0.5rem 0rem",
+                width: "24rem",
+                backgroundColor: "#ffffff",
+                border: "1px solid #b8b8c2",
+                zIndex: "100",
+              }}
+            >
+              {notifications.length > 0 ? (
+                notifications.map((value, index) => (
+                  <div
+                    style={{
+                      backgroundColor: `${!value.seen ? "#f6f6ff" : "#ffffff"}`,
+                    }}
+                    className="notification-item w-100"
+                    eventKey={index}
+                    onClick={() => {
+                      handleItemClick(value);
+                    }}
+                  >
+                    {!value.seen && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="9"
+                        width="9"
+                        viewBox="0 0 512 512"
+                      >
+                        <path
+                          fill="#5D5FEF"
+                          d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z"
+                        />
+                      </svg>
+                    )}
+                    <img src={member_image} alt="" />
+                    <div className="w-100">
+                      <div
+                        style={{ color: "#2C2C66", fontSize: "1rem" }}
+                        className="d-flex justify-content-between mb-1"
+                      >
+                        <small
+                          style={{
+                            fontWeight: "bold",
+                            width: "10rem",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {value.class}
+                        </small>
+                        <small style={{ fontSize: "0.8rem" }}>{value.time}</small>
+                      </div>
+                      <p
+                        className="p-0 m-0"
                         style={{
-                          fontWeight: "bold",
-                          width: "10rem",
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
+                          color: "#333333",
+                          fontSize: "0.8rem",
+                          fontStyle: "italic",
                         }}
                       >
-                        {value.class}
-                      </small>
-                      <small style={{ fontSize: "0.8rem" }}>{value.time}</small>
+                        <span style={{ fontWeight: "bold" }}>
+                          {value.fromName}
+                        </span>
+                        {value.content}
+                      </p>
                     </div>
-                    <p
-                      className="p-0 m-0"
-                      style={{
-                        color: "#333333",
-                        fontSize: "0.8rem",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      <span style={{ fontWeight: "bold" }}>
-                        {value.fromName}
-                      </span>
-                      {value.content}
-                    </p>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p
-                className=" m-0 p-0 p-2"
-                style={{
-                  fontStyle: "italic",
-                  color: "#2C2C66",
-                  textAlign: "center",
-                }}
-              >
-                There have been no notifications yet
-              </p>
-            )}
-          </Dropdown.Menu>
+                ))
+              ) : (
+                <p
+                  className=" m-0 p-0 p-2"
+                  style={{
+                    fontStyle: "italic",
+                    color: "#2C2C66",
+                    textAlign: "center",
+                  }}
+                >
+                  There have been no notifications yet
+                </p>
+              )}
+            </Dropdown.Menu>}
         </Dropdown>
         <LogoutIcon onClick={logoutHandler} className="icon" />
       </div>

@@ -23,6 +23,34 @@ export default function ReviewDetail() {
   const [comments, setComments] = useState([])
   const [loading, setLoading] = useState(true)
 
+  let toastId
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0">
+          <div
+            style={{ width: "1.6rem", height: "1.6rem", color: "#5D5FEF", marginRight: "1rem" }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>Loading...</p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  }
+  const dismissToast = () => {
+    toast.dismiss(toastId)
+  }
+
   const location = useLocation();
 
   useEffect(() => {
@@ -159,9 +187,10 @@ export default function ReviewDetail() {
       class_id: id,
       fromName: authCtx.userData.username
     }
-
+    loadingToast()
     axios.post(process.env.REACT_APP_API_HOST + 'review/mark-final-decision', data, { headers })
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           handleClose()
           toast.success('Mark final review successfully!', styleSuccess);

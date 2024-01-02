@@ -270,7 +270,7 @@ const Classroom = () => {
             <Outlet />
           </div>
         </>}
-
+        
     </div>
   );
 };

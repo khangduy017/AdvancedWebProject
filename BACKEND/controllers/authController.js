@@ -117,13 +117,14 @@ const loginGoogle = catchAsync(async (req, res, next) => {
         expiresTime,
         data: { user: req.user },
     };
+
     res.redirect(
         `${process.env.APP_URL}/login?success&token=` +
-            token +
-            '&expiresTime=' +
-            expiresTime +
-            '&userData=' +
-            JSON.stringify(req.user)
+        token +
+        '&expiresTime=' +
+        expiresTime +
+        '&userData=' +
+        JSON.stringify(req.user)
     );
 });
 
@@ -137,11 +138,11 @@ const loginFacebook = catchAsync(async (req, res, next) => {
     };
     res.redirect(
         `${process.env.APP_URL}/login?success&token=` +
-            token +
-            '&expiresTime=' +
-            expiresTime +
-            '&userData=' +
-            JSON.stringify(req.user)
+        token +
+        '&expiresTime=' +
+        expiresTime +
+        '&userData=' +
+        JSON.stringify(req.user)
     );
 });
 
@@ -158,7 +159,7 @@ const forgetPassword = catchAsync(async (req, res, next) => {
         await sendMail(
             data.email,
             'Your verify code is [' + verifyCode + ']',
-            'Use this code to complete the account registration: ' + verifyCode
+            'Use this code to complete reset password: ' + verifyCode
         );
 
         return res.status(200).json({
