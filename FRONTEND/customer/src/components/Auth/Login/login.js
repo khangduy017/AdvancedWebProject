@@ -111,6 +111,10 @@ function Login() {
     if (status === 'failed') {
       navigate(`/login?status=false&role=${_role}`, { replace: true })
     }
+    else if(status ==='inactive'){
+      navigate(`/login?status=falseinactive&role=${_role}`, { replace: true })
+    }
+
     else {
       const token = new URLSearchParams(location.search).get("token");
       const expiresTime = new URLSearchParams(location.search).get("expiresTime");
@@ -131,6 +135,11 @@ function Login() {
       setStep(2)
       setRole(role)
       toast.error('Login failed, this account has been used for another role', styleError);
+    }
+    if (status === 'falseinactive') {
+      setStep(2)
+      setRole(role)
+      toast.error('Login failed, this account has been locked.', styleError);
     }
   }, [location.search]);
 

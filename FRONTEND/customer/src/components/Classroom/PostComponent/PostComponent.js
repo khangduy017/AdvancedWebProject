@@ -153,7 +153,7 @@ export default function PostComponent() {
         }
       });
   };
-  
+
   const location = useLocation();
   useEffect(() => {
     setLoading(true);
@@ -324,6 +324,7 @@ export default function PostComponent() {
                         type="text"
                         className={`${styles["form-cmt"]} form-control-container w-100`}
                         as="input"
+                        value={typingCmt}
                         rows={1}
                       />
                     </Form.Group>
