@@ -313,6 +313,7 @@ const getClassBySearchCustomer = catchAsync(async (req, res) => {
     });
 });
 
+
 export default {
     getAllClassAllAccount,
     updateClassStatus,

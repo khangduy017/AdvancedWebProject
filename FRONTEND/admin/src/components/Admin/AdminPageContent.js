@@ -49,6 +49,7 @@ const AdminPageContent = () => {
   };
 
   const handleChangeActive = (id) => {
+    loadingToast();
     const data = {
       id: id,
       _id: localStorage.getItem("_id"),
@@ -59,6 +60,7 @@ const AdminPageContent = () => {
         headers,
       })
       .then((res) => {
+        dismissToast();
         if (res.data.status === "success") {
           authCtx.setClasses(res.data.value);
           setClasses(res.data.value);
@@ -116,6 +118,41 @@ const AdminPageContent = () => {
       handleGetAllClasses();
     }
   }, []);
+
+  let toastId;
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0 d-flex align-items-center gap-1">
+          <div
+            style={{
+              width: "1.6rem",
+              height: "1.6rem",
+              color: "#5D5FEF",
+              marginRight: "1rem",
+            }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>
+            Loading...
+          </p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  };
+  const dismissToast = () => {
+    toast.dismiss(toastId);
+  };
 
   return (
     <div className={`${styles["total-container"]} w-75`}>

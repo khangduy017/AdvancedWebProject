@@ -42,5 +42,6 @@ router.post('/update-student-id', authController.updateStudentID);
 router.post('/search-student', authController.getStudentBySearch);
 router.post('/search-user', authController.getUserBySearch);
 router.post('/create-student', authController.createStudent);
+router.post('/delete-student', authController.deleteStudentById);
 
 export default router;

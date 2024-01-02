@@ -437,6 +437,16 @@ const createStudent = catchAsync(async (req, res, next) => {
     });
 });
 
+const deleteStudentById = catchAsync(async (req, res) => {
+    await Student.deleteOne({_id: req.body.studentId});
+    const studentAccount = await User.find({ role: 'student' });
+    const studentNoneAccount = await Student.find();
+    res.status(200).json({
+        status: 'success',
+        value: [...studentAccount, ...studentNoneAccount],
+    });
+});
+
 export default {
     register,
     getUserById,
@@ -456,4 +466,5 @@ export default {
     getStudentBySearch,
     getUserBySearch,
     createStudent,
+    deleteStudentById
 };
