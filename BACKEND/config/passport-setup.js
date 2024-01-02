@@ -12,11 +12,14 @@ const google = passport.use(
   }, async (req, accessToken, refreshToken, profile, done) => {
     const useFounder = await User.findOne({ email: profile.emails[0].value })
     if (useFounder) {
-      if (useFounder.googleId === profile.id && useFounder.role === req.query.state) {
+      if (!useFounder.active) {
+        done(null, { status: 'inactive', role: req.query.state })
+      }
+      else if (useFounder.googleId === profile.id && useFounder.role === req.query.state) {
         done(null, useFounder)
       }
       else {
-        done(null, {status: 'exist',role: req.query.state})
+        done(null, { status: 'exist', role: req.query.state })
       }
     } else {
       const newUser = await User.create({

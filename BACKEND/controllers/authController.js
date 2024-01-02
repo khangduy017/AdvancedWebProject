@@ -114,6 +114,10 @@ const loginGoogle = catchAsync(async (req, res, next) => {
         return res.redirect(`${process.env.APP_URL}/login?status=failed&role=${req.user.role}`);
     }
 
+    if (req.user.status && req.user.status === 'inactive') {
+        return res.redirect(`${process.env.APP_URL}/login?status=inactive&role=${req.user.role}`);
+    }
+
     const token = signToken(req.user._id);
     res.redirect(
         `${process.env.APP_URL}/login?status=success&token=` +
