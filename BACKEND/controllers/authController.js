@@ -120,11 +120,11 @@ const loginGoogle = catchAsync(async (req, res, next) => {
 
     res.redirect(
         `${process.env.APP_URL}/login?success&token=` +
-        token +
-        '&expiresTime=' +
-        expiresTime +
-        '&userData=' +
-        JSON.stringify(req.user)
+            token +
+            '&expiresTime=' +
+            expiresTime +
+            '&userData=' +
+            JSON.stringify(req.user)
     );
 });
 
@@ -138,11 +138,11 @@ const loginFacebook = catchAsync(async (req, res, next) => {
     };
     res.redirect(
         `${process.env.APP_URL}/login?success&token=` +
-        token +
-        '&expiresTime=' +
-        expiresTime +
-        '&userData=' +
-        JSON.stringify(req.user)
+            token +
+            '&expiresTime=' +
+            expiresTime +
+            '&userData=' +
+            JSON.stringify(req.user)
     );
 });
 
@@ -247,26 +247,39 @@ const editProfile = catchAsync(async (req, res, next) => {
             message: 'Invalid email address',
         });
     } else {
-        const updatedUser = await User.updateOne(
-            { _id: req.user._id },
-            {
-                fullname: req.body.fullname,
-                username: req.body.username,
-                id: req.body.studentId,
-                phone: req.body.phone,
-                gender: req.body.gender,
-                role: req.body.role,
-                email: req.body.email,
-                address: req.body.address,
+        const checkStudentIdExist = await User.findOne({ id: req.body.studentId });
+        if (checkStudentIdExist && checkStudentIdExist.id !== req.user.id) {
+            res.status(200).json({
+                status: 'fail',
+                message: 'Student ID has been existed',
+            });
+        } else {
+            const updatedUser = await User.updateOne(
+                { _id: req.user._id },
+                {
+                    fullname: req.body.fullname,
+                    username: req.body.username,
+                    id: req.body.studentId,
+                    phone: req.body.phone,
+                    gender: req.body.gender,
+                    role: req.body.role,
+                    email: req.body.email,
+                    address: req.body.address,
+                }
+            );
+
+            const checkStudentExist = await Student.findOne({ id: req.body.studentId });
+            if (checkStudentExist) {
+                await Student.deleteOne({ id: req.body.studentId });
             }
-        );
 
-        const userData = await User.findOne({ _id: req.user._id });
+            const userData = await User.findOne({ _id: req.user._id });
 
-        res.status(200).json({
-            status: 'success',
-            data: userData,
-        });
+            res.status(200).json({
+                status: 'success',
+                data: userData,
+            });
+        }
     }
 });
 
@@ -438,7 +451,7 @@ const createStudent = catchAsync(async (req, res, next) => {
 });
 
 const deleteStudentById = catchAsync(async (req, res) => {
-    await Student.deleteOne({_id: req.body.studentId});
+    await Student.deleteOne({ _id: req.body.studentId });
     const studentAccount = await User.find({ role: 'student' });
     const studentNoneAccount = await Student.find();
     res.status(200).json({
@@ -466,5 +479,5 @@ export default {
     getStudentBySearch,
     getUserBySearch,
     createStudent,
-    deleteStudentById
+    deleteStudentById,
 };
