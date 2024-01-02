@@ -37,7 +37,6 @@ const HomePageContent = () => {
   const [idInput, setIdInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
   const [contentInput, setContentInput] = useState("");
-  const [topicInput, setTopicInput] = useState("");
 
   const [inviteCodeInput, setInviteCodeInput] = useState("");
 
@@ -45,17 +44,26 @@ const HomePageContent = () => {
   const [joinEnable, setJoinEnable] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  let toastId
+  const [classes, setClasses] = useState([]);
+
+  let toastId;
   const loadingToast = () => {
     toastId = toast(
       (t) => (
         <div className="notification-up w-100 p-0">
           <div
-            style={{ width: "1.6rem", height: "1.6rem", color: "#5D5FEF", marginRight: "1rem" }}
+            style={{
+              width: "1.6rem",
+              height: "1.6rem",
+              color: "#5D5FEF",
+              marginRight: "1rem",
+            }}
             className="spinner-border"
             role="status"
           ></div>
-          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>Loading...</p>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>
+            Loading...
+          </p>
         </div>
       ),
       {
@@ -68,11 +76,10 @@ const HomePageContent = () => {
         },
       }
     );
-  }
+  };
   const dismissToast = () => {
-    toast.dismiss(toastId)
-  }
-
+    toast.dismiss(toastId);
+  };
 
   const authCtx = useContext(AuthContext);
 
@@ -90,11 +97,12 @@ const HomePageContent = () => {
       .then((res) => {
         if (res.data.status === "success") {
           authCtx.setClasses(res.data.value);
+          setClasses(res.data.value);
         } else {
         }
         setLoading(false);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   };
 
   useEffect(() => {
@@ -117,13 +125,12 @@ const HomePageContent = () => {
   ];
 
   const handleCreate = (event) => {
-    loadingToast()
+    loadingToast();
     event.preventDefault();
     const dataSubmit = {
       user: userData._id,
       title: titleInput,
       content: contentInput,
-      topic: topicInput,
       inviteLink: "",
       color: color[Math.floor(Math.random() * 10)],
     };
@@ -133,14 +140,13 @@ const HomePageContent = () => {
         headers,
       })
       .then((res) => {
-        dismissToast()
+        dismissToast();
         if (res.data.status === "success") {
           toast.success("Create class successfully", styleSuccess);
           handleGetAllClasses();
           setShow(false);
           setTitleInput("");
           setContentInput("");
-          setTopicInput("");
         } else {
           toast.error(res.data.message, styleError);
         }
@@ -181,8 +187,8 @@ const HomePageContent = () => {
   const [classInfo, setClassInfo] = useState({});
 
   const handleJoinCode = (e) => {
-    loadingToast()
-    e.preventDefault()
+    loadingToast();
+    e.preventDefault();
     const dataSubmit = {
       code:
         inviteCodeInput[0] === "#" ? inviteCodeInput.slice(1) : inviteCodeInput,
@@ -196,7 +202,7 @@ const HomePageContent = () => {
         { headers }
       )
       .then((res) => {
-        dismissToast()
+        dismissToast();
         if (res.data.status === "success") {
           if (res.data.already_in_class) {
             navigate(`/myclass/${res.data.value._id}/`);
@@ -212,7 +218,7 @@ const HomePageContent = () => {
   };
 
   const joinClass = () => {
-    loadingToast()
+    loadingToast();
     const dataSubmit = {
       classId: classInfo._id,
       userId: localStorage.getItem("_id"),
@@ -223,7 +229,7 @@ const HomePageContent = () => {
         headers,
       })
       .then((res) => {
-        dismissToast()
+        dismissToast();
         if (res.data.status === "success") {
           navigate(`/myclass/${res.data.value}/`);
           handleGetAllClasses();
@@ -241,19 +247,22 @@ const HomePageContent = () => {
     };
 
     axios
-      .post(process.env.REACT_APP_API_HOST + "classes/search-class-customer", data, {
-        headers,
-      })
+      .post(
+        process.env.REACT_APP_API_HOST + "classes/search-class-customer",
+        data,
+        {
+          headers,
+        }
+      )
       .then((res) => {
         if (res.data.status === "success") {
-          authCtx.setClasses(res.data.value);
+          setClasses(res.data.value);
         } else {
         }
         setLoading(false);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   };
-
 
   return (
     <div className={`${styles["total-container"]} w-75`}>
@@ -275,7 +284,6 @@ const HomePageContent = () => {
             centered
             show={showFind}
             onHide={handleCloseFind}
-
           >
             <Modal.Header closeButton>
               <h4 className={styles["modal-heading"]}>Join class</h4>
@@ -310,7 +318,6 @@ const HomePageContent = () => {
                 </div>
               </Form>
             </Modal.Body>
-
           </Modal>
           {/* class modal */}
           <Modal
@@ -403,16 +410,6 @@ const HomePageContent = () => {
                         className="form-control-container"
                       />
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="formGridAddress1">
-                      <Form.Label>Topic</Form.Label>
-                      <Form.Control
-                        onChange={(event) => {
-                          setTopicInput(event.target.value);
-                        }}
-                        value={topicInput}
-                        className="form-control-container"
-                      />
-                    </Form.Group>
                     <div className="mt-4 d-flex justify-content-end align-items-center">
                       <Button
                         variant="secondary"
@@ -456,7 +453,6 @@ const HomePageContent = () => {
               className={`${styles["form-control-container"]}`}
               placeholder="Search for classes..."
             />
-
           </Form.Group>
 
           <Button
@@ -468,7 +464,7 @@ const HomePageContent = () => {
           </Button>
         </Form>
       </div>
-      {loading && !authCtx.classes.length > 0 && (
+      {loading ? (
         <div
           style={{ marginTop: "10rem" }}
           className="d-flex justify-content-center"
@@ -481,67 +477,64 @@ const HomePageContent = () => {
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
+      ) : (
+        <div className={`${styles["more-gap"]} d-flex my-2 flex-wrap`}>
+          {classes.map((data, index) => (
+            <div
+              onClick={() => {
+                navigate(`/myclass/${data._id}/`);
+              }}
+              className={`${styles["class-content-container"]} mt-4 rounded-3`}
+              key={index}
+            >
+              <div
+                style={{ backgroundColor: data.background }}
+                className={`${styles["class-title-container"]} rounded-top-3`}
+              >
+                <h2 className={`${styles["class-title"]} px-3 pt-3`}>
+                  {data.title}
+                </h2>
+                <div className={`${styles["class-instructor"]} px-3 pt-0`}>
+                  {data.content}
+                </div>
+                <div className={`${styles["class-instructor"]} px-3 pt-2 pb-3`}>
+                  {data.owner}
+                </div>
+              </div>
+              <div className={`${styles["class-mid-container"]} rounded-top-3`}>
+                <h5 className={`${styles["class-assignment-title"]} px-3 pt-3`}>
+                  Posts
+                </h5>
+                {data.recentTitleTopic.map((el, index) => (
+                  <div
+                    className={`${styles["class-instructor"]} px-3 pb-1`}
+                    key={index}
+                  >
+                    {el.title}
+                  </div>
+                ))}
+
+                {data.recentTitleTopic.length === 0 && (
+                  <div className={`${styles["class-instructor"]} px-3 pb-1`}>
+                    Nothing
+                  </div>
+                )}
+              </div>
+              <div
+                className={`${styles["class-footer-container"]} d-flex justify-content-end align-items-center px-4`}
+              >
+                <FolderIcon className={`${styles["size-icon"]} m-3`} />
+                <LeaveIcon className={styles["size-icon"]} />
+              </div>
+            </div>
+          ))}
+        </div>
       )}
-      {authCtx.classes.length === 0 && (
-        <div
-          class="d-flex justify-content-start"
-        >
+      {!loading && classes.length === 0 && (
+        <div class="d-flex justify-content-start">
           <h3>No results</h3>
         </div>
       )}
-      <div className={`${styles["more-gap"]} d-flex my-2 flex-wrap`}>
-        {authCtx.classes.map((data, index) => (
-          <div
-            onClick={() => {
-              navigate(`/myclass/${data._id}/`);
-            }}
-            className={`${styles["class-content-container"]} mt-4 rounded-3`}
-            key={index}
-          >
-            <div
-              style={{ backgroundColor: data.background }}
-              className={`${styles["class-title-container"]} rounded-top-3`}
-            >
-              <h2 className={`${styles["class-title"]} px-3 pt-3`}>
-                {data.title}
-              </h2>
-              <div className={`${styles["class-instructor"]} px-3 pt-0`}>
-                {data.content}
-              </div>
-              <div className={`${styles["class-instructor"]} px-3 pt-2 pb-3`}>
-                {data.owner}
-              </div>
-            </div>
-            <div className={`${styles["class-mid-container"]} rounded-top-3`}>
-              <h5 className={`${styles["class-assignment-title"]} px-3 pt-3`}>
-                Posts
-              </h5>
-              {data.recentTitleTopic.map((el, index) => (
-                <div
-                  className={`${styles["class-instructor"]} px-3 pb-1`}
-                  key={index}
-                >
-                  {el.title}
-                </div>
-              ))}
-
-              {data.recentTitleTopic.length === 0 && (
-                <div
-                  className={`${styles["class-instructor"]} px-3 pb-1`}
-                >
-                  Nothing
-                </div>
-              )}
-            </div>
-            <div
-              className={`${styles["class-footer-container"]} d-flex justify-content-end align-items-center px-4`}
-            >
-              <FolderIcon className={`${styles["size-icon"]} m-3`} />
-              <LeaveIcon className={styles["size-icon"]} />
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

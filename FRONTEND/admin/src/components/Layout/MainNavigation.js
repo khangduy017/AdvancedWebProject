@@ -36,7 +36,7 @@ const MainNavigation = () => {
     } else {
       navigate("/login");
     }
-  },[]);
+  }, []);
 
   const logoutHandler = () => {
     authCtx.logout();
@@ -52,30 +52,10 @@ const MainNavigation = () => {
         <Navbar.Brand href="/" className="nav-brand-container">
           AWClassroom
         </Navbar.Brand>
-        {/* <Nav
-          className="me-auto"
-          activeKey={active}
-          onSelect={(selectedKey) => setActive(selectedKey)}
-        >
-          <Nav.Link href="/" eventKey="myclass">
-            My class
-          </Nav.Link>
-          <Nav.Link href="/" eventKey="todo">
-            To do
-          </Nav.Link>
-          <Nav.Link href="/" eventKey="schedule">
-            Schedule
-          </Nav.Link>
-        </Nav> */}
       </Container>
 
       <div className="d-flex align-items-center">
-        <div
-          onClick={() => {
-            navigate("./profile");
-          }}
-          className="d-flex justify-content-end info-ava"
-        >
+        <div className="d-flex justify-content-end info-ava">
           <div className="info-container">
             <div className="role">Hello,</div>
             <div className="username">{userData.username}</div>

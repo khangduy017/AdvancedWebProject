@@ -162,7 +162,7 @@
   }
   
   .save-button:hover {
-    background: #4c4eb6;
+    background: #4c4eb6 !important;
   }
   
   .total-container {
@@ -232,38 +232,26 @@
       }
 
       .active-button{
-        background: #37b24d;
-        padding: 0.25rem;
-        color: white;
-        border-radius: 0.25rem;
-        text-align: center;
-        font-size: 0.9rem;
-      }
-      
-      .active-button:hover{
-        cursor: pointer;
+        color: #37b24d;
+        font-weight: 500;
       }
       
       .inactive-button{
-        background: #e03131;
-        padding: 0.25rem;
-        color: white;
-        border-radius: 0.25rem;
-        text-align: center;
-        font-size: 0.9rem;
+        color: #e03131;
       }
       
       .inactive-button:hover{
-        cursor: pointer;
+        cursor: default;
       }
       
       .spec-col{
-        width: 7rem;
+        width: 9rem;
       }
 
       .import-student{
         width: 10.5rem;
         background: #5d5fef;
+        border: none;
         color: white;
         height: 2.5rem;
         font-weight: 500;
@@ -290,4 +278,11 @@
         background: #e0e0e9 !important;
       }
 
+      .action-col{
+        width: 5rem;
+      }
+
+      .ban-hover{
+        cursor: no-drop;
+      }
 

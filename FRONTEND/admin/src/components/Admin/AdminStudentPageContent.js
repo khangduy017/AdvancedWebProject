@@ -6,6 +6,11 @@ import { ReactComponent as FilterIcon } from "../../assests/svg/filter.svg";
 import { ReactComponent as ImportIcon } from "../../assests/svg/import.svg";
 import { ReactComponent as SortIcon } from "../../assests/svg/sort.svg";
 import { ReactComponent as AddIcon } from "../../assests/svg/plus.svg";
+import { ReactComponent as CheckIcon } from "../../assests/svg/check.svg";
+import { ReactComponent as XIcon } from "../../assests/svg/x.svg";
+import { ReactComponent as TrashIcon } from "../../assests/svg/trash.svg";
+import { ReactComponent as TrashOpIcon } from "../../assests/svg/trashop.svg";
+import { ReactComponent as EditIcon } from "../../assests/svg/edit.svg";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
@@ -67,6 +72,7 @@ const AdminPageContent = () => {
   };
 
   const handleChangeStudentID = (id, isVerify) => {
+    loadingToast();
     const data = {
       id: id,
       isVerify: isVerify,
@@ -79,6 +85,7 @@ const AdminPageContent = () => {
         headers,
       })
       .then((res) => {
+        dismissToast();
         if (res.data.status === "success") {
           authCtx.setListStudent(res.data.value);
           setListStudent(res.data.value);
@@ -128,7 +135,7 @@ const AdminPageContent = () => {
 
   const handleUploadStudentList = (event) => {
     event.preventDefault();
-    setLoading(true);
+    loadingToast();
     const file = event.target.files[0];
 
     if (file) {
@@ -171,6 +178,7 @@ const AdminPageContent = () => {
                 { headers }
               )
               .then((res) => {
+                dismissToast();
                 if (res.data.status === "success") {
                   authCtx.setListStudent(res.data.value);
                   setListStudent(res.data.value);
@@ -198,13 +206,12 @@ const AdminPageContent = () => {
       };
 
       reader.readAsArrayBuffer(file);
-      setLoading(false);
     }
   };
 
   const submitAddStudentID = (event) => {
     event.preventDefault();
-
+    loadingToast();
     const jsonData = [
       {
         studentId: addStudentIDInput,
@@ -222,6 +229,7 @@ const AdminPageContent = () => {
         headers,
       })
       .then((res) => {
+        dismissToast();
         if (res.data.status === "success") {
           authCtx.setListStudent(res.data.value);
           setListStudent(res.data.value);
@@ -259,6 +267,63 @@ const AdminPageContent = () => {
       handleGetAllStudents();
     }
   }, []);
+
+  let toastId;
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0 d-flex align-items-center gap-1">
+          <div
+            style={{
+              width: "1.6rem",
+              height: "1.6rem",
+              color: "#5D5FEF",
+              marginRight: "1rem",
+            }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>
+            Loading...
+          </p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  };
+  const dismissToast = () => {
+    toast.dismiss(toastId);
+  };
+
+  const deleteStudent = (studentId) => {
+    loadingToast();
+    const data = {
+      studentId: studentId,
+    };
+
+    axios
+      .post(process.env.REACT_APP_API_HOST + "auth/delete-student", data, {
+        headers,
+      })
+      .then((res) => {
+        dismissToast();
+        if (res.data.status === "success") {
+          authCtx.setListStudent(res.data.value);
+          setListStudent(res.data.value);
+          toast.success("Delete student successfully", styleSuccess);
+        } else {
+        }
+      })
+      .catch((err) => {});
+  };
 
   return (
     <div className={`${styles["total-container"]} w-75`}>
@@ -381,21 +446,14 @@ const AdminPageContent = () => {
               <th>Username</th>
               <th>Email</th>
               <th>Account</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {listStudent.map((data, index) => (
               <tr
-                className={`${styles["add-hover"]} ${
-                  !data.active && styles["inactive"]
-                }}`}
+                className={` ${!data.active && styles["inactive"]}}`}
                 key={index}
-                onClick={() => {
-                  setStudentIdMongoose(data._id.toString());
-                  setIsVerify(data.email !== undefined);
-                  setStudentIDInput(data.id);
-                  handleShow();
-                }}
               >
                 <td>{index + 1}</td>
                 <td>{data.id}</td>
@@ -407,12 +465,41 @@ const AdminPageContent = () => {
                   // onClick={() => handleChangeActive(data._id.toString())}
                 >
                   {data.email !== undefined ? (
-                    <div className={`${styles["active-button"]}`}>Verified</div>
+                    <div
+                      className={`${styles["active-button"]} d-flex align-items-center`}
+                    >
+                      <CheckIcon /> Verified
+                    </div>
                   ) : (
-                    <div className={`${styles["inactive-button"]}`}>
-                      Unverified{" "}
+                    <div
+                      className={`${styles["inactive-button"]} d-flex align-items-center`}
+                    >
+                      <XIcon /> Unverified
                     </div>
                   )}
+                </td>
+                <td className={`${styles["action-col"]}`}>
+                  <div className="d-flex align-items-center justify-content-between w-100 gap-0 h-100 px-1">
+                    <EditIcon
+                      className={`${styles["add-hover"]}`}
+                      onClick={() => {
+                        setStudentIdMongoose(data._id.toString());
+                        setIsVerify(data.email !== undefined);
+                        setStudentIDInput(data.id);
+                        handleShow();
+                      }}
+                    />
+                    {data.email !== undefined ? (
+                      <TrashOpIcon className={`${styles["ban-hover"]}`} />
+                    ) : (
+                      <TrashIcon
+                        className={`${styles["add-hover"]}`}
+                        onClick={() => {
+                          deleteStudent(data._id);
+                        }}
+                      />
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
