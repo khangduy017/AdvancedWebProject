@@ -100,12 +100,15 @@ const login = catchAsync(async (req, res, next) => {
         return next(new AppError('Enter your email and password', 401));
     }
 
-    const user = await User.findOne({ email: email, role: role, active: true }).select('+password');
+    const user = await User.findOne({ email: email, role: role}).select('+password');
 
     if (!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Email or password is incorrect', 401));
     }
 
+    if(!user.active){
+        return next(new AppError('Account has been blocked', 401));
+    }
     createSendToken(user, 200, res);
 });
 
