@@ -7,7 +7,7 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from "cdbreact";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import AuthContext from "../../store/auth-context";
 import { useState, useContext, useEffect } from "react";
@@ -45,6 +45,9 @@ const Sidebar = () => {
       handleGetAllClasses();
     }
   }, []);
+
+  const location = useLocation();
+
   return (
     <div className={`${styles["sidebar-container"]} d-flex`}>
       <CDBSidebar textColor="#5D5FEF" backgroundColor="white">
@@ -88,20 +91,25 @@ const Sidebar = () => {
               <CDBSidebarMenuItem icon="user">Profile page</CDBSidebarMenuItem>
             </NavLink>
             <div className={`${styles["middle-line"]}`}></div>
-            {authCtx.classes.map((data, index) => (
-              <NavLink
-                key={index}
-                to={`/myclass/${data._id}/`}
-                style={({ isActive }) => ({
-                  color: isActive ? "#5D5FEF" : "#A5A6F6",
-                  fontWeight: isActive ? "700" : "",
-                })}
-              >
-                <CDBSidebarMenuItem icon="book">
-                  {data.title}
-                </CDBSidebarMenuItem>
-              </NavLink>
-            ))}
+            {authCtx.classes.map((data, index) => {
+              const pathToMatch = `/myclass/${data._id}/`;
+              const isActive = location.pathname.startsWith(pathToMatch);
+
+              return (
+                <NavLink
+                  key={index}
+                  to={pathToMatch}
+                  style={{
+                    color: isActive ? "#5D5FEF" : "#A5A6F6",
+                    fontWeight: isActive ? "700" : "",
+                  }}
+                >
+                  <CDBSidebarMenuItem icon="book">
+                    {data.title}
+                  </CDBSidebarMenuItem>
+                </NavLink>
+              );
+            })}
           </CDBSidebarMenu>
         </CDBSidebarContent>
 

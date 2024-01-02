@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import AuthContext from "../../../store/auth-context";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import User from "../../../assests/img/user.jpg";
 import toast from "react-hot-toast";
 import { Toast } from "react-bootstrap";
@@ -83,7 +83,7 @@ export default function PostComponent() {
     toast.dismiss(toastId);
   };
 
-  useEffect(() => {
+  const getAllPosts = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "posts/get-all-posts/" + id, {
         headers,
@@ -95,7 +95,11 @@ export default function PostComponent() {
         } else {
         }
       });
-  }, []);
+  }
+
+  useEffect(() => {
+    getAllPosts()
+  }, [])
 
   const handleSubmitCreatePost = () => {
     loadingToast();
@@ -149,6 +153,17 @@ export default function PostComponent() {
         }
       });
   };
+  
+  const location = useLocation();
+  useEffect(() => {
+    setLoading(true);
+    setTyping(false)
+    setTypingTitle("")
+    setTypingContent("")
+    setTypingCmt("")
+    getAllPosts();
+  }, [location.pathname]);
+
 
   return loading ? (
     <div>

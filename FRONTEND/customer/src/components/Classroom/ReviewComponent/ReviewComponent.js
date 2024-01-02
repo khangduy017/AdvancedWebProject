@@ -153,10 +153,11 @@ export default function ReviewComponent() {
       reason: typingContent,
       user_id: authCtx.userData.id
     }
-
+    loadingToast()
     axios.post(process.env.REACT_APP_API_HOST + 'review/create', data, { headers })
       .then((res) => {
         if (res.data.status === "success") {
+          dismissToast()
           expectedGradeInputRef.current.value = ''
           setTypingContent('')
           toast.success('Request review successfully!', styleSuccess);
@@ -198,7 +199,7 @@ export default function ReviewComponent() {
                       <Form.Control value={studentGrade.grade[gradeComposition]} className={`form-control w-50`} type="text" disabled={true} />
                     </Form.Group>
                   </div>
-                  <Form.Group style={{ width: '20%', marginLeft: '2%' }} className="d-flex align-items-center mb-1" controlId="formGridAddress1">
+                  <Form.Group style={{ width: '21%', marginLeft: '2%',justifyContent:'space-between' }} className="d-flex align-items-center mb-1" controlId="formGridAddress1">
                     <Form.Label className='m-0 p-0' style={{ fontSize: '1rem', fontWeight: 'bold', color: "#5D5FEF" }}>Expected Grade:</Form.Label>
                     <Form.Control style={{ width: '30%' }} maxLength={2} ref={expectedGradeInputRef} required className={`form-control`} type="text" />
                   </Form.Group>

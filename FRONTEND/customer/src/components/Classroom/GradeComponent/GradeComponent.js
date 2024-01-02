@@ -698,7 +698,7 @@ const GradeComponent = () => {
                 Add
               </Button>
             </Modal.Footer>
-          </Modal>;
+          </Modal>
 
           {/* download file modal */}
           <Modal
@@ -832,7 +832,7 @@ const GradeComponent = () => {
                             )}
 
                           </Draggable>
-                        );
+                        )
                       }) :
                         gradeStructureClone.map((_comment, index) => {
                           return (

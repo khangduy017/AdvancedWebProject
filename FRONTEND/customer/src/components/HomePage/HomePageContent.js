@@ -232,6 +232,7 @@ const HomePageContent = () => {
         dismissToast();
         if (res.data.status === "success") {
           navigate(`/myclass/${res.data.value}/`);
+          handleGetAllClasses();
         } else {
         }
       });

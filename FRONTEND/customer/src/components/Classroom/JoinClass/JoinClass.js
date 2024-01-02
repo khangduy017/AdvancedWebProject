@@ -34,6 +34,23 @@ const JoinClass = () => {
       });
   }, [])
 
+  const handleGetAllClasses = () => {
+    const data = {
+      _id: localStorage.getItem("_id"),
+    };
+
+    axios
+      .post(process.env.REACT_APP_API_HOST + "classes", data, { headers })
+      .then((res) => {
+        if (res.data.status === "success") {
+          authCtx.setClasses(res.data.value);
+        } else {
+        }
+        setLoading(false);
+      })
+      .catch((err) => { });
+  };
+
   const joinClass = () => {
     const dataSubmit = {
       classId: id,
@@ -44,6 +61,7 @@ const JoinClass = () => {
       .then((res) => {
         if (res.data.status === "success") {
           navigate(`/myclass/${res.data.value}/`)
+          handleGetAllClasses()
         }
         else { }
       });
