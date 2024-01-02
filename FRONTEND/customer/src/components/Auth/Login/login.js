@@ -7,6 +7,8 @@ import axios from 'axios'
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from '../../../store/auth-context'
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
+import queryString from 'query-string'
 
 
 function Login() {
@@ -19,6 +21,26 @@ function Login() {
 
   const [step, setStep] = useState(1)
   const [showPassword, setShowPassword] = useState(false)
+
+  const styleError = {
+    style: {
+      border: "2px solid red",
+      padding: "10px",
+      color: "red",
+      fontWeight: "500",
+    },
+    duration: 5000,
+  };
+
+  const styleSuccess = {
+    style: {
+      border: "2px solid #28a745",
+      padding: "5px",
+      color: "#28a745",
+      fontWeight: "500",
+    },
+    duration: 2500,
+  };
 
   const [message, setMessage] = useState({
     type: "success",
@@ -57,6 +79,7 @@ function Login() {
           );
           authCtx.login(res.data.token, expirationTime.toISOString(), res.data.data.user.role, res.data.data.user._id);
           navigate('/', { replace: true })
+          toast.success("Login successfully!", styleSuccess);
         })
         .catch(err => {
           setIsLoading(false)
@@ -82,18 +105,34 @@ function Login() {
   // get information when login with social
   const location = useLocation();
   useEffect(() => {
-    const token = new URLSearchParams(location.search).get("token");
-    const expiresTime = new URLSearchParams(location.search).get("expiresTime");
-    const userData = new URLSearchParams(location.search).get("userData");
-    if (token) {
-      const expirationTime = new Date(new Date().getTime() + +expiresTime);
-      authCtx.login(token, expirationTime.toISOString(), JSON.parse(userData).role, JSON.parse(userData)._id);
-      navigate('/', { replace: true })
+    const status = new URLSearchParams(location.search).get("status");
+    const _role = new URLSearchParams(location.search).get("role");
+
+    if (status === 'failed') {
+      navigate(`/login?status=false&role=${_role}`, { replace: true })
     }
+    else {
+      const token = new URLSearchParams(location.search).get("token");
+      const expiresTime = new URLSearchParams(location.search).get("expiresTime");
+      const userData = new URLSearchParams(location.search).get("userData");
+      if (token) {
+        const expirationTime = new Date(new Date().getTime() + +expiresTime);
+        authCtx.login(token, expirationTime.toISOString(), JSON.parse(userData).role, JSON.parse(userData)._id);
+        navigate('/', { replace: true })
+        toast.success("Login successfully!", styleSuccess);
+      }
+    }
+
   }, [location.search]);
 
-
-
+  useEffect(() => {
+    const { status, role } = queryString.parse(location.search);
+    if (status === 'false') {
+      setStep(2)
+      setRole(role)
+      toast.error('Login failed, this account has been used for another role', styleError);
+    }
+  }, [location.search]);
 
   return (
     <div className={`${styles.login} d-flex justify-content-center align-items-center`}>
