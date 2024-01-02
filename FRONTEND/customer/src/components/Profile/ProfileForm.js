@@ -196,7 +196,7 @@ const ProfileForm = (props) => {
                 setFullname(event.target.value);
               }}
               value={fullname}
-              readOnly={props.mode === "General"}
+              disabled={props.mode === "General"}
               className="form-control-container"
             />
           </Form.Group>
@@ -209,7 +209,7 @@ const ProfileForm = (props) => {
                   setUsername(event.target.value);
                 }}
                 value={username}
-                readOnly={props.mode === "General"}
+                disabled={props.mode === "General"}
                 className="form-control-container"
               />
             </Form.Group>
@@ -220,7 +220,7 @@ const ProfileForm = (props) => {
                   setStudentId(event.target.value);
                 }}
                 value={studentId}
-                readOnly={
+                disabled={
                   props.mode === "General" ||
                   authCtx.userData.role === "teacher"
                 }
@@ -237,7 +237,7 @@ const ProfileForm = (props) => {
                   setPhone(event.target.value);
                 }}
                 value={phone}
-                readOnly={props.mode === "General"}
+                disabled={props.mode === "General"}
                 className="form-control-container"
               />
             </Form.Group>
@@ -249,7 +249,7 @@ const ProfileForm = (props) => {
                   setGender(event.target.value);
                 }}
                 value={gender}
-                readOnly={props.mode === "General"}
+                disabled={props.mode === "General"}
                 className="form-control-container"
               />
             </Form.Group>
@@ -257,24 +257,21 @@ const ProfileForm = (props) => {
             <Form.Group as={Col} controlId="formGridZip">
               <Form.Label>Role</Form.Label>
               <Form.Control
-                onChange={(event) => {
-                  setRole(event.target.value);
-                }}
                 value={role}
-                readOnly={props.mode === "General"}
+                disabled
                 className="form-control-container"
               />
             </Form.Group>
           </Row>
 
           <Form.Group className="mb-3" controlId="formGridAddress1">
-            <Form.Label>Email</Form.Label>
+            <Form.Label>Email (Only system account can change)</Form.Label>
             <Form.Control
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
               value={email}
-              readOnly={props.mode === "General"}
+              disabled={props.mode === "General" || userData.type === "google" || userData.type === "facebook"}
               type="email"
               className="form-control-container"
             />
@@ -287,7 +284,7 @@ const ProfileForm = (props) => {
                 setAddress(event.target.value);
               }}
               value={address}
-              readOnly={props.mode === "General"}
+              disabled={props.mode === "General"}
               type="email"
               className="form-control-container"
             />
@@ -316,7 +313,7 @@ const ProfileForm = (props) => {
               type="password"
               value={passwordCurrent}
               className="form-control-container"
-              readOnly={userData.type !== "account"}
+              disabled={userData.type !== "account"}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formGridAddress1">
@@ -328,7 +325,7 @@ const ProfileForm = (props) => {
               type="password"
               value={password}
               className="form-control-container"
-              readOnly={userData.type !== "account"}
+              disabled={userData.type !== "account"}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formGridAddress1">
@@ -340,7 +337,7 @@ const ProfileForm = (props) => {
               type="password"
               value={passwordConfirm}
               className="form-control-container"
-              readOnly={userData.type !== "account"}
+              disabled={userData.type !== "account"}
             />
           </Form.Group>
           {userData.type === "account" && (
