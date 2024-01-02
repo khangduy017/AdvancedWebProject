@@ -47,7 +47,7 @@ const getAllPosts = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        value: allPosts,
+        value: allPosts.reverse(),
     });
 });
 
@@ -72,7 +72,7 @@ const createComment = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        value: allPosts,
+        value: allPosts.reverse(),
     });
 });
 

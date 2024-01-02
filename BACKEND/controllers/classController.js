@@ -9,7 +9,7 @@ import REGEX from '../constants/regex.js';
 import Post from '../models/postModel.js';
 
 const getAllClass = catchAsync(async (req, res, next) => {
-    const _class = await Class.aggregate([
+    const getClass = await Class.aggregate([
         {
             $lookup: {
                 from: 'users',
@@ -39,6 +39,8 @@ const getAllClass = catchAsync(async (req, res, next) => {
             },
         },
     ]);
+
+    const _class = getClass.filter((el) => el.active === true);
 
     for (let i = 0; i < _class.length; i++) {
         let getRecentTitlePost = await Post.find({ classId: _class[i]._id.toString() });
@@ -222,10 +224,9 @@ const getClassMember = catchAsync(async (req, res, next) => {
 
 const getClassBySearch = catchAsync(async (req, res) => {
     let getClass = [];
-    if(req.body.searchInput === ''){
-         getClass = await Class.find();
-    }
-    else{
+    if (req.body.searchInput === '') {
+        getClass = await Class.find();
+    } else {
         getClass = await Class.find({ $text: { $search: req.body.searchInput } });
     }
     res.status(200).json({
@@ -288,10 +289,13 @@ const getClassBySearchCustomer = catchAsync(async (req, res) => {
 
     let _class = [];
     if (req.body.searchInput === '') {
-        _class = [...getClass]
+        _class = getClass.filter((el) => el.active === true);
     } else {
-        _class = getClass.filter((el) => el.title.toLowerCase() === req.body.searchInput.toLowerCase());
+        _class = getClass.filter(
+            (el) => el.title.toLowerCase() === req.body.searchInput.toLowerCase() && el.active === true
+        );
     }
+
     for (let i = 0; i < _class.length; i++) {
         let getRecentTitlePost = await Post.find({ classId: _class[i]._id.toString() });
         if (getRecentTitlePost.length !== 0) {

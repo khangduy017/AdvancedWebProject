@@ -17,7 +17,6 @@ const Classroom = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-
   const styleSuccess = {
     style: {
       border: "2px solid #28a745",
@@ -38,8 +37,7 @@ const Classroom = () => {
     duration: 4000,
   };
 
-
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   const [inviteEnable, setInviteEnable] = useState(true);
 
@@ -59,11 +57,11 @@ const Classroom = () => {
         } else {
         }
       });
-  }
+  };
 
   const [emailInput, setEmailInput] = useState("");
   const handleSubmitInvite = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const dataSubmit = {
       email: emailInput,
       link: linkInvite,
@@ -78,7 +76,7 @@ const Classroom = () => {
       .then((res) => {
         if (res.data.status === "success") {
           handleClose();
-          toast.success('Invite successfully!', styleSuccess);
+          toast.success("Invite successfully!", styleSuccess);
         } else {
           toast.error(res.data.value, styleError);
         }
@@ -93,23 +91,20 @@ const Classroom = () => {
   const handleCopyClick = async () => {
     try {
       await navigator.clipboard.writeText(linkInvite);
-      toast.success('Copied!', styleSuccess);
+      toast.success("Copied!", styleSuccess);
     } catch (err) {
       console.error("Unable to copy to clipboard.", err);
-      toast.error('Copy to clipboard failed!', styleError);
+      toast.error("Copy to clipboard failed!", styleError);
     }
   };
 
   const handleCopyCode = async () => {
     try {
       await navigator.clipboard.writeText(classData.inviteCode);
-      toast.success('Copied!', styleSuccess);
+      toast.success("Copied!", styleSuccess);
     } catch (err) {
-      console.error(
-        "Unable to copy to clipboard.",
-        err
-      );
-      toast.error('Copy to clipboard failed!', styleError);
+      console.error("Unable to copy to clipboard.", err);
+      toast.error("Copy to clipboard failed!", styleError);
     }
   };
 
@@ -117,17 +112,19 @@ const Classroom = () => {
 
   useEffect(() => {
     setLoading(true);
-    fecthData(id)
+    fecthData(id);
   }, [location.pathname]);
 
-
-  const chosen = ({ isActive }) => isActive ? `rounded-0 ${styles["tab-button"]} ${styles["tab-button-active"]}` : `rounded-0 ${styles["tab-button"]}`
-  const firstChoosen = `rounded-0 ${styles["tab-button"]} ${styles["tab-button-active"]}`
-  const [activeFirst, setActiveFirst] = useState(firstChoosen)
+  const chosen = ({ isActive }) =>
+    isActive
+      ? `rounded-0 ${styles["tab-button"]} ${styles["tab-button-active"]}`
+      : `rounded-0 ${styles["tab-button"]}`;
+  const firstChoosen = `rounded-0 ${styles["tab-button"]} ${styles["tab-button-active"]}`;
+  const [activeFirst, setActiveFirst] = useState(firstChoosen);
 
   useEffect(() => {
-    setActiveFirst(chosen)
-  }, [])
+    setActiveFirst(chosen);
+  }, []);
 
   return (
     <div className={`${styles["classroom-container"]}`}>
@@ -193,14 +190,24 @@ const Classroom = () => {
         </Modal.Footer>
       </Modal>
 
-      {!classData ?
-        <div style={{ marginTop: '10rem' }} className="d-flex justify-content-center">
-          <div style={{ width: '3rem', height: '3rem', color: '#5D5FEF' }} className="spinner-border" role="status">
+      {!classData ? (
+        <div
+          style={{ marginTop: "10rem" }}
+          className="d-flex justify-content-center"
+        >
+          <div
+            style={{ width: "3rem", height: "3rem", color: "#5D5FEF" }}
+            className="spinner-border"
+            role="status"
+          >
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-        : <>
-          <div className={`${styles["sub-nav"]} d-flex align-items-center justify-content-between`} >
+      ) : (
+        <>
+          <div
+            className={`${styles["sub-nav"]} d-flex align-items-center justify-content-between`}
+          >
             <div className={`${styles["tab-layout"]} d-flex gap-0`}>
               <NavLink
                 to={`/myclass/${id}/`}
@@ -242,12 +249,24 @@ const Classroom = () => {
           </div>
           <div className={`${styles["content"]}`}>
             <div
-              style={{ backgroundColor: `${classData && classData.background ? classData.background : '#5d5fef'}` }}
+              style={{
+                backgroundColor: `${
+                  classData && classData.background
+                    ? classData.background
+                    : "#5d5fef"
+                }`,
+              }}
               className={`${styles["banner-container"]} rounded-4 w-100`}
             >
-              <h2 className={`${styles["classroom-name"]}`}>{classData.title}</h2>
-              <p className={`${styles["classroom-note"]}`}>{classData.content}</p>
-              <p className={`${styles["classroom-owner"]}`}>{classData.owner}</p>
+              <h2 className={`${styles["classroom-name"]}`}>
+                {classData.title}
+              </h2>
+              <p className={`${styles["classroom-note"]}`}>
+                {classData.content}
+              </p>
+              <p className={`${styles["classroom-owner"]}`}>
+                {classData.owner}
+              </p>
 
               <div
                 className={`${styles["classroom-code"]} d-flex align-items-center gap-2`}
@@ -269,8 +288,8 @@ const Classroom = () => {
             </div>
             <Outlet />
           </div>
-        </>}
-
+        </>
+      )}
     </div>
   );
 };
