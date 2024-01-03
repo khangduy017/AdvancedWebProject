@@ -136,7 +136,6 @@ const ProfileForm = (props) => {
 
   const changePasswordHandler = (event) => {
     event.preventDefault();
-    loadingToast()
 
     const dataSubmit = {
       passwordCurrent: passwordCurrent,
@@ -153,6 +152,7 @@ const ProfileForm = (props) => {
     } else if (password === passwordCurrent) {
       toast.error("New password must be different", styleError);
     } else {
+      loadingToast()
       axios
         .post(
           process.env.REACT_APP_API_HOST + "auth/change-password",
