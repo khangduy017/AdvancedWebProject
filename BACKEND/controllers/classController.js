@@ -292,7 +292,7 @@ const getClassBySearchCustomer = catchAsync(async (req, res) => {
         _class = getClass.filter((el) => el.active === true);
     } else {
         _class = getClass.filter(
-            (el) => el.title.toLowerCase() === req.body.searchInput.toLowerCase() && el.active === true
+            (el) => el.title.toLowerCase().includes(req.body.searchInput.toLowerCase()) && el.active === true
         );
     }
 
