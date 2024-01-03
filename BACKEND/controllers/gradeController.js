@@ -1,12 +1,10 @@
-import mongoose from "mongoose";
 import Class from "../models/classModel.js";
 import User from "../models/userModel.js"
-import Grade from "../models/GradeModel.js";
 import catchAsync from '../utils/catchAsync.js'
 import io from "../socket.js"
 import { basket } from "../server.js";
-import socket from "../socket.js";
 import Notification from "../models/notificationModel.js";
+import Grade from "../models/gradeModel.js";
 
 const getGrade = catchAsync(async (req, res, next) => {
   const grade = await Grade.findById(req.body.id)
@@ -99,6 +97,13 @@ const editStructure = catchAsync(async (req, res, next) => {
       });
     }
     nameSet.add(item.name);
+
+    if (!(!isNaN(Number(item.scale)) && !isNaN(parseFloat(item.scale)))) {
+      return res.status(200).json({
+        status: 'failed',
+        value: 'Exist invalid scale value'
+      });
+    }
 
     const scaleValue = parseInt(item.scale, 10);
     if (!isNaN(scaleValue)) {

@@ -42,7 +42,7 @@ export default function MemberComponent() {
           {teachers.map((value, index) =>
             <div className={`${styles['member-item']} d-flex align-items-center gap-4`}>
               <img src={member_image} alt='' />
-              <small className={`m-0 p-0`}>{value.username}</small>
+              <small className={`m-0 p-0`}>{value.username ? value.username : value.email}</small>
             </div>
           )}
           <div className={` mt-5 mb-3 d-flex align-items-end justify-content-between`}>
@@ -52,7 +52,7 @@ export default function MemberComponent() {
           {students.map((value, index) =>
             <div className={`${styles['member-item']} d-flex align-items-center gap-4`}>
               <img src={member_image} alt='' />
-              <small className={`m-0 p-0`}>{value.username}</small>
+              <small className={`m-0 p-0`}>{value.username ? value.username : value.email}</small>
             </div>
           )}
         </>}

@@ -177,6 +177,7 @@
   margin: 1rem 0rem;
   height: 12.5rem;
   position: relative;
+  padding-top: 0.1rem;
 }
 
 .classroom-banner {
@@ -185,18 +186,16 @@
 }
 
 .classroom-name {
-  position: absolute;
   max-width: 90%;
-  top: 1.5rem;
-  left: 1.5rem;
+  margin-top: 1rem;
+  margin-left: 1.5rem;
   color: white;
   overflow: hidden;
 }
 
 .classroom-note {
-  position: absolute;
-  top: 4rem;
-  left: 1.5rem;
+  margin-top: 0.1rem;
+  margin-left: 1.5rem;
   color: white;
   font-weight: 500;
   font-size: 1.2rem;

@@ -8,9 +8,10 @@ import toast from "react-hot-toast";
 import AuthContext from "../../store/auth-context";
 import { Outlet, useLocation, useParams, NavLink } from "react-router-dom";
 
+
 const Classroom = () => {
   const { id } = useParams();
-  const linkInvite = `http://localhost:3001/myclass/${id}/join`;
+  const linkInvite = `${process.env.REACT_APP_URL}/myclass/${id}/join`;
 
   const [show, setShow] = useState(false);
 
@@ -38,6 +39,40 @@ const Classroom = () => {
   };
 
   const [loading, setLoading] = useState(true);
+  let toastId;
+  const loadingToast = () => {
+    toastId = toast(
+      (t) => (
+        <div className="notification-up w-100 p-0">
+          <div
+            style={{
+              width: "1.6rem",
+              height: "1.6rem",
+              color: "#5D5FEF",
+              marginRight: "1rem",
+            }}
+            className="spinner-border"
+            role="status"
+          ></div>
+          <p className="p-0 m-0" style={{ color: "#5D5FEF" }}>
+            Loading...
+          </p>
+        </div>
+      ),
+      {
+        duration: 600000,
+        style: {
+          cursor: "pointer",
+          width: "10rem",
+          border: "2px solid #5D5FEF",
+          padding: "5px",
+        },
+      }
+    );
+  };
+  const dismissToast = () => {
+    toast.dismiss(toastId);
+  };
 
   const [inviteEnable, setInviteEnable] = useState(true);
 
@@ -66,7 +101,7 @@ const Classroom = () => {
       email: emailInput,
       link: linkInvite,
     };
-
+    loadingToast()
     axios
       .post(
         process.env.REACT_APP_API_HOST + "classes/invite-email",
@@ -74,6 +109,7 @@ const Classroom = () => {
         { headers }
       )
       .then((res) => {
+        dismissToast()
         if (res.data.status === "success") {
           handleClose();
           toast.success("Invite successfully!", styleSuccess);
