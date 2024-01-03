@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 import Class from '../models/classModel.js';
 import User from '../models/userModel.js';
-import Grade from '../models/GradeModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import sendMail from '../utils/mailer.js';
 import Validator from '../utils/validator.js';
 import REGEX from '../constants/regex.js';
 import Post from '../models/postModel.js';
+import Grade from '../models/gradeModel.js';
 
 const getAllClass = catchAsync(async (req, res, next) => {
     const getClass = await Class.aggregate([
