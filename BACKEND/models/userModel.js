@@ -12,32 +12,32 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  id:{
+  id: {
     type: String,
   },
-  type:{
+  type: {
     type: String,
-    enum: ['account', 'google','facebook'],
+    enum: ['account', 'google', 'facebook'],
   },
   role: {
-      type: String,
+    type: String,
   },
   class: [String],
   notify: [String],
   fullname: {
-      type: String,
+    type: String,
   },
   phone: String,
   email: {
-      type: String,
-      lowercase: true,
+    type: String,
+    lowercase: true,
   },
   dob: String,
   address: String,
   gender: String,
   avatar: String,
   googleId: String,
-  facebookId:String,
+  facebookId: String,
   passwordChangedAt: Date,
   userVerifyToken: String,
   passwordResetExpires: Date,
@@ -45,30 +45,30 @@ const userSchema = new mongoose.Schema({
 
 userSchema.index(
   {
-      id: 'text',
-      username: 'text',
-      fullname: 'text',
-      email: 'text',
-      role: 'text',
+    id: 'text',
+    username: 'text',
+    fullname: 'text',
+    email: 'text',
+    role: 'text',
   },
   { default_language: 'none' }
 );
 
-// userSchema.pre('save', async function (next) {
-//   // Only run this function if password was actually modified
-//   if (!this.isModified('password')) return next();
+userSchema.pre('save', async function (next) {
+  // Only run this function if password was actually modified
+  if (!this.isModified('password')) return next();
 
-//   // Hash the password with cost of 12
-//   this.password = await bcrypt.hash(this.password, 12);
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
 
-//   next();
-// });
+  next();
+});
 
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
