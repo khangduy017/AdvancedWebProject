@@ -1,0 +1,94 @@
+[{
+  "_id": {
+    "$oid": "6596c465230895e6c0b0ab65"
+  },
+  "structure": [
+    {
+      "_id": "lqzbqlmnnj6o12uy0te",
+      "name": "Week 1",
+      "scale": "10",
+      "_public": true
+    },
+    {
+      "_id": "lqzbriynzqh9olc4po",
+      "name": "Week 2",
+      "scale": "10",
+      "_public": true
+    },
+    {
+      "_id": "lqzbroz724sx4sk67h4i",
+      "name": "Week 3",
+      "scale": "10",
+      "_public": true
+    },
+    {
+      "_id": "lqzbrupwaemcxsi5l46",
+      "name": "Midterm",
+      "scale": "20",
+      "_public": false
+    },
+    {
+      "_id": "lqzbs1uzqm37nuzr0q",
+      "name": "Week 7",
+      "scale": "10",
+      "_public": false
+    }
+  ],
+  "grades": [
+    {
+      "_id": {
+        "$oid": "6596c513230895e6c0b0ab91"
+      },
+      "studentId": "20127525",
+      "fullname": "Dinh Nguyen Duy Khang",
+      "grade": {
+        "Week 1": "5",
+        "Week 2": "9",
+        "Week 3": "7",
+        "Midterm": "10",
+        "Week 7": "8"
+      }
+    },
+    {
+      "_id": "",
+      "studentId": "20127039",
+      "fullname": "Tran Dam Gia Huy",
+      "grade": {
+        "Week 1": "10",
+        "Week 2": "6",
+        "Week 3": "5",
+        "Midterm": "9",
+        "Week 7": "5"
+      }
+    },
+    {
+      "_id": "",
+      "studentId": "20127666",
+      "fullname": "Huynh Tan Vinh",
+      "grade": {
+        "Week 1": "10",
+        "Week 2": "6",
+        "Week 3": "9",
+        "Midterm": "1",
+        "Week 7": "3"
+      }
+    }
+  ],
+  "__v": 11
+},
+{
+  "_id": {
+    "$oid": "6596c4b0230895e6c0b0ab70"
+  },
+  "structure": [],
+  "grades": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c4d7230895e6c0b0ab85"
+  },
+  "structure": [],
+  "grades": [],
+  "__v": 0
+}]

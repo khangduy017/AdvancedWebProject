@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "6596c76e230895e6c0b0acfb"
+  },
+  "id": "20127039",
+  "fullname": "Tran Dam Gia Huy",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c76e230895e6c0b0acfd"
+  },
+  "id": "20127666",
+  "fullname": "Huynh Tan Vinh",
+  "__v": 0
+}]

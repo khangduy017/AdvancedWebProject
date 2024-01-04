@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "6596c557230895e6c0b0abe5"
+  },
+  "content": "Hi",
+  "creator": "",
+  "postId": "6596c550230895e6c0b0abe0",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c562230895e6c0b0abee"
+  },
+  "content": "hello",
+  "creator": "",
+  "postId": "6596c550230895e6c0b0abe0",
+  "__v": 0
+}]

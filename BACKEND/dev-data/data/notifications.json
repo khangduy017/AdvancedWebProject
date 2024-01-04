@@ -1,0 +1,91 @@
+[{
+  "_id": {
+    "$oid": "6596c657230895e6c0b0ac62"
+  },
+  "user_id": "6596c513230895e6c0b0ab91",
+  "time": "14:53:11 - 04/01/2024",
+  "class": "Advanced Web",
+  "direction": "/myclass/6596c465230895e6c0b0ab67/grade/6596c465230895e6c0b0ab65/14531104012024",
+  "fromName": "Khang Dinh",
+  "content": " has completed the score columns for Week 1,Week 2,Week 3",
+  "seen": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c669230895e6c0b0ac76"
+  },
+  "user_id": "6596c448230895e6c0b0ab5a",
+  "time": "14:53:28 - 04/01/2024",
+  "class": "Advanced Web",
+  "direction": "/myclass/6596c465230895e6c0b0ab67/review/6596c465230895e6c0b0ab65/6596c668230895e6c0b0ac72/14532804012024",
+  "fromName": "20127525",
+  "content": " has a grade review request for Week 1 ",
+  "seen": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c671230895e6c0b0ac83"
+  },
+  "user_id": "6596c513230895e6c0b0ab91",
+  "time": "21:53:35 - 04/01/2024",
+  "class": "Advanced Web",
+  "direction": "/myclass/6596c465230895e6c0b0ab67/review/6596c465230895e6c0b0ab65/6596c668230895e6c0b0ac72/21533504012024",
+  "fromName": "Khang Dinh",
+  "content": " has commented on the grade review request for Week 1",
+  "seen": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c676230895e6c0b0ac91"
+  },
+  "user_id": "6596c448230895e6c0b0ab5a",
+  "time": "21:53:41 - 04/01/2024",
+  "class": "Advanced Web",
+  "direction": "/myclass/6596c465230895e6c0b0ab67/review/6596c465230895e6c0b0ab65/6596c668230895e6c0b0ac72/21534104012024",
+  "fromName": "20127525",
+  "content": " has commented on the grade review request for Week 1",
+  "seen": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c692230895e6c0b0ac9f"
+  },
+  "user_id": "6596c513230895e6c0b0ab91",
+  "time": "14:54:09 - 04/01/2024",
+  "class": "Advanced Web",
+  "direction": "/myclass/6596c465230895e6c0b0ab67/review/6596c465230895e6c0b0ab65/6596c668230895e6c0b0ac72/14540904012024",
+  "fromName": "Khang Dinh",
+  "content": " has created a final decision for your grade review request (Week 1)",
+  "seen": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c707230895e6c0b0acbf"
+  },
+  "user_id": "6596c448230895e6c0b0ab5a",
+  "time": "14:56:06 - 04/01/2024",
+  "class": "Advanced Web",
+  "direction": "/myclass/6596c465230895e6c0b0ab67/review/6596c465230895e6c0b0ab65/6596c707230895e6c0b0acbb/14560604012024",
+  "fromName": "20127525",
+  "content": " has a grade review request for Week 2 ",
+  "seen": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6596c715230895e6c0b0acce"
+  },
+  "user_id": "6596c513230895e6c0b0ab91",
+  "time": "14:56:19 - 04/01/2024",
+  "class": "Advanced Web",
+  "direction": "/myclass/6596c465230895e6c0b0ab67/review/6596c465230895e6c0b0ab65/6596c707230895e6c0b0acbb/14561904012024",
+  "fromName": "Khang Dinh",
+  "content": " has created a final decision for your grade review request (Week 2)",
+  "seen": true,
+  "__v": 0
+}]
