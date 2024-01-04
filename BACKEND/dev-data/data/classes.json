@@ -1,71 +1,74 @@
-[{
-  "_id": {
-    "$oid": "6596c465230895e6c0b0ab67"
-  },
-  "teacher": [
+[
     {
-      "$oid": "6596c448230895e6c0b0ab5a"
-    }
-  ],
-  "active": true,
-  "student": [
+        "_id": {
+            "$oid": "6596c465230895e6c0b0ab67"
+        },
+        "teacher": [
+            {
+                "$oid": "6596c448230895e6c0b0ab5a"
+            }
+        ],
+        "active": true,
+        "student": [
+            {
+                "$oid": "6596c513230895e6c0b0ab91"
+            }
+        ],
+        "owner": "",
+        "title": "Advanced Web",
+        "content": "How to build React App?",
+        "post": [],
+        "inviteCode": "35562",
+        "inviteLink": "",
+        "grade": "6596c465230895e6c0b0ab65",
+        "background": "#F08C00",
+        "__v": 1
+    },
     {
-      "$oid": "6596c513230895e6c0b0ab91"
-    }
-  ],
-  "owner": "",
-  "title": "Advanced Web",
-  "content": "How to build React App?",
-  "post": [],
-  "inviteCode": "35562",
-  "inviteLink": "",
-  "grade": "6596c465230895e6c0b0ab65",
-  "background": "#F08C00",
-  "__v": 1
-},
-{
-  "_id": {
-    "$oid": "6596c4b0230895e6c0b0ab72"
-  },
-  "teacher": [
+        "_id": {
+            "$oid": "6596c4b0230895e6c0b0ab72"
+        },
+        "teacher": [
+            {
+                "$oid": "6596c448230895e6c0b0ab5a"
+            }
+        ],
+        "active": true,
+        "student": [
+            {
+                "$oid": "6596c513230895e6c0b0ab91"
+            }
+        ],
+        "owner": "",
+        "title": "Data structure & Algorithm",
+        "content": "Tree, Hash Table, Quick Sort,...",
+        "post": [],
+        "inviteCode": "29303",
+        "inviteLink": "",
+        "grade": "6596c4b0230895e6c0b0ab70",
+        "background": "#0CA678",
+        "__v": 1
+    },
     {
-      "$oid": "6596c448230895e6c0b0ab5a"
+        "_id": {
+            "$oid": "6596c4d7230895e6c0b0ab87"
+        },
+        "teacher": [
+            {
+                "$oid": "6596c448230895e6c0b0ab5a"
+            }
+        ],
+        "active": true,
+        "student": [],
+        "owner": "",
+        "title": "Mobile App Programming",
+        "content": "Java Android",
+        "post": [],
+        "inviteCode": "57823",
+        "inviteLink": "",
+        "grade": "6596c4d7230895e6c0b0ab85",
+        "background": "#0CA678",
+        "__v": 0
     }
-  ],
-  "active": true,
-  "student": [
-    {
-      "$oid": "6596c513230895e6c0b0ab91"
-    }
-  ],
-  "owner": "",
-  "title": "Data structure & Algorithm",
-  "content": "Tree, Hash Table, Quick Sort,...",
-  "post": [],
-  "inviteCode": "29303",
-  "inviteLink": "",
-  "grade": "6596c4b0230895e6c0b0ab70",
-  "background": "#0CA678",
-  "__v": 1
-},
-{
-  "_id": {
-    "$oid": "6596c4d7230895e6c0b0ab87"
-  },
-  "teacher": [
-    {
-      "$oid": "6596c448230895e6c0b0ab5a"
-    }
-  ],
-  "active": true,
-  "student": [],
-  "owner": "",
-  "title": "Mobile App Programming",
-  "content": "Java Android",
-  "post": [],
-  "inviteCode": "57823",
-  "inviteLink": "",
-  "grade": "6596c4d7230895e6c0b0ab85",
-  "background": "#0CA678",
-  "__v": 0
-}]
+]
+

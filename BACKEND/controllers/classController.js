@@ -9,6 +9,7 @@ import Post from '../models/postModel.js';
 import Grade from '../models/gradeModel.js';
 
 const getAllClass = catchAsync(async (req, res, next) => {
+    console.log(req.body._id)
     const getClass = await Class.aggregate([
         {
             $lookup: {

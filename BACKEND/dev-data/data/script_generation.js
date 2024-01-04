@@ -28,16 +28,58 @@ mongoose
     console.log('Loading...');
   });
 
+const convertToObjectId = (data) => {
+  if (Array.isArray(data)) {
+    return data.map(item => {
+      // Chuyển đổi mỗi $oid trong các trường của đối tượng
+      Object.keys(item).forEach(key => {
+        if (item[key] && Array.isArray(item[key])) {
+          item[key] = item[key].map(idObject => {
+            if (idObject instanceof Object && idObject.$oid) {
+              return new mongoose.Types.ObjectId(idObject.$oid);
+            }
+            return convertToObjectId(idObject);
+          });
+        } else if (item[key] instanceof Object && item[key].$oid) {
+          item[key] = new mongoose.Types.ObjectId(item[key].$oid);
+        } else {
+          item[key] = convertToObjectId(item[key]);
+        }
+      });
+
+      return convertToObjectId(item);
+    });
+  } else if (data instanceof Object) {
+    // Chuyển đổi mỗi $oid trong các trường của đối tượng
+    Object.keys(data).forEach(key => {
+      if (data[key] && Array.isArray(data[key])) {
+        data[key] = data[key].map(idObject => {
+          if (idObject instanceof Object && idObject.$oid) {
+            return new mongoose.Types.ObjectId(idObject.$oid);
+          }
+          return convertToObjectId(idObject);
+        });
+      } else if (data[key] instanceof Object && data[key].$oid) {
+        data[key] = new mongoose.Types.ObjectId(data[key].$oid);
+      } else {
+        data[key] = convertToObjectId(data[key]);
+      }
+    });
+  }
+
+  return data;
+};
+
 // READ JSON FILE
-const classes = JSON.parse(fs.readFileSync(`${__dirname}/classes.json`, 'utf-8'));
-const comments = JSON.parse(fs.readFileSync(`${__dirname}/comments.json`, 'utf-8'));
-const grades = JSON.parse(fs.readFileSync(`${__dirname}/grades.json`, 'utf-8'));
-const notifications = JSON.parse(fs.readFileSync(`${__dirname}/notifications.json`, 'utf-8'));
-const posts = JSON.parse(fs.readFileSync(`${__dirname}/posts.json`, 'utf-8'));
-const reviewComments = JSON.parse(fs.readFileSync(`${__dirname}/review-comments.json`, 'utf-8'));
-const reviews = JSON.parse(fs.readFileSync(`${__dirname}/reviews.json`, 'utf-8'));
-const students = JSON.parse(fs.readFileSync(`${__dirname}/students.json`, 'utf-8'));
-const users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'));
+const classes = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/classes.json`, 'utf-8')));
+const comments = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/comments.json`, 'utf-8')));
+const grades = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/grades.json`, 'utf-8')));
+const notifications = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/notifications.json`, 'utf-8')));
+const posts = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/posts.json`, 'utf-8')));
+const reviewComments = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/review-comments.json`, 'utf-8')));
+const reviews = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/reviews.json`, 'utf-8')));
+const students = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/students.json`, 'utf-8')));
+const users = convertToObjectId(JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8')));
 
 // IMPORT DATA INTO DB
 const importData = async () => {
