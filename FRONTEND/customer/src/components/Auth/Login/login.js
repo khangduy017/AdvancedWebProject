@@ -194,7 +194,7 @@ function Login() {
           </Button>
 
           <div className={`d-flex justify-content-center mt-3 mb-0`}>
-            <p>Orther</p>
+            <p>Other</p>
           </div>
 
           <a href={`${process.env.REACT_APP_API_HOST}auth/google?role=${role}`}

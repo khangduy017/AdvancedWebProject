@@ -148,7 +148,7 @@ export default function PostComponent() {
         if (res.data.status === "success") {
           setPostData(res.data.value);
           setTypingCmt("");
-          toast.success('Comment succesfully', styleSuccess);
+          toast.success('Comment successfully', styleSuccess);
         } else {
         }
       });
