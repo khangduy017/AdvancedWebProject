@@ -348,6 +348,10 @@ const updateStudentID = catchAsync(async (req, res, next) => {
             });
         } else {
             await User.updateOne({ _id: req.body.id }, { id: req.body.studentID });
+            const checkStudentExist = await Student.findOne({ id: req.body.studentID });
+            if (checkStudentExist) {
+                await Student.deleteOne({ id: req.body.studentID });
+            }
             const studentAccount = await User.find({ role: 'student' });
             const studentNoneAccount = await Student.find();
             res.status(200).json({

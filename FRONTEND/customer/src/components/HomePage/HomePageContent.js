@@ -98,11 +98,12 @@ const HomePageContent = () => {
         if (res.data.status === "success") {
           authCtx.setClasses(res.data.value);
           setClasses(res.data.value);
+          console.log(res.data.value)
         } else {
         }
         setLoading(false);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   useEffect(() => {
@@ -261,7 +262,7 @@ const HomePageContent = () => {
         }
         setLoading(false);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   return (
