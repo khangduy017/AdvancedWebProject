@@ -50,8 +50,8 @@ const google = passport.use(
 const facebook = passport.use(new FacebookStrategy({
   callbackURL: '/webAdvanced/api/v1/auth/facebook/redirect',
   proxy: true,
-  clientID: '360372179696821',
-  clientSecret: 'db235faa5952b1a2008858025efdfc9e',
+  clientID: '391220859959574',
+  clientSecret: '73dbe8637bd81c3c1e1c09554397b098',
   passReqToCallback: true,
 },
   function (req, accessToken, refreshToken, profile, done) {
