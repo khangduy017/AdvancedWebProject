@@ -7,11 +7,21 @@ import catchAsync from '../utils/catchAsync.js';
 import sendMail from '../utils/mailer.js';
 
 const createPost = catchAsync(async (req, res, next) => {
+    let ts = Date.now();
+
+    let date_ob = new Date(ts);
+    let date = date_ob.getDate();
+    let month = date_ob.toLocaleString('default', { month: 'long' });
+    let year = date_ob.getFullYear();
+
+    const dateSave = `${month} ${date}, ${year}`
+
     const newPost = await Post.create({
         creator: req.body.username,
         title: req.body.title,
         content: req.body.content,
         classId: req.body.classId,
+        date: dateSave
     });
 
     let posts = await Post.find({ classId: req.body.classId });

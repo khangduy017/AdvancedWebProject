@@ -5,6 +5,7 @@ const postSchema = new mongoose.Schema({
   content: String,
   creator: String,
   classId: String,
+  date: String
 });
 
 const Post = mongoose.model('posts', postSchema);

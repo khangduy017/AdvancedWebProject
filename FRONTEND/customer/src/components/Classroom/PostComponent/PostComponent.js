@@ -275,7 +275,7 @@ export default function PostComponent() {
                     {data.creator}
                   </h5>
                   <div className={`${styles["content-title-time"]}`}>
-                    December 1, 2023
+                    {data.date}
                   </div>
                 </div>
               </div>

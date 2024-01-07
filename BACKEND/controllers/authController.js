@@ -107,28 +107,27 @@ const login = catchAsync(async (req, res, next) => {
     }
 
     if(!user.active){
-        return next(new AppError('Account has been blocked', 401));
+        return next(new AppError('Account has been blocked  ', 401));
     }
     createSendToken(user, 200, res);
 });
 
 const loginGoogle = catchAsync(async (req, res, next) => {
-    if (req.user.status && req.user.status === 'exist') {
-        return res.redirect(`${process.env.APP_URL}/login?status=failed&role=${req.user.role}`);
-    }
-
-    if (req.user.status && req.user.status === 'inactive') {
-        return res.redirect(`${process.env.APP_URL}/login?status=inactive&role=${req.user.role}`);
-    }
-
     const token = signToken(req.user._id);
+    const data = {
+        status: 'success',
+        token,
+        expiresTime,
+        data: { user: req.user },
+    };
+
     res.redirect(
-        `${process.env.APP_URL}/login?status=success&token=` +
-        token +
-        '&expiresTime=' +
-        expiresTime +
-        '&userData=' +
-        JSON.stringify(req.user)
+        `${process.env.APP_URL}/login?success&token=` +
+            token +
+            '&expiresTime=' +
+            expiresTime +
+            '&userData=' +
+            JSON.stringify(req.user)
     );
 });
 
@@ -157,7 +156,7 @@ const forgetPassword = catchAsync(async (req, res, next) => {
 
         const founded_user = await User.findOne({ email: data.email });
 
-        if (!founded_user | founded_user.type != 'account') return next(new AppError('The email does not exist', 400));
+        if (!founded_user) return next(new AppError('The email does not exist', 400));
 
         verifyCode = Math.floor(100000 + Math.random() * 900000);
         await sendMail(
@@ -348,10 +347,6 @@ const updateStudentID = catchAsync(async (req, res, next) => {
             });
         } else {
             await User.updateOne({ _id: req.body.id }, { id: req.body.studentID });
-            const checkStudentExist = await Student.findOne({ id: req.body.studentID });
-            if (checkStudentExist) {
-                await Student.deleteOne({ id: req.body.studentID });
-            }
             const studentAccount = await User.find({ role: 'student' });
             const studentNoneAccount = await Student.find();
             res.status(200).json({
